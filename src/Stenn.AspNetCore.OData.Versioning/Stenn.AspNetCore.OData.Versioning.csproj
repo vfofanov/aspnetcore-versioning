@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>AspNetCore.OData.Versioning</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="VersioningODataRoutingApplicationModelProvider.cs" />
+        <Compile Remove="VersionedFilterODataRoutingConvention.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Stenn.AspNetCore.Versioning\Stenn.AspNetCore.Versioning.csproj" />
+    </ItemGroup>
+
+</Project>
