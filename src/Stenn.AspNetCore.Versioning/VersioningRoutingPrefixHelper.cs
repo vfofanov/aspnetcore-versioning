@@ -1,4 +1,4 @@
-namespace AspNetCore.Versioning
+namespace Stenn.AspNetCore.Versioning
 {
     public static class VersioningRoutingPrefixHelper
     {

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using AspNetCore.Versioning;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using Stenn.AspNetCore.Versioning;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace TestSample.Swagger

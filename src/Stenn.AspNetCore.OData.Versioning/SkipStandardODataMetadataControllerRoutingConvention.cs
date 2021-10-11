@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace AspNetCore.OData.Versioning
+namespace Stenn.AspNetCore.OData.Versioning
 {
     public class SkipStandardODataMetadataControllerRoutingConvention : Attribute, IControllerModelConvention
     {

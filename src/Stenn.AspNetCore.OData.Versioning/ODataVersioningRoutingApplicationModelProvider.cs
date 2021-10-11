@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AspNetCore.Versioning;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Microsoft.Extensions.Options;
+using Stenn.AspNetCore.Versioning;
 
-namespace AspNetCore.OData.Versioning
+namespace Stenn.AspNetCore.OData.Versioning
 {
     /// <summary>
     /// Versioning routing provider for odata controllers with attribute <see cref="ODataAttributeRoutingAttribute"/>

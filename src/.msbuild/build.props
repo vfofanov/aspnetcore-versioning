@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <LangVersion>latest</LangVersion>       
+        <OutDir>$(MSBuildProjectDirectory)\..\bin</OutDir>
+        <PackageOutputPath>$(MSBuildProjectDirectory)\..\bin\Packages</PackageOutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!--        Nuget-->
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>    
+    </PropertyGroup>    
+</Project>

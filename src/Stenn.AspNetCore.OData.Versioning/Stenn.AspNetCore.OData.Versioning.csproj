@@ -1,17 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>AspNetCore.OData.Versioning</RootNamespace>
+        <Description>Api versioning implementation for ASP.NET Core OData 8.+</Description>
     </PropertyGroup>
-
+    
     <ItemGroup>
-        <Compile Remove="VersioningODataRoutingApplicationModelProvider.cs" />
-        <Compile Remove="VersionedFilterODataRoutingConvention.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.*" />
     </ItemGroup>
 
     <ItemGroup>

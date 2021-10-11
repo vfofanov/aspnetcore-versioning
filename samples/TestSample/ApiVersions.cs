@@ -1,5 +1,5 @@
-﻿using AspNetCore.Versioning;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Stenn.AspNetCore.Versioning;
 
 namespace TestSample
 {

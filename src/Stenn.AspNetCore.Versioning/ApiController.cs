@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace AspNetCore.Versioning
+namespace Stenn.AspNetCore.Versioning
 {
     [ApiController]
     [Route("[controller]")]

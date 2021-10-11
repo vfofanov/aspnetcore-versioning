@@ -1,4 +1,4 @@
-namespace AspNetCore.OData.Versioning
+namespace Stenn.AspNetCore.OData.Versioning
 {
     public interface IODataController<TEntity>
     {

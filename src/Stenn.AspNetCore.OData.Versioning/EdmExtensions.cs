@@ -1,7 +1,7 @@
 using System;
 using Microsoft.OData.ModelBuilder;
 
-namespace AspNetCore.OData.Versioning
+namespace Stenn.AspNetCore.OData.Versioning
 {
     public static class EdmExtensions
     {

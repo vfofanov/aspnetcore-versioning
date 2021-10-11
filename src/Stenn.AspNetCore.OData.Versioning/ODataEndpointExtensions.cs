@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AspNetCore.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -10,8 +9,9 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.OData.Routing;
 using Microsoft.AspNetCore.OData.Routing.Conventions;
 using Microsoft.OData.Edm;
+using Stenn.AspNetCore.Versioning;
 
-namespace AspNetCore.OData.Versioning
+namespace Stenn.AspNetCore.OData.Versioning
 {
     public static class ODataEndpointExtensions
     {

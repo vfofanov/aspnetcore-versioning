@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 
-namespace AspNetCore.OData.Versioning
+namespace Stenn.AspNetCore.OData.Versioning
 {
     /// <summary>
     /// Proxy class under <see cref="ODataConventionModelBuilder"/> 

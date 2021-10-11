@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace AspNetCore.Versioning.Extensions.DependencyInjection
+namespace Stenn.AspNetCore.Versioning.Extensions.DependencyInjection
 {
     /// <summary>
     /// Dependency injection extensions for register AspNet.Core versioning 

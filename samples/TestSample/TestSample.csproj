@@ -2,30 +2,18 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-        <FileVersion>1.0.0.0</FileVersion>
-
         <NoWarn>CS1591</NoWarn>
 
         <DocumentationFile>$(OutputPath)\$(MSBuildProjectName).xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.10"/>
-
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2"/>
-        <!--        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />-->
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.10"/>   
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0"/>
 
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2"/>
         <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.2.2"/>
         <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.2"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Remove="Common\OData\VersioningODataRoutingApplicationModelProvider.cs"/>
-        <Compile Remove="Common\OData\VersionedFilterODataRoutingConvention.cs"/>
-        <Compile Remove="Common\OData\**"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -33,18 +21,6 @@
         <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning\Stenn.AspNetCore.OData.Versioning.csproj"/>
         <ProjectReference Include="..\..\src\Stenn.AspNetCore.Versioning.Extensions.DependencyInjection\Stenn.AspNetCore.Versioning.Extensions.DependencyInjection.csproj"/>
         <ProjectReference Include="..\..\src\Stenn.AspNetCore.Versioning\Stenn.AspNetCore.Versioning.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Remove="Common\OData\**"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Remove="Common\OData\**"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Remove="Common\OData\**"/>
-    </ItemGroup>
+    </ItemGroup>    
 
 </Project>

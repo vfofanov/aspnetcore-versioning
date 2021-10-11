@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
 
-namespace AspNetCore.Versioning
+namespace Stenn.AspNetCore.Versioning
 {
     /// <summary>
     /// Api version provider item for store all information about api version

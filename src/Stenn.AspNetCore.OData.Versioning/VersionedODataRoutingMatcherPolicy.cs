@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Routing.Matching;
 using Microsoft.Extensions.Options;
 using Microsoft.OData.Edm;
 
-namespace AspNetCore.OData.Versioning
+namespace Stenn.AspNetCore.OData.Versioning
 {
     public class VersionedODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
     {

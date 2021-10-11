@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
 
-namespace AspNetCore.Versioning
+namespace Stenn.AspNetCore.Versioning
 {
     /// <summary>
     /// Provides extension methods for the <see cref="ApiDescription"/> class.

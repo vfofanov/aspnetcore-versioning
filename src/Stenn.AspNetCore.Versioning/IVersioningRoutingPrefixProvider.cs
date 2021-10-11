@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace AspNetCore.Versioning
+namespace Stenn.AspNetCore.Versioning
 {
     public interface IVersioningRoutingPrefixProvider
     {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Options;
 
-namespace AspNetCore.OData.Versioning.Extensions.DependencyInjection
+namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
 {
     /// <summary>
     /// Sets up default options for <see cref="ODataVersioningOptions"/>.

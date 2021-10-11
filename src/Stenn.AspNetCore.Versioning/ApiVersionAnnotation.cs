@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AspNetCore.Versioning
+namespace Stenn.AspNetCore.Versioning
 {
     /// <summary>
     /// Represents an annotation for <see cref="ApiVersion">API version</see>.

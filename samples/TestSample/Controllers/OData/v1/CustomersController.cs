@@ -1,10 +1,10 @@
 ﻿// Licensed under the MIT License.
 
 using System.Linq;
-using AspNetCore.OData.Versioning;
-using AspNetCore.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Stenn.AspNetCore.OData.Versioning;
+using Stenn.AspNetCore.Versioning;
 using TestSample.Models.OData.v1;
 
 namespace TestSample.Controllers.OData.v1

@@ -1,6 +1,6 @@
 using System;
-using AspNetCore.OData.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Stenn.AspNetCore.OData.Versioning;
 using TestSample.Controllers.OData;
 using TestSample.Controllers.OData.v1;
 using TestSample.Models.OData;

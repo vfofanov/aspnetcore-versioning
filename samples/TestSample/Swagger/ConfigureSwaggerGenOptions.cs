@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using AspNetCore.Versioning;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Stenn.AspNetCore.Versioning;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace TestSample.Swagger

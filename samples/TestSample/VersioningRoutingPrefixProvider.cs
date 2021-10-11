@@ -1,5 +1,5 @@
-﻿using AspNetCore.Versioning;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
+﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Stenn.AspNetCore.Versioning;
 using TestSample.Controllers;
 
 namespace TestSample

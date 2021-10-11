@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AspNetCore.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Stenn.AspNetCore.Versioning;
 using TestSample.Models;
 
 namespace TestSample.Controllers

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Routing.Conventions;
 using Microsoft.AspNetCore.OData.Routing.Template;
 
-namespace AspNetCore.OData.Versioning
+namespace Stenn.AspNetCore.OData.Versioning
 {
     /// <summary>
     /// The convention for $metadata.

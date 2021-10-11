@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using AspNetCore.OData.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Stenn.AspNetCore.OData.Versioning;
 using TestSample.Models.OData;
 
 namespace TestSample.Controllers.OData

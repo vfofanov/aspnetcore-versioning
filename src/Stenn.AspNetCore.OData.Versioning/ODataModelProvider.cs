@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 
-namespace AspNetCore.OData.Versioning
+namespace Stenn.AspNetCore.OData.Versioning
 {
     public abstract class ODataModelProvider<TKey> : IODataModelProvider, IODataConventionModelProvider
     {

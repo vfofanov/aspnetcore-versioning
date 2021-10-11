@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using AspNetCore.Versioning;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Routing.Conventions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Stenn.AspNetCore.Versioning;
 
-namespace AspNetCore.OData.Versioning.Extensions.DependencyInjection
+namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
 {
     /// <summary>
     /// Dependency injection extensions for registee AspNet.Core OData versioning 

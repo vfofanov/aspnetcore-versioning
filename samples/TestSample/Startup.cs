@@ -1,7 +1,3 @@
-using AspNetCore.OData.Versioning;
-using AspNetCore.OData.Versioning.Extensions.DependencyInjection;
-using AspNetCore.Versioning;
-using AspNetCore.Versioning.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -15,6 +11,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OData;
 using Newtonsoft.Json.Converters;
+using Stenn.AspNetCore.OData.Versioning;
+using Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection;
+using Stenn.AspNetCore.Versioning;
+using Stenn.AspNetCore.Versioning.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using TestSample.Models.OData;

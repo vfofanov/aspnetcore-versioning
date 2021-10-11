@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.Versioning
+﻿namespace Stenn.AspNetCore.Versioning
 {
     /// <summary>
     /// Factory inteface for <see cref="IApiVersionInfoProvider"/>

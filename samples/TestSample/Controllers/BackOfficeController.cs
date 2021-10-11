@@ -1,4 +1,4 @@
-﻿using AspNetCore.Versioning;
+﻿using Stenn.AspNetCore.Versioning;
 
 namespace TestSample.Controllers
 {

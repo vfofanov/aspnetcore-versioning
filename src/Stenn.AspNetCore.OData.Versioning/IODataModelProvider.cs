@@ -4,7 +4,7 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
 
-namespace AspNetCore.OData.Versioning
+namespace Stenn.AspNetCore.OData.Versioning
 {
     public interface IODataModelProvider
     {
