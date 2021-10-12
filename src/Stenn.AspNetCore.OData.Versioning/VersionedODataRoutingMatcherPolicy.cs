@@ -13,16 +13,17 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Matching;
 using Microsoft.Extensions.Options;
 using Microsoft.OData.Edm;
+using Microsoft.OData.UriParser;
 
 namespace Stenn.AspNetCore.OData.Versioning
 {
-    public class VersionedODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
+    public class VersioningODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
     {
         private readonly IODataTemplateTranslator _translator;
         private readonly IODataModelRequestProvider _provider;
         private readonly ODataOptions _options;
 
-        public VersionedODataRoutingMatcherPolicy(IODataTemplateTranslator translator,
+        public VersioningODataRoutingMatcherPolicy(IODataTemplateTranslator translator,
             IODataModelRequestProvider provider,
             IOptions<ODataOptions> options)
         {
@@ -39,7 +40,7 @@ namespace Stenn.AspNetCore.OData.Versioning
         }
 
         /// <inheritdoc />
-        public Task ApplyAsync(HttpContext httpContext, CandidateSet candidates)
+        public async Task ApplyAsync(HttpContext httpContext, CandidateSet candidates)
         {
             if (httpContext == null)
             {
@@ -51,12 +52,12 @@ namespace Stenn.AspNetCore.OData.Versioning
             {
                 // If we have the OData path setting, it means there's some Policy working.
                 // Let's skip this default OData matcher policy.
-                return Task.CompletedTask;
+                return;
             }
 
             for (var i = 0; i < candidates.Count; i++)
             {
-                ref var candidate = ref candidates[i];
+                var candidate = candidates[i];
                 if (!candidates.IsValidCandidate(i))
                 {
                     continue;
@@ -68,6 +69,7 @@ namespace Stenn.AspNetCore.OData.Versioning
                     continue;
                 }
 
+                
                 var apiVersion = oDataRoutingMetadata.GetODataApiVersion();
                 if (apiVersion == null || !candidate.Endpoint.IsODataApiVersionMatch(apiVersion))
                 {
@@ -75,29 +77,29 @@ namespace Stenn.AspNetCore.OData.Versioning
                     continue;
                 }
 
-                var model = _provider.GetRequestEdmModel(apiVersion, httpContext.RequestServices);
-                if (model == null)
+                var requestModel = _provider.GetRequestEdmModel(apiVersion, httpContext.RequestServices);
+                if (requestModel == null)
                 {
                     candidates.SetValidity(i, false);
                     continue;
                 }
 
-                var translatorContext = new ODataTemplateTranslateContext(httpContext, candidate.Endpoint, candidate.Values, model);
+                var translatorContext = new ODataTemplateTranslateContext(httpContext, candidate.Endpoint, candidate.Values, requestModel);
 
                 try
                 {
-                    var template = GetODataPathTemplate(oDataRoutingMetadata.Template, model);
+                    var template = GetODataPathTemplate(oDataRoutingMetadata.Template, requestModel);
                     
                     var odataPath = _translator.Translate(template, translatorContext);
                     if (odataPath != null)
                     {
                         odataFeature.RoutePrefix = oDataRoutingMetadata.Prefix;
-                        odataFeature.Model = model;
+                        odataFeature.Model = requestModel;
                         odataFeature.Path = odataPath;
 
                         var options = new ODataOptions();
                         UpdateQuerySetting(options);
-                        options.AddRouteComponents(model);
+                        options.AddRouteComponents(requestModel);
                         odataFeature.Services = options.GetRouteServices(string.Empty);
 
                         MergeRouteValues(translatorContext.UpdatedValues, candidate.Values);
@@ -109,11 +111,28 @@ namespace Stenn.AspNetCore.OData.Versioning
                 }
                 catch
                 {
+                    //NOTE: Check candidate with full model
+                    var fullModel = oDataRoutingMetadata.Model;
+                    var fullModelTtranslatorContext = new ODataTemplateTranslateContext(httpContext, candidate.Endpoint, candidate.Values, fullModel);
+                    ODataPath odataPath;
+                    try
+                    {
+                        var template = GetODataPathTemplate(oDataRoutingMetadata.Template, fullModel);
+                        odataPath = _translator.Translate(template, fullModelTtranslatorContext);
+                    }
+                    catch
+                    {
+                        odataPath = null;
+                    }
+                    if (odataPath != null)
+                    {
+                        //NOTE: This means that endpoint valid for full model and invalid for request model, and that is unauthorized access
+                        httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        await httpContext.Response.CompleteAsync();
+                    }
                     candidates.SetValidity(i, false);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
         private static ODataPathTemplate GetODataPathTemplate(ODataPathTemplate metadataTemplate, IEdmModel model)

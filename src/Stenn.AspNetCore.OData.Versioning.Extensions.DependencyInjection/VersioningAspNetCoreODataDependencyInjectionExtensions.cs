@@ -24,7 +24,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
 
             services.TryAddSingleton<IODataModelRequestProvider, TODataModelRequestProvider>();
             services.TryAddSingleton<IODataModelRequestProvider>(p => p.GetService<TODataModelRequestProvider>());
-            services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, VersionedODataRoutingMatcherPolicy>());
+            services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, VersioningODataRoutingMatcherPolicy>());
 
             return services;
         }
