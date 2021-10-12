@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.OData;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OData;
@@ -17,6 +14,7 @@ using Stenn.AspNetCore.Versioning;
 using Stenn.AspNetCore.Versioning.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using TestSample.Controllers.OData;
 using TestSample.Models.OData;
 using TestSample.Swagger;
 
@@ -38,24 +36,20 @@ namespace TestSample
 
             services.AddVersioningForApi<ApiVersionInfoProviderFactory, VersioningRoutingPrefixProvider>();
 
-            services.AddControllers(options =>
-                {
-                    options.Conventions.Add(new SkipStandardODataMetadataControllerRoutingConvention());
-                })
+            services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 })
-                .AddVersioningOData<ODataModelProvider>(versioningOptions =>
+                .AddVersioningOData<MetadataController, ODataModelProvider>(versioningOptions =>
                     {
+                        versioningOptions.ODataVersion = ODataVersion.V4;
                         versioningOptions.VersionPrefixTemplate = "api/{0}/odata";
                     },
                     options =>
                     {
                         options.EnableQueryFeatures();
                     });
-            
-            services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, VersionedODataRoutingMatcherPolicy>());
             
             //Swagger
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>();

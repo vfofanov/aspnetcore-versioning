@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Stenn.AspNetCore.Versioning;
 using TestSample.Models;
 
 namespace TestSample.Controllers.BackOffice
 {
     [ApiVersionV2]
+    [Route("[controller]")]
     public class WeatherForecastController : BackOfficeController
     {
         [HttpPost]

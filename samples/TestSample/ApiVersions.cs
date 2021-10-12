@@ -38,8 +38,8 @@ namespace TestSample
             const string pathPartFormat = "v{0}";
 
             return new ApiVersionInfoProvider(ApiVersions.V2,
-                new ApiVersionInfo(ApiVersions.V1, string.Format(pathPartFormat, ApiVersions.V1)),
-                new ApiVersionInfo(ApiVersions.V2, string.Format(pathPartFormat, ApiVersions.V2)));
+                new ApiVersionInfo(ApiVersions.V2, string.Format(pathPartFormat, ApiVersions.V2)),
+                new ApiVersionInfo(ApiVersions.V1, string.Format(pathPartFormat, ApiVersions.V1)));
         }
     }
 }

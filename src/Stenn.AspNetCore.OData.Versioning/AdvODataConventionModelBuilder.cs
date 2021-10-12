@@ -9,7 +9,7 @@ namespace Stenn.AspNetCore.OData.Versioning
     /// <summary>
     /// Proxy class under <see cref="ODataConventionModelBuilder"/> 
     /// </summary>
-    public class AdvODataConventionModelBuilder
+    public class AdvODataConventionModelBuilder : IODataConventionModelBuilder
     {
         private readonly ODataConventionModelBuilder _builder;
 
@@ -21,13 +21,10 @@ namespace Stenn.AspNetCore.OData.Versioning
         public EntityTypeConfiguration<TEntity> AddEntityType<TEntity>(Action<EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
             where TEntity : class
         {
-            AddEntityType<TEntity>((_, type) => typeInitialConfiguration?.Invoke(type));
-            var result = EntityType<TEntity>();
-            typeInitialConfiguration?.Invoke(result);
-            return result;
+            return AddEntityType<TEntity>((_, type) => typeInitialConfiguration?.Invoke(type));
         }
 
-        private EntityTypeConfiguration<TEntity> AddEntityType<TEntity>(
+        protected virtual EntityTypeConfiguration<TEntity> AddEntityType<TEntity>(
             Action<EntityTypeConfiguration, EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
             where TEntity : class
         {
@@ -37,7 +34,7 @@ namespace Stenn.AspNetCore.OData.Versioning
             return result;
         }
 
-        private static bool KeyExist(EntityTypeConfiguration entityType)
+        protected static bool KeyExist(EntityTypeConfiguration entityType)
         {
             if (entityType == null)
             {
@@ -53,12 +50,11 @@ namespace Stenn.AspNetCore.OData.Versioning
         /// <typeparam name="TEntity"></typeparam>
         /// <typeparam name="TController"></typeparam>
         /// <returns></returns>
-        public EntitySetConfiguration<TEntity> Add<TEntity, TController>(
+        public virtual EntitySetConfiguration<TEntity> Add<TEntity, TController>(
             Action<EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
             where TEntity : class
-            where TController:IODataController<TEntity>
+            where TController : IODataController<TEntity>
         {
-
             return Add<TEntity, TController>((_, type) => typeInitialConfiguration?.Invoke(type));
         }
 
@@ -69,13 +65,12 @@ namespace Stenn.AspNetCore.OData.Versioning
         /// <typeparam name="TEntity"></typeparam>
         /// <typeparam name="TController"></typeparam>
         /// <returns></returns>
-        private EntitySetConfiguration<TEntity> Add<TEntity, TController>(
+        protected virtual EntitySetConfiguration<TEntity> Add<TEntity, TController>(
             Action<EntityTypeConfiguration, EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
             where TEntity : class
-            where TController:IODataController<TEntity>
+            where TController : IODataController<TEntity>
         {
             var entitySetName = EdmExtensions.GetEntitySetName<TController>();
-
             return AddUnbound<TEntity>(entitySetName, (commonType, type) => typeInitialConfiguration?.Invoke(commonType, type));
         }
 
@@ -86,31 +81,41 @@ namespace Stenn.AspNetCore.OData.Versioning
         /// <param name="typeInitialConfiguration"></param>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        private EntitySetConfiguration<TEntity> AddUnbound<TEntity>(string entitySetName,
+        public EntitySetConfiguration<TEntity> AddUnbound<TEntity>(string entitySetName,
+            Action<EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
+            where TEntity : class
+        {
+            return AddUnbound<TEntity>(entitySetName, (_, type) => typeInitialConfiguration?.Invoke(type));
+        }
+
+        /// <summary>
+        /// Add entity set and type without controller
+        /// </summary>
+        /// <param name="entitySetName"></param>
+        /// <param name="typeInitialConfiguration"></param>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
+        protected virtual EntitySetConfiguration<TEntity> AddUnbound<TEntity>(string entitySetName,
             Action<EntityTypeConfiguration, EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
             where TEntity : class
         {
-            var commonType = _builder.AddEntityType(typeof(TEntity));
-            var result = _builder.EntitySet<TEntity>(entitySetName);
-
-            typeInitialConfiguration?.Invoke(commonType, result.EntityType);
-
-            return result;
+            AddEntityType(typeInitialConfiguration);
+            return _builder.EntitySet<TEntity>(entitySetName);
         }
 
         public void EnableLowerCamelCase()
         {
             _builder.EnableLowerCamelCase();
         }
-        
-        public EntitySetConfiguration<TEntity> EntitySet<TEntity, TController>()
+
+        public virtual EntitySetConfiguration<TEntity> EntitySet<TEntity, TController>()
             where TEntity : class
         {
             var entitySetName = EdmExtensions.GetEntitySetName<TController>();
             return _builder.EntitySet<TEntity>(entitySetName);
         }
 
-        public bool RemoveEntitySet<TController>()
+        public virtual bool RemoveEntitySet<TController>()
         {
             var entitySetName = EdmExtensions.GetEntitySetName<TController>();
             return _builder.RemoveEntitySet(entitySetName);

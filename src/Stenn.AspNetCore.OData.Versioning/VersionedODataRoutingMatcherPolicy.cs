@@ -19,11 +19,11 @@ namespace Stenn.AspNetCore.OData.Versioning
     public class VersionedODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
     {
         private readonly IODataTemplateTranslator _translator;
-        private readonly IODataModelProvider _provider;
+        private readonly IODataModelRequestProvider _provider;
         private readonly ODataOptions _options;
 
         public VersionedODataRoutingMatcherPolicy(IODataTemplateTranslator translator,
-            IODataModelProvider provider,
+            IODataModelRequestProvider provider,
             IOptions<ODataOptions> options)
         {
             _translator = translator;
@@ -75,7 +75,7 @@ namespace Stenn.AspNetCore.OData.Versioning
                     continue;
                 }
 
-                var model = _provider.GetEdmModel(apiVersion, httpContext.RequestServices);
+                var model = _provider.GetRequestEdmModel(apiVersion, httpContext.RequestServices);
                 if (model == null)
                 {
                     candidates.SetValidity(i, false);

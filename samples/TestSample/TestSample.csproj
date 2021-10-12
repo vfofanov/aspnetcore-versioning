@@ -8,19 +8,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.10"/>   
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.10" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
 
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.2.2"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.2"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.2.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection.csproj"/>
-        <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning\Stenn.AspNetCore.OData.Versioning.csproj"/>
-        <ProjectReference Include="..\..\src\Stenn.AspNetCore.Versioning.Extensions.DependencyInjection\Stenn.AspNetCore.Versioning.Extensions.DependencyInjection.csproj"/>
-        <ProjectReference Include="..\..\src\Stenn.AspNetCore.Versioning\Stenn.AspNetCore.Versioning.csproj"/>
-    </ItemGroup>    
+        <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection.csproj" />
+        <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning\Stenn.AspNetCore.OData.Versioning.csproj" />
+        <ProjectReference Include="..\..\src\Stenn.AspNetCore.Versioning.Extensions.DependencyInjection\Stenn.AspNetCore.Versioning.Extensions.DependencyInjection.csproj" />
+        <ProjectReference Include="..\..\src\Stenn.AspNetCore.Versioning\Stenn.AspNetCore.Versioning.csproj" />
+    </ItemGroup>
 
 </Project>

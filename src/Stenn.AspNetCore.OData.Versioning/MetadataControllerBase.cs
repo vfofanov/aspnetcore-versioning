@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Extensions;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.OData;
 using Microsoft.OData.Edm;
@@ -13,13 +14,15 @@ namespace Stenn.AspNetCore.OData.Versioning
     /// </summary>
     public abstract class MetadataControllerBase : ControllerBase
     {
+        private readonly IOptions<ODataVersioningOptions> _options;
+
         /// <inheritdoc />
-        protected MetadataControllerBase(ODataVersion oDataVersion = ODataVersion.V4)
+        protected MetadataControllerBase(IOptions<ODataVersioningOptions> options)
         {
-            ODataVersion = oDataVersion;
+            _options = options;
         }
 
-        protected ODataVersion ODataVersion { get; }
+        protected virtual ODataVersion ODataVersion => _options.Value.ODataVersion;
 
         /// <summary>
         /// Generates the OData $metadata document.

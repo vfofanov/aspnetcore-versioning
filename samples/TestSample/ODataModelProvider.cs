@@ -8,27 +8,18 @@ using TestSample.Models.OData.v1;
 
 namespace TestSample
 {
-    public class ODataModelProvider : ODataModelProvider<ApiVersion>
+    public class ODataModelProvider : ODataModelProviderBase
     {
-        /// <inheritdoc />
-        protected override ApiVersion GetNameConventionKey(ApiVersion version)
-        {
-            return version;
-        }
-
-        /// <inheritdoc />
-        protected override ApiVersion GetKey(ApiVersion version, IServiceProvider provider)
-        {
-            return version;
-        }
-
-        
-
         /// <inheritdoc />
         protected override void FillEdmModel(AdvODataConventionModelBuilder builder, ApiVersion key)
         {
+            FillModel(builder, key);
+        }
+
+        internal static void FillModel(AdvODataConventionModelBuilder builder, ApiVersion key)
+        {
             builder.Namespace = "TestNs";
-            
+
             switch (key)
             {
                 case { MajorVersion: 1, MinorVersion: 0 }:

@@ -7,7 +7,7 @@ using TestSample.Models;
 
 namespace TestSample.Controllers
 {
-    
+    [Route("[controller]")]
     public class WeatherForecastController : ApiController
     {
         private static readonly string[] Summaries = {

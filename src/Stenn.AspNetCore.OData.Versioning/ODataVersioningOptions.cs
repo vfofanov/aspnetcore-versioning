@@ -1,4 +1,6 @@
-﻿namespace Stenn.AspNetCore.OData.Versioning
+﻿using Microsoft.OData;
+
+namespace Stenn.AspNetCore.OData.Versioning
 {
     public class ODataVersioningOptions
     {
@@ -6,5 +8,10 @@
         /// Version prefix template. By default '{0}/odata'
         /// </summary>
         public string VersionPrefixTemplate { get; set; }
+        
+        /// <summary>
+        /// OData protocol version
+        /// </summary>
+        public ODataVersion ODataVersion { get; set; } = ODataVersion.V4;
     }
 }
