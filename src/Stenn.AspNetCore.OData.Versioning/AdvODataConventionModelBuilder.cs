@@ -7,25 +7,25 @@ using Microsoft.OData.ModelBuilder;
 namespace Stenn.AspNetCore.OData.Versioning
 {
     /// <summary>
-    /// Proxy class under <see cref="ODataConventionModelBuilder"/> 
+    ///     Proxy class under <see cref="ODataConventionModelBuilder" />
     /// </summary>
     public class AdvODataConventionModelBuilder : IODataConventionModelBuilder
     {
         private readonly ODataConventionModelBuilder _builder;
 
-        public AdvODataConventionModelBuilder(ODataConventionModelBuilder builder = null)
+        public AdvODataConventionModelBuilder(ODataConventionModelBuilder? builder = null)
         {
             _builder = builder ?? new ODataConventionModelBuilder();
         }
 
-        public EntityTypeConfiguration<TEntity> AddEntityType<TEntity>(Action<EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
+        public EntityTypeConfiguration<TEntity> AddEntityType<TEntity>(Action<EntityTypeConfiguration<TEntity>>? typeInitialConfiguration = null)
             where TEntity : class
         {
             return AddEntityType<TEntity>((_, type) => typeInitialConfiguration?.Invoke(type));
         }
 
         protected virtual EntityTypeConfiguration<TEntity> AddEntityType<TEntity>(
-            Action<EntityTypeConfiguration, EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
+            Action<EntityTypeConfiguration, EntityTypeConfiguration<TEntity>>? typeInitialConfiguration = null)
             where TEntity : class
         {
             var commonType = AddEntityType(typeof(TEntity));
@@ -34,7 +34,7 @@ namespace Stenn.AspNetCore.OData.Versioning
             return result;
         }
 
-        protected static bool KeyExist(EntityTypeConfiguration entityType)
+        protected static bool KeyExist(EntityTypeConfiguration? entityType)
         {
             if (entityType == null)
             {
@@ -44,14 +44,14 @@ namespace Stenn.AspNetCore.OData.Versioning
         }
 
         /// <summary>
-        /// Add entity set and entity type
+        ///     Add entity set and entity type
         /// </summary>
         /// <param name="typeInitialConfiguration"></param>
         /// <typeparam name="TEntity"></typeparam>
         /// <typeparam name="TController"></typeparam>
         /// <returns></returns>
         public virtual EntitySetConfiguration<TEntity> Add<TEntity, TController>(
-            Action<EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
+            Action<EntityTypeConfiguration<TEntity>>? typeInitialConfiguration = null)
             where TEntity : class
             where TController : IODataController<TEntity>
         {
@@ -59,14 +59,14 @@ namespace Stenn.AspNetCore.OData.Versioning
         }
 
         /// <summary>
-        /// Add entity set and entity type
+        ///     Add entity set and entity type
         /// </summary>
         /// <param name="typeInitialConfiguration"></param>
         /// <typeparam name="TEntity"></typeparam>
         /// <typeparam name="TController"></typeparam>
         /// <returns></returns>
         protected virtual EntitySetConfiguration<TEntity> Add<TEntity, TController>(
-            Action<EntityTypeConfiguration, EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
+            Action<EntityTypeConfiguration, EntityTypeConfiguration<TEntity>>? typeInitialConfiguration = null)
             where TEntity : class
             where TController : IODataController<TEntity>
         {
@@ -75,28 +75,28 @@ namespace Stenn.AspNetCore.OData.Versioning
         }
 
         /// <summary>
-        /// Add entity set and type without controller
+        ///     Add entity set and type without controller
         /// </summary>
         /// <param name="entitySetName"></param>
         /// <param name="typeInitialConfiguration"></param>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
         public EntitySetConfiguration<TEntity> AddUnbound<TEntity>(string entitySetName,
-            Action<EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
+            Action<EntityTypeConfiguration<TEntity>>? typeInitialConfiguration = null)
             where TEntity : class
         {
             return AddUnbound<TEntity>(entitySetName, (_, type) => typeInitialConfiguration?.Invoke(type));
         }
 
         /// <summary>
-        /// Add entity set and type without controller
+        ///     Add entity set and type without controller
         /// </summary>
         /// <param name="entitySetName"></param>
         /// <param name="typeInitialConfiguration"></param>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
         protected virtual EntitySetConfiguration<TEntity> AddUnbound<TEntity>(string entitySetName,
-            Action<EntityTypeConfiguration, EntityTypeConfiguration<TEntity>> typeInitialConfiguration = null)
+            Action<EntityTypeConfiguration, EntityTypeConfiguration<TEntity>>? typeInitialConfiguration = null)
             where TEntity : class
         {
             AddEntityType(typeInitialConfiguration);
@@ -120,7 +120,6 @@ namespace Stenn.AspNetCore.OData.Versioning
             var entitySetName = EdmExtensions.GetEntitySetName<TController>();
             return _builder.RemoveEntitySet(entitySetName);
         }
-
 
         #region Unchanged delegating methods
         public virtual EntityTypeConfiguration<TEntityType> EntityType<TEntityType>()

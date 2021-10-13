@@ -6,7 +6,7 @@ namespace Stenn.AspNetCore.OData.Versioning
     public interface IODataModelProvider
     {
         /// <summary>
-        /// Model for run standard entites' name conventions for odata controllers.
+        ///     Model for run standard entites' name conventions for odata controllers.
         /// </summary>
         /// <returns></returns>
         IEdmModel GetEdmModel(ApiVersion version);

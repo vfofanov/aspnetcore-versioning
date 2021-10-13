@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +16,6 @@ namespace Stenn.AspNetCore.OData.Versioning
     {
         public static ApiVersion? GetODataApiVersion(this ODataControllerActionContext context)
         {
-            
             return GetODataApiVersion(context.Model);
         }
 
@@ -32,12 +30,12 @@ namespace Stenn.AspNetCore.OData.Versioning
             var metadata = GetODataRoutingMetadata(controller);
             return GetODataApiVersion(metadata);
         }
-        
+
         public static IODataRoutingMetadata? GetODataRoutingMetadata(this ControllerModel controller)
         {
             return GetODataRoutingMetadata(controller.Attributes);
         }
-        
+
         public static IODataRoutingMetadata? GetODataRoutingMetadata(this Endpoint endpoint)
         {
             return GetODataRoutingMetadata(endpoint.Metadata);
@@ -47,7 +45,7 @@ namespace Stenn.AspNetCore.OData.Versioning
         {
             return attributes.OfType<IODataRoutingMetadata>().FirstOrDefault();
         }
-        
+
         public static ApiVersion? GetODataApiVersion(this IODataRoutingMetadata? metadata)
         {
             return metadata?.Model.GetODataApiVersion();
@@ -84,12 +82,12 @@ namespace Stenn.AspNetCore.OData.Versioning
             }
             return IsODataApiVersionMatch(endpoint.Metadata, apiVersion);
         }
-        
+
         public static bool IsODataApiVersionMatch(this EndpointMetadataCollection metadata, ApiVersion apiVersion)
         {
             return IsODataApiVersionMatch((IReadOnlyList<object>)metadata, apiVersion);
         }
-        
+
         private static bool IsODataApiVersionMatch(IReadOnlyCollection<object> metadata, ApiVersion apiVersion)
         {
             var apiVersionsNeutral = metadata.OfType<IApiVersionNeutral>().ToList();

@@ -5,12 +5,12 @@ using Microsoft.Extensions.Options;
 namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
 {
     /// <summary>
-    /// Sets up default options for <see cref="ODataVersioningOptions"/>.
+    ///     Sets up default options for <see cref="ODataVersioningOptions" />.
     /// </summary>
     public class ODataVersioningOptionsSetup : IConfigureOptions<ODataVersioningOptions>
     {
         /// <summary>
-        /// Configure the default <see cref="ODataOptions"/>
+        ///     Configure the default <see cref="ODataOptions" />
         /// </summary>
         /// <param name="options">The OData options.</param>
         public void Configure(ODataVersioningOptions options)

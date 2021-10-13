@@ -9,8 +9,8 @@ using Microsoft.OData.Edm.Csdl;
 
 namespace Stenn.AspNetCore.OData.Versioning
 {
-     /// <summary>
-    /// Represents a controller for generating OData service and metadata ($metadata) documents.
+    /// <summary>
+    ///     Represents a controller for generating OData service and metadata ($metadata) documents.
     /// </summary>
     public abstract class MetadataControllerBase : ControllerBase
     {
@@ -25,9 +25,9 @@ namespace Stenn.AspNetCore.OData.Versioning
         protected virtual ODataVersion ODataVersion => _options.Value.ODataVersion;
 
         /// <summary>
-        /// Generates the OData $metadata document.
+        ///     Generates the OData $metadata document.
         /// </summary>
-        /// <returns>The <see cref="IEdmModel"/> representing $metadata.</returns>
+        /// <returns>The <see cref="IEdmModel" /> representing $metadata.</returns>
         [HttpGet]
         public virtual IEdmModel GetMetadata()
         {
@@ -35,7 +35,7 @@ namespace Stenn.AspNetCore.OData.Versioning
         }
 
         /// <summary>
-        /// Generates the OData service document.
+        ///     Generates the OData service document.
         /// </summary>
         /// <returns>The service document for the service.</returns>
         [HttpGet]
@@ -44,7 +44,7 @@ namespace Stenn.AspNetCore.OData.Versioning
             var model = GetModel();
             return model.GenerateServiceDocument();
         }
-  
+
         [HttpOptions]
         public virtual IActionResult GetOptions()
         {
@@ -67,7 +67,7 @@ namespace Stenn.AspNetCore.OData.Versioning
             model.SetEdmxVersion(new Version(GetODataVersionString()));
             return model;
         }
-        
+
         protected virtual string GetODataVersionString()
         {
             return ODataUtils.ODataVersionToString(ODataVersion);

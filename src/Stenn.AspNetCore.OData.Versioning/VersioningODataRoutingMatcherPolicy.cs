@@ -19,9 +19,9 @@ namespace Stenn.AspNetCore.OData.Versioning
 {
     public class VersioningODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
     {
-        private readonly IODataTemplateTranslator _translator;
-        private readonly IODataModelRequestProvider _provider;
         private readonly ODataOptions _options;
+        private readonly IODataModelRequestProvider _provider;
+        private readonly IODataTemplateTranslator _translator;
 
         public VersioningODataRoutingMatcherPolicy(IODataTemplateTranslator translator,
             IODataModelRequestProvider provider,
@@ -46,7 +46,7 @@ namespace Stenn.AspNetCore.OData.Versioning
             {
                 throw new ArgumentNullException(nameof(httpContext));
             }
-            
+
             var odataFeature = httpContext.ODataFeature();
             if (odataFeature.Path != null)
             {
@@ -63,13 +63,13 @@ namespace Stenn.AspNetCore.OData.Versioning
                     continue;
                 }
 
-                var oDataRoutingMetadata = candidate.Endpoint.Metadata.OfType<IODataRoutingMetadata>().FirstOrDefault();
+                var oDataRoutingMetadata = ODataEndpointExtensions.GetODataRoutingMetadata(candidate.Endpoint.Metadata);
                 if (oDataRoutingMetadata == null)
                 {
                     continue;
                 }
 
-                
+
                 var apiVersion = oDataRoutingMetadata.GetODataApiVersion();
                 if (apiVersion == null || !candidate.Endpoint.IsODataApiVersionMatch(apiVersion))
                 {
@@ -89,7 +89,7 @@ namespace Stenn.AspNetCore.OData.Versioning
                 try
                 {
                     var template = GetODataPathTemplate(oDataRoutingMetadata.Template, requestModel);
-                    
+
                     var odataPath = _translator.Translate(template, translatorContext);
                     if (odataPath != null)
                     {
@@ -114,7 +114,7 @@ namespace Stenn.AspNetCore.OData.Versioning
                     //NOTE: Check candidate with full model
                     var fullModel = oDataRoutingMetadata.Model;
                     var fullModelTtranslatorContext = new ODataTemplateTranslateContext(httpContext, candidate.Endpoint, candidate.Values, fullModel);
-                    ODataPath odataPath;
+                    ODataPath? odataPath;
                     try
                     {
                         var template = GetODataPathTemplate(oDataRoutingMetadata.Template, fullModel);
@@ -135,7 +135,7 @@ namespace Stenn.AspNetCore.OData.Versioning
             }
         }
 
-        private static ODataPathTemplate GetODataPathTemplate(ODataPathTemplate metadataTemplate, IEdmModel model)
+        private static ODataPathTemplate? GetODataPathTemplate(ODataPathTemplate? metadataTemplate, IEdmModel model)
         {
             if (metadataTemplate == null)
             {
@@ -168,19 +168,19 @@ namespace Stenn.AspNetCore.OData.Versioning
                         break;
                 }
             }
-            
+
             return new ODataPathTemplate(segments);
         }
 
         //NOTE: Copied from KeySegmentTemplate due it internal ((
         //TODO: Run via reflection
         /// <summary>
-        /// Create <see cref="KeySegmentTemplate"/> based on the given entity type and navigation source.
+        ///     Create <see cref="KeySegmentTemplate" /> based on the given entity type and navigation source.
         /// </summary>
         /// <param name="entityType">The given entity type.</param>
         /// <param name="navigationSource">The given navigation source.</param>
         /// <param name="keyPrefix">The prefix used before key template.</param>
-        /// <returns>The built <see cref="KeySegmentTemplate"/>.</returns>
+        /// <returns>The built <see cref="KeySegmentTemplate" />.</returns>
         private static KeySegmentTemplate CreateKeySegment(IEdmEntityType entityType, IEdmNavigationSource navigationSource, string keyPrefix = "key")
         {
             if (entityType == null)
@@ -206,7 +206,7 @@ namespace Stenn.AspNetCore.OData.Versioning
 
             return new KeySegmentTemplate(keyTemplates, entityType, navigationSource);
         }
-        
+
         private void UpdateQuerySetting(ODataOptions options)
         {
             options.QuerySettings.EnableSelect = _options.QuerySettings.EnableSelect;
@@ -218,11 +218,15 @@ namespace Stenn.AspNetCore.OData.Versioning
             options.QuerySettings.MaxTop = _options.QuerySettings.MaxTop;
         }
 
-        private static void MergeRouteValues(RouteValueDictionary updates, RouteValueDictionary source)
+        private static void MergeRouteValues(RouteValueDictionary updates, RouteValueDictionary? source)
         {
-            foreach (var data in updates)
+            if (source == null)
             {
-                source[data.Key] = data.Value;
+                return;
+            }
+            foreach (var (key, value) in updates)
+            {
+                source[key] = value;
             }
         }
     }

@@ -6,6 +6,6 @@ namespace Stenn.AspNetCore.OData.Versioning
 {
     public interface IODataModelRequestProvider
     {
-        IEdmModel GetRequestEdmModel(ApiVersion version, IServiceProvider provider);
+        IEdmModel? GetRequestEdmModel(ApiVersion version, IServiceProvider provider);
     }
 }

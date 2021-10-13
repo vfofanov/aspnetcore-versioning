@@ -17,7 +17,6 @@ namespace Stenn.AspNetCore.OData.Versioning
     public abstract class ODataModelProviderBase<TModelBuilder> : IODataModelProvider
         where TModelBuilder : IODataConventionModelBuilder
     {
-
         public IEdmModel GetEdmModel(ApiVersion version)
         {
             var builder = CreateBuilder();
@@ -29,6 +28,7 @@ namespace Stenn.AspNetCore.OData.Versioning
 
             return model;
         }
+
         protected abstract TModelBuilder CreateBuilder();
 
         protected abstract void FillEdmModel(TModelBuilder builder, ApiVersion version);

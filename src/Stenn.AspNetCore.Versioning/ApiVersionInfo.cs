@@ -71,7 +71,7 @@ namespace Stenn.AspNetCore.Versioning
         /// <seealso cref="ApiVersionFormatProvider"/></summary>
         /// <param name="format">The format to return the text representation in. The value can be <c>null</c> or empty.</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider">format provider</see> used to generate text.
-        /// This implementation should typically use an <see cref="InvariantCulture">invariant culture</see>.</param>
+        /// This implementation should typically use an <see cref="StringComparison.InvariantCulture">invariant culture</see>.</param>
         /// <returns>The <see cref="string">string</see> representation of the version.</returns>
         /// <exception cref="FormatException">The specified <paramref name="format"/> is not one of the supported format values.</exception>
         public string ToString(string? format, IFormatProvider? formatProvider)

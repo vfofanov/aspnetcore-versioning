@@ -5,10 +5,16 @@
         <LangVersion>latest</LangVersion>       
         <OutDir>$(MSBuildProjectDirectory)\..\bin</OutDir>
         <PackageOutputPath>$(MSBuildProjectDirectory)\..\bin\Packages</PackageOutputPath>
+        
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DocumentationFile>$(OutDir)\$(MSBuildProjectName).xml</DocumentationFile>
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>
         <!--        Nuget-->
+        <PatchNumSuffix>beta</PatchNumSuffix>
+        
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <IncludeSymbols>true</IncludeSymbols>

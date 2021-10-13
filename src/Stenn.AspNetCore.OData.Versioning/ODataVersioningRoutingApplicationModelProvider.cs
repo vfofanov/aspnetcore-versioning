@@ -8,7 +8,7 @@ using Stenn.AspNetCore.Versioning;
 namespace Stenn.AspNetCore.OData.Versioning
 {
     /// <summary>
-    /// Versioning routing provider for odata controllers with attribute <see cref="ODataAttributeRoutingAttribute"/>
+    ///     Versioning routing provider for odata controllers with attribute <see cref="ODataAttributeRoutingAttribute" />
     /// </summary>
     public sealed class ODataVersioningRoutingApplicationModelProvider : VersioningRoutingApplicationModelProvider
     {
@@ -23,16 +23,6 @@ namespace Stenn.AspNetCore.OData.Versioning
         {
             return context.Result.Controllers.Where(c => c.ControllerType.IsAssignableTo(typeof(MetadataControllerBase)) ||
                                                          c.Attributes.OfType<ODataAttributeRoutingAttribute>().Any());
-        }
-
-        /// <inheritdoc />
-        public override void OnProvidersExecuted(ApplicationModelProviderContext context)
-        {
-            var standardMetadataController =
-                context.Result.Controllers.FirstOrDefault(c => c.ControllerType == typeof(Microsoft.AspNetCore.OData.Routing.Controllers.MetadataController));
-            
-            
-            base.OnProvidersExecuted(context);
         }
 
         /// <inheritdoc />

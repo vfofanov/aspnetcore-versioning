@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Routing.Conventions;
@@ -7,12 +8,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Microsoft.OData.Edm;
 using Stenn.AspNetCore.Versioning;
 
 namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
 {
     /// <summary>
-    /// Dependency injection extensions for registee AspNet.Core OData versioning 
+    ///     Dependency injection extensions for registee AspNet.Core OData versioning
     /// </summary>
     public static class VersioningAspNetCoreODataDependencyInjectionExtensions
     {
@@ -40,18 +42,27 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             //Options
             services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<ODataVersioningOptions>, ODataVersioningOptionsSetup>());
 
+            //For ApiExplorer
+            services.TryAddSingleton<IEdmModelSelector, EdmModelSelector>();
+            services.TryAddEnumerable(ServiceDescriptor.Transient<IApiDescriptionProvider, ODataQueryParametersApiDescriptionProvider>());
+
             return services;
         }
 
         /// <summary>
-        /// Adds essential versioning OData services to the specified <see cref="IMvcBuilder" />.
+        ///     Adds essential versioning OData services to the specified <see cref="IMvcBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="IMvcBuilder" /> to add services to.</param>
-        /// /// <param name="versioningSetupAction">The OData versioning options to configure the services with,
-        /// including access to a service provider which you can resolve services from.</param>
-        /// <param name="setupAction">The OData options to configure the services with,
-        /// including access to a service provider which you can resolve services from.</param>
-        /// <returns>A <see cref="IMvcBuilder"/> that can be used to further configure the OData services.</returns>
+        /// ///
+        /// <param name="versioningSetupAction">
+        ///     The OData versioning options to configure the services with,
+        ///     including access to a service provider which you can resolve services from.
+        /// </param>
+        /// <param name="setupAction">
+        ///     The OData options to configure the services with,
+        ///     including access to a service provider which you can resolve services from.
+        /// </param>
+        /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
         public static IMvcBuilder AddVersioningOData<TMetadataController, TODataModelProvider>(this IMvcBuilder builder,
             Action<ODataVersioningOptions> versioningSetupAction,
             Action<ODataOptions> setupAction)
@@ -64,14 +75,19 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Adds essential versioning OData services to the specified <see cref="IMvcBuilder" />.
+        ///     Adds essential versioning OData services to the specified <see cref="IMvcBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="IMvcBuilder" /> to add services to.</param>
-        /// /// <param name="versioningSetupAction">The OData versioning options to configure the services with,
-        /// including access to a service provider which you can resolve services from.</param>
-        /// <param name="setupAction">The OData options to configure the services with,
-        /// including access to a service provider which you can resolve services from.</param>
-        /// <returns>A <see cref="IMvcBuilder"/> that can be used to further configure the OData services.</returns>
+        /// ///
+        /// <param name="versioningSetupAction">
+        ///     The OData versioning options to configure the services with,
+        ///     including access to a service provider which you can resolve services from.
+        /// </param>
+        /// <param name="setupAction">
+        ///     The OData options to configure the services with,
+        ///     including access to a service provider which you can resolve services from.
+        /// </param>
+        /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
         public static IMvcBuilder AddVersioningOData<TMetadataController, TODataModelProvider>(this IMvcBuilder builder,
             Action<ODataVersioningOptions, IServiceProvider> versioningSetupAction,
             Action<ODataOptions, IServiceProvider> setupAction)
@@ -96,14 +112,19 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Adds essential versioning OData services to the specified <see cref="IMvcBuilder" />.
+        ///     Adds essential versioning OData services to the specified <see cref="IMvcBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="IMvcBuilder" /> to add services to.</param>
-        /// /// <param name="versioningSetupAction">The OData versioning options to configure the services with,
-        /// including access to a service provider which you can resolve services from.</param>
-        /// <param name="setupAction">The OData options to configure the services with,
-        /// including access to a service provider which you can resolve services from.</param>
-        /// <returns>A <see cref="IMvcBuilder"/> that can be used to further configure the OData services.</returns>
+        /// ///
+        /// <param name="versioningSetupAction">
+        ///     The OData versioning options to configure the services with,
+        ///     including access to a service provider which you can resolve services from.
+        /// </param>
+        /// <param name="setupAction">
+        ///     The OData options to configure the services with,
+        ///     including access to a service provider which you can resolve services from.
+        /// </param>
+        /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
         public static IMvcBuilder AddVersioningOData<TMetadataController, TODataModelProvider, TODataModelRequestProvider>(this IMvcBuilder builder,
             Action<ODataVersioningOptions> versioningSetupAction,
             Action<ODataOptions> setupAction)
@@ -117,14 +138,19 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Adds essential versioning OData services to the specified <see cref="IMvcBuilder" />.
+        ///     Adds essential versioning OData services to the specified <see cref="IMvcBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="IMvcBuilder" /> to add services to.</param>
-        /// /// <param name="versioningSetupAction">The OData versioning options to configure the services with,
-        /// including access to a service provider which you can resolve services from.</param>
-        /// <param name="setupAction">The OData options to configure the services with,
-        /// including access to a service provider which you can resolve services from.</param>
-        /// <returns>A <see cref="IMvcBuilder"/> that can be used to further configure the OData services.</returns>
+        /// ///
+        /// <param name="versioningSetupAction">
+        ///     The OData versioning options to configure the services with,
+        ///     including access to a service provider which you can resolve services from.
+        /// </param>
+        /// <param name="setupAction">
+        ///     The OData options to configure the services with,
+        ///     including access to a service provider which you can resolve services from.
+        /// </param>
+        /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
         public static IMvcBuilder AddVersioningOData<TMetadataController, TODataModelProvider, TODataModelRequestProvider>(this IMvcBuilder builder,
             Action<ODataVersioningOptions, IServiceProvider> versioningSetupAction,
             Action<ODataOptions, IServiceProvider> setupAction)
@@ -150,7 +176,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Configures versioned odata controllers, use it inside method <see cref="ODataMvcBuilderExtensions.AddOData(IMvcBuilder,Action{ODataOptions, IServiceProvider})"/>
+        ///     Configures versioned odata controllers, use it inside method
+        ///     <see cref="ODataMvcBuilderExtensions.AddOData(IMvcBuilder,Action{ODataOptions, IServiceProvider})" />
         /// </summary>
         /// <param name="options">OData options</param>
         /// <param name="provider">Service provider</param>

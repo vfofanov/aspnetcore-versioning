@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-  <Import Project="$(MSBuildThisFileDirectory).msbuild\import.props"/>
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\import.props"/>
 
 </Project>

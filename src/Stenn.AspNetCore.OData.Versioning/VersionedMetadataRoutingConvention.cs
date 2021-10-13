@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.OData.Routing.Template;
 namespace Stenn.AspNetCore.OData.Versioning
 {
     /// <summary>
-    /// The convention for $metadata.
+    ///     The convention for $metadata.
     /// </summary>
     public sealed class VersionedMetadataRoutingConvention<TMetadataController> : IODataControllerActionConvention
         where TMetadataController : MetadataControllerBase
@@ -17,8 +17,8 @@ namespace Stenn.AspNetCore.OData.Versioning
         private static readonly TypeInfo MetadataTypeInfo = typeof(TMetadataController).GetTypeInfo();
 
         /// <summary>
-        /// Gets the order value for determining the order of execution of conventions.
-        /// Metadata routing convention has 0 order.
+        ///     Gets the order value for determining the order of execution of conventions.
+        ///     Metadata routing convention has 0 order.
         /// </summary>
         public int Order => 0;
 
