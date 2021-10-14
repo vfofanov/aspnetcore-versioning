@@ -14,7 +14,7 @@ namespace Stenn.AspNetCore.OData.Versioning
     {
         /// <inheritdoc />
         public ODataVersioningRoutingApplicationModelProvider(IApiVersionInfoProvider versionInfoProvider, IOptions<ODataVersioningOptions> options)
-            : base(versionInfoProvider, new DefaultVersioningRoutingPrefixProvider(options.Value.VersionPrefixTemplate))
+            : base(versionInfoProvider, new DefaultVersioningRoutingPrefixProvider(_ => options.Value.VersionPrefixTemplate))
         {
         }
 

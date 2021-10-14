@@ -16,6 +16,7 @@ using Stenn.AspNetCore.Versioning;
 using Stenn.AspNetCore.Versioning.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using TestSample.Controllers;
 using TestSample.Controllers.OData;
 using TestSample.Models.OData;
 using TestSample.Swagger;
@@ -36,7 +37,14 @@ namespace TestSample
         {
             services.AddDbContext<BookStoreContext>(opt => opt.UseInMemoryDatabase("BookLists"));
 
-            services.AddVersioningForApi<ApiVersionInfoProviderFactory, VersioningRoutingPrefixProvider>();
+            services.AddVersioningForApi<ApiVersionInfoProviderFactory>(controller =>
+            {
+                if (controller.ControllerType.IsAssignableTo(typeof(BackOfficeController)))
+                {
+                    return "api/backOffice/{0}";
+                }
+                return "api/{0}";
+            });
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>

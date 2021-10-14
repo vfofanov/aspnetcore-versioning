@@ -6,24 +6,24 @@ namespace Stenn.AspNetCore.Versioning
     /// <summary>
     /// Default versioning route prefix provider
     /// </summary>
-    public class DefaultVersioningRoutingPrefixProvider : IVersioningRoutingPrefixProvider
+    public sealed class DefaultVersioningRoutingPrefixProvider : IVersioningRoutingPrefixProvider
     {
-        private readonly string _prefixFormatTemplate;
+        private readonly Func<ControllerModel, string> _prefixFormatTemplateFunc;
 
-        public DefaultVersioningRoutingPrefixProvider(string prefixFormatTemplate = "{0}")
+        public DefaultVersioningRoutingPrefixProvider(Func<ControllerModel, string> prefixFormatTemplateFunc)
         {
-            if (string.IsNullOrWhiteSpace(prefixFormatTemplate))
-            {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(prefixFormatTemplate));
-            }
-
-            _prefixFormatTemplate = prefixFormatTemplate;
+            _prefixFormatTemplateFunc = prefixFormatTemplateFunc ?? throw new ArgumentNullException(nameof(prefixFormatTemplateFunc));
         }
 
         /// <inheritdoc />
-        public virtual string GetPrefix(ControllerModel controller, ApiVersionInfo version)
+        public string GetPrefix(ControllerModel controller, ApiVersionInfo version)
         {
-            return VersioningRoutingPrefixHelper.GeneratePrefix(_prefixFormatTemplate, version);
+            var template = _prefixFormatTemplateFunc(controller);
+            if (template == null)
+            {
+                throw new ArgumentNullException(nameof(template));
+            }
+            return VersioningRoutingPrefixHelper.GeneratePrefix(template, version);
         }
     }
 }
