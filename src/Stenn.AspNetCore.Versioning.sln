@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.Versioning
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection", "Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection.csproj", "{E782003C-BBEF-4B0C-9D25-FD4A1CBAD092}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle", "Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle\Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle.csproj", "{5D755A14-325A-49B3-BD50-028BCA73AFE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E782003C-BBEF-4B0C-9D25-FD4A1CBAD092}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E782003C-BBEF-4B0C-9D25-FD4A1CBAD092}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E782003C-BBEF-4B0C-9D25-FD4A1CBAD092}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D755A14-325A-49B3-BD50-028BCA73AFE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D755A14-325A-49B3-BD50-028BCA73AFE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D755A14-325A-49B3-BD50-028BCA73AFE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D755A14-325A-49B3-BD50-028BCA73AFE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

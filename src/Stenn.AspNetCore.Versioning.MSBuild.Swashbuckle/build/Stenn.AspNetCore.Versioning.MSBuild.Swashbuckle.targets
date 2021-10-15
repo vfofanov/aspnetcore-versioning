@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+    <Target Condition="'$(RunSwaggerGen)'=='True'" Name="SwaggerGen_GenerateOpenApi" AfterTargets="Build">
+        <PropertyGroup>
+            <SwaggerGenOutDir Condition="'$(SwaggerGenOutDir)'=='' And '$(SwaggerGenOutputDirectory)'!=''">$(MSBuildProjectDirectory)\$(SwaggerGenOutputDirectory)</SwaggerGenOutDir>
+            <SwaggerGenFileNamePrefix Condition="'$(SwaggerGenFileNamePrefix)'==''">$(MSBuildProjectName).openapi.</SwaggerGenFileNamePrefix>
+            <SwaggerGenJsonOutput Condition="'$(SwaggerGenJsonOutput)'=='' And '$(SwaggerGenYamlOutput)'!='True'">True</SwaggerGenJsonOutput>
+            <SwaggerGenYamlOutput Condition="'$(SwaggerGenYamlOutput)'==''">False</SwaggerGenYamlOutput>
+            <_SwaggerGenStartupAssembly>$(OutDir)$(AssemblyName).dll</_SwaggerGenStartupAssembly>
+        </PropertyGroup>
+
+        <Error Condition="'$(SwaggerGenOutDir)'==''" Text="Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle: SwaggerGenOutDir property is empty. Define SwaggerGenOutDir(full path) or SwaggerGenOutDirectory(relative to project directory)."/>
+        <Error Condition="'@(ApiVersion->Count())'== 0" Text="Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle: Can't find ItemGroup ApiVersion. Define at least one ApiVersion item and run again"/>
+
+        <RemoveDir Condition="Exists('$(SwaggerGenOutDir)') And '$(SwaggerGenOutputDirectoryRecreate)'=='True'" Directories="$(SwaggerGenOutDir)"/>
+        <MakeDir Condition="!Exists('$(SwaggerGenOutDir)')" Directories="$(SwaggerGenOutDir)"/>
+
+        <ItemGroup>
+            <_SwaggerGenOpenApiFileTemplate Condition="'%(ApiVersion.SwaggerGenFileName)'==''"
+                                            Include="$(SwaggerGenOutDir)\$(SwaggerGenFileNamePrefix)%(ApiVersion.Identity)"
+                                            DocGroupName="%(ApiVersion.Identity)"/>
+
+            <_SwaggerGenOpenApiFileTemplate Condition="'%(ApiVersion.SwaggerGenFileName)'!=''"
+                                            Include="$(SwaggerGenOutDir)\%(ApiVersion.SwaggerGenFileName)"
+                                            DocGroupName="%(ApiVersion.Identity)"/>
+        </ItemGroup>
+
+        <ItemGroup Condition="'$(SwaggerGenJsonOutput)'=='True'">
+            <_SwaggerGenOpenApiFile Include="%(_SwaggerGenOpenApiFileTemplate.Identity).json"
+                                    DocGroupName="%(_SwaggerGenOpenApiFileTemplate.DocGroupName)"
+                                    Options=""/>
+        </ItemGroup>
+        <ItemGroup Condition="'$(SwaggerGenYamlOutput)'=='True'">
+            <_SwaggerGenOpenApiFile Include="%(_SwaggerGenOpenApiFileTemplate.Identity).yml"
+                                    DocGroupName="%(_SwaggerGenOpenApiFileTemplate.DocGroupName)"
+                                    Options=" --yaml"/>
+        </ItemGroup>
+
+        <PropertyGroup>
+            <_SwaggerGenCommands>@(_SwaggerGenOpenApiFile->'start "Gen %(DocGroupName)" /b dotnet swagger tofile %(Options) --output "%(Identity)" "$(_SwaggerGenStartupAssembly)" "%(DocGroupName)"', '
+')</_SwaggerGenCommands>
+        </PropertyGroup>
+
+        <Exec Command="$(_SwaggerGenCommands)" ConsoleToMSBuild="true"/>
+    </Target>
+
+</Project>

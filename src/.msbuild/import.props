@@ -7,5 +7,6 @@
   <Import Project="$(MSBuildThisFileDirectory)build.props"/>  
   <!-- shared -->
   <Import Project="$(MSBuildThisFileDirectory)shared\assemblyInfo.props"/>
+  <Import Project="$(MSBuildThisFileDirectory)shared\nuget.github.props"/>
   
 </Project>

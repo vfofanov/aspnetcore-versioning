@@ -1,0 +1,28 @@
+﻿<Project>
+
+    <PropertyGroup>
+<!--        This property enable\disable open api generation task-->
+        <RunSwaggerGen>True</RunSwaggerGen>
+<!--        Directory for open api generated specification. This folder relative to project root folder.-->
+        <SwaggerGenOutputDirectory>open-api</SwaggerGenOutputDirectory>
+<!--        Recreate open ai specs output folder before generation-->
+        <SwaggerGenOutputDirectoryRecreate>True</SwaggerGenOutputDirectoryRecreate>
+<!--        Generate open api spec in json format-->
+        <SwaggerGenJsonOutput>True</SwaggerGenJsonOutput>
+<!--        Generate open api spec in yaml format-->
+        <SwaggerGenYamlOutput>False</SwaggerGenYamlOutput>
+<!--        open api specification result file prefix. Full name will be constracted like: $(SwaggerGenFileNamePrefix)$(ApiVersion)-->
+        <SwaggerGenFileNamePrefix>$(MSBuildProjectName).openapi.</SwaggerGenFileNamePrefix>
+    </PropertyGroup>
+    
+    <ItemGroup>
+<!--        Add SwaggerGenOutputDirectory to project-->
+        <Folder Include="$(SwaggerGenOutputDirectory)"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+<!--        Api version declaration. Add one for every api version in ASP.NET core project.-->
+        <ApiVersion Include="v1" Major="1" Minor="0" Depricated="false" IsDefault="true" />
+    </ItemGroup>
+    
+</Project>

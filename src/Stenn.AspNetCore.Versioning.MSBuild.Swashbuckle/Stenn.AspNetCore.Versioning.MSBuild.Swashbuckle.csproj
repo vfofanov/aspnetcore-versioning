@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework/>
+        <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);NU5128</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageDescription>Swashbuckle Cli MSBuild targets for generate open api(swagger) specification during the build.</PackageDescription>
+        <PackageTags>MSBuild Tasks Swagger Swashbuckle openapi</PackageTags>
+        <DevelopmentDependency>true</DevelopmentDependency>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+
+        <!--        Disable shared behavior-->
+        <EmbedUntrackedSources>false</EmbedUntrackedSources>
+        <IncludeSymbols>false</IncludeSymbols>
+        <SymbolPackageFormat/>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="build\*.*" PackagePath="build\" Pack="true"/>
+        <None Include="buildMultiTargeting\*.*" PackagePath="buildMultiTargeting\" Pack="true"/>
+        <None Include="README.md" PackagePath="\" Pack="true"/>
+        <!--        <None Include="content\*.*" PackagePath="contentFiles\any\any" Pack="true" />-->
+        
+    </ItemGroup>
+
+
+</Project>

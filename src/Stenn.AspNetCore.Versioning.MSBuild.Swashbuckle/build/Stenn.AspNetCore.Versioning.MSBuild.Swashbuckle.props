@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  
+  <PropertyGroup>
+    <_SwaggerGenApiVersionsDefaultFile>$(MSBuildProjectDirectory)\ApiVersions.props</_SwaggerGenApiVersionsDefaultFile>
+  </PropertyGroup>
+
+  <Import Condition="'$(ApiVersionsImported)'!='True' And Exists('$(_SwaggerGenApiVersionsDefaultFile)')" Project="$(_SwaggerGenApiVersionsDefaultFile)"/>
+  <PropertyGroup>
+    <ApiVersionsImported Condition="Exists('$(_SwaggerGenApiVersionsDefaultFile)')">True</ApiVersionsImported>
+  </PropertyGroup>
+  
+</Project>
