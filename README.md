@@ -7,5 +7,5 @@ Based on
 - https://devblogs.microsoft.com/odata/asp-net-odata-8-0-preview-for-net-5/
 - https://devblogs.microsoft.com/odata/attribute-routing-in-asp-net-core-odata-8-0-rc/
 
-##Extra functionality
+## Extra functionality
 - [MSBuild task for generate open api specification during build](https://github.com/StennGroup/stenn-aspnetcore-versioning/tree/master/src/Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle) 
