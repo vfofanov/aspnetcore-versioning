@@ -1,18 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OData;
 using Newtonsoft.Json.Converters;
-using Stenn.AspNetCore.OData.Versioning;
+using Stenn.AspNetCore.OData.Versioning.CsvRouting;
 using Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection;
-using Stenn.AspNetCore.Versioning;
 using Stenn.AspNetCore.Versioning.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -116,6 +113,8 @@ namespace TestSample
             }
             #endregion
 
+            app.UseODataCsvDocs();
+            
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
