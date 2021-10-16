@@ -46,7 +46,6 @@ namespace TestSample.Controllers.OData
 
         [ApiVersionV2]
         [HttpPost]
-        [EnableQuery]
         public IActionResult Post([FromBody] Book book)
         {
             _db.Books.Add(book);
@@ -56,7 +55,6 @@ namespace TestSample.Controllers.OData
         
         [ApiVersionV2]
         [HttpDelete]
-        [EnableQuery]
         public IActionResult Delete(int key)
         {
             var b = _db.Books.FirstOrDefault(c => c.Id == key);
