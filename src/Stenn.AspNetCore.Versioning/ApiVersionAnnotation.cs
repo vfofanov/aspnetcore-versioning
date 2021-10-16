@@ -4,21 +4,27 @@ using Microsoft.AspNetCore.Mvc;
 namespace Stenn.AspNetCore.Versioning
 {
     /// <summary>
-    /// Represents an annotation for <see cref="ApiVersion">API version</see>.
+    /// Represents an annotation for <see cref="ApiVersionInfo">API version</see>.
     /// </summary>
-    [DebuggerDisplay("{ApiVersion}")]
+    [DebuggerDisplay("{Version}")]
     public class ApiVersionAnnotation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiVersionAnnotation"/> class.
         /// </summary>
-        /// <param name="apiVersion">The annotated <see cref="ApiVersion">API version</see>.</param>
-        public ApiVersionAnnotation(ApiVersion apiVersion) => ApiVersion = apiVersion;
+        /// <param name="info">The annotated <see cref="ApiVersionInfo">API version info</see>.</param>
+        public ApiVersionAnnotation(ApiVersionInfo info) => Info = info;
+
+        /// <summary>
+        /// Gets the annotated API version info.
+        /// </summary>
+        /// <value>The annotated <see cref="Version">API version</see>.</value>
+        public ApiVersionInfo Info { get; }
 
         /// <summary>
         /// Gets the annotated API version.
         /// </summary>
-        /// <value>The annotated <see cref="ApiVersion">API version</see>.</value>
-        public ApiVersion ApiVersion { get; }
+        /// <value>The annotated <see cref="Version">API version</see>.</value>
+        public ApiVersion Version => Info.Version;
     }
 }

@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 
@@ -20,7 +19,7 @@ namespace Stenn.AspNetCore.Versioning
                 throw new ArgumentNullException(nameof(controller));
             }
             var annotation = controller.ControllerContext.ActionDescriptor.GetProperty<ApiVersionAnnotation?>();
-            return annotation?.ApiVersion;
+            return annotation?.Version;
         }
     }
 }

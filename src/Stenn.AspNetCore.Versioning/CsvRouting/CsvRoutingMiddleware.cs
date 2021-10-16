@@ -37,12 +37,15 @@ namespace Stenn.AspNetCore.Versioning.CsvRouting
                 }
 
                 var routeEndpoint = endpoint as RouteEndpoint;
+                var versionInfo = endpoint.Metadata.GetMetadata<ApiVersionAnnotation>()?.Info;
 
                 var info = new EndpointRouteInfo
                 (
+                    controllerActionDescriptor.ControllerName,
                     endpoint.DisplayName,
                     endpoint.Metadata.GetMetadata<HttpMethodMetadata>()?.HttpMethods ?? EmptyHeaders,
-                    routeEndpoint?.RoutePattern.RawText ?? "N/A"
+                    routeEndpoint?.RoutePattern.RawText ?? "N/A",
+                    versionInfo?.RoutePathName ?? string.Empty
                 );
 
                 routInfoList.Add(info);
@@ -56,23 +59,23 @@ namespace Stenn.AspNetCore.Versioning.CsvRouting
             var routeInfoList = GetRouteInfo(context);
 
             var csvTable = new StringBuilder();
-            AddRow(csvTable, "Verb", "Route", "Method");
+            AddRow(csvTable, "Version", "Verb", "Route", "Controller", "Method");
 
-            foreach (var (actionMethod, verbs, pattern) in routeInfoList.OrderBy(r => r.Pattern))
+            foreach (var (controller, actionMethod, verbs, pattern, version) in routeInfoList.OrderBy(r => r.Pattern))
             {
                 foreach (var verb in verbs)
                 {
-                    AddRow(csvTable, verb, pattern, actionMethod);
+                    AddRow(csvTable, version, verb, pattern,controller, actionMethod);
                 }
             }
             return csvTable.ToString();
         }
 
-        private void AddRow(StringBuilder sbuilder, string verb, string route, string method)
+        private void AddRow(StringBuilder sbuilder, string? version, string verb, string route, string controller, string? method)
         {
-            sbuilder.AppendLine(string.Join(Delimiter, GetCsvValue(verb), GetCsvValue(route), GetCsvValue(method)));
+            sbuilder.AppendLine(string.Join(Delimiter, GetCsvValue(version),GetCsvValue(verb), GetCsvValue(route), GetCsvValue(controller), GetCsvValue(method)));
         }
 
-        private record EndpointRouteInfo(string ActionMethod, IReadOnlyList<string> HttpVerbs, string Pattern);
+        private record EndpointRouteInfo(string Controller, string? ActionMethod, IReadOnlyList<string> HttpVerbs, string Pattern, string? VersionName);
     }
 }

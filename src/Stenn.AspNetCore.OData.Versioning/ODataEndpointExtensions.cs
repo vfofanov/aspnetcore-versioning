@@ -53,20 +53,20 @@ namespace Stenn.AspNetCore.OData.Versioning
 
         public static ApiVersion? GetODataApiVersion(this IEdmModel? model)
         {
-            return model?.GetAnnotationValue<ApiVersionAnnotation>(model)?.ApiVersion;
+            return model?.GetAnnotationValue<ApiVersionAnnotation>(model)?.Version;
         }
 
-        public static void SetApiVersion(this IEdmModel model, ApiVersion version)
+        public static void SetApiVersion(this IEdmModel model, ApiVersionInfo versionInfo)
         {
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
-            if (version == null)
+            if (versionInfo == null)
             {
-                throw new ArgumentNullException(nameof(version));
+                throw new ArgumentNullException(nameof(versionInfo));
             }
-            model.SetAnnotationValue(model, new ApiVersionAnnotation(version));
+            model.SetAnnotationValue(model, versionInfo.Annotation);
         }
 
         public static bool IsODataApiVersionMatch(this ICommonModel model, ApiVersion version)

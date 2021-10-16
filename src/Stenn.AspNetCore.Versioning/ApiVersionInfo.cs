@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -28,8 +27,9 @@ namespace Stenn.AspNetCore.Versioning
             }
 
             Version = version;
+            IsDeprecated = depricated;
             RoutePathName = versionApiName ?? version.ToString();
-            Annotation = new ApiVersionAnnotation(version);
+            Annotation = new ApiVersionAnnotation(this);
         }
 
         /// <summary>
@@ -123,16 +123,6 @@ namespace Stenn.AspNetCore.Versioning
         }
 
         public static bool operator !=(ApiVersionInfo? left, ApiVersionInfo? right)
-        {
-            return !Equals(left, right);
-        }
-        
-        public static bool operator ==(ApiVersionInfo? left, ApiVersion? right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(ApiVersionInfo? left, ApiVersion? right)
         {
             return !Equals(left, right);
         }

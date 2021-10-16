@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.OData.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Stenn.AspNetCore.Versioning;
 using Stenn.AspNetCore.Versioning.CsvRouting;
 
 namespace Stenn.AspNetCore.OData.Versioning.CsvRouting
@@ -16,7 +17,7 @@ namespace Stenn.AspNetCore.OData.Versioning.CsvRouting
         private static readonly IReadOnlyList<string> EmptyHeaders = Array.Empty<string>();
 
         /// <inheritdoc />
-        public CsvODataRoutingMiddleware(string routePattern, RequestDelegate next, char delimiter = ',') 
+        public CsvODataRoutingMiddleware(string routePattern, RequestDelegate next, char delimiter = ',')
             : base(routePattern, next, delimiter)
         {
         }
@@ -39,13 +40,16 @@ namespace Stenn.AspNetCore.OData.Versioning.CsvRouting
                 }
 
                 var routeEndpoint = endpoint as RouteEndpoint;
-                var isOData = endpoint.Metadata.GetMetadata<IODataRoutingMetadata>()!=null;
+                var isOData = endpoint.Metadata.GetMetadata<IODataRoutingMetadata>() != null;
+                var versionInfo = endpoint.Metadata.GetMetadata<ApiVersionAnnotation>()?.Info;
 
                 var info = new EndpointRouteInfo
                 (
+                    controllerActionDescriptor.ControllerName,
                     endpoint.DisplayName,
                     endpoint.Metadata.GetMetadata<HttpMethodMetadata>()?.HttpMethods ?? EmptyHeaders,
-                    routeEndpoint?.RoutePattern.RawText ?? "N/A",
+                    routeEndpoint?.RoutePattern.RawText ?? string.Empty,
+                    versionInfo?.RoutePathName ?? string.Empty,
                     isOData
                 );
 
@@ -60,23 +64,25 @@ namespace Stenn.AspNetCore.OData.Versioning.CsvRouting
             var routeInfoList = GetRouteInfo(context);
 
             var csvTable = new StringBuilder();
-            AddRow(csvTable, "Verb", "Route", "IsOData", "Method");
+            AddRow(csvTable, "Version", "Verb", "Route", "IsOData", "Controller", "Method");
 
-            foreach (var (actionMethod, verbs, pattern, isOData) in routeInfoList.OrderBy(r => r.Pattern))
+            foreach (var (controller, actionMethod, verbs, pattern, version, isOData) in routeInfoList.OrderBy(r => r.Pattern))
             {
                 foreach (var verb in verbs)
                 {
-                    AddRow(csvTable, verb, pattern,isOData ? "x" : string.Empty, actionMethod);
+                    AddRow(csvTable, version, verb, pattern, isOData ? "x" : string.Empty, controller, actionMethod);
                 }
             }
             return csvTable.ToString();
         }
 
-        private void AddRow(StringBuilder sbuilder, string verb, string route, string isodata, string? method)
+        private void AddRow(StringBuilder sbuilder, string? version, string verb, string route, string isodata, string controller, string? method)
         {
-            sbuilder.AppendLine(string.Join(Delimiter, GetCsvValue(verb), GetCsvValue(route), GetCsvValue(isodata), GetCsvValue(method)));
+            sbuilder.AppendLine(string.Join(Delimiter,  GetCsvValue(version), GetCsvValue(verb), GetCsvValue(route),
+                GetCsvValue(isodata),GetCsvValue(controller), GetCsvValue(method)));
         }
 
-        private record EndpointRouteInfo(string? ActionMethod, IReadOnlyList<string> HttpVerbs, string Pattern, bool IsOData);
+        private record EndpointRouteInfo(string Controller, string? ActionMethod, IReadOnlyList<string> HttpVerbs, string Pattern, string VersionName,
+            bool IsOData);
     }
 }

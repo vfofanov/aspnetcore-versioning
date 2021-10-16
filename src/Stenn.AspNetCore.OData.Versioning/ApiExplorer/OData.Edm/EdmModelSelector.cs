@@ -34,7 +34,7 @@ namespace Microsoft.OData.Edm
             foreach (var versionInfo in apiVersionInfoProvider.Versions)
             {
                 var version = versionInfo.Version;
-                var model = modelProvider.GetEdmModel(version);
+                var model = modelProvider.GetEdmModel(versionInfo);
 
                 collection.Add(version, model);
                 versions.Add(version);

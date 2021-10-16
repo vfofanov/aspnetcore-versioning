@@ -2,10 +2,11 @@
 
     <PropertyGroup>
         <Description>Api versioning implementation for ASP.NET Core</Description>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
     </ItemGroup>
 
 </Project>

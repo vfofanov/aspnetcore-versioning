@@ -25,7 +25,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             services.AddVersioningODataCore<TODataModelProvider>();
 
             services.TryAddSingleton<IODataModelRequestProvider, TODataModelRequestProvider>();
-            services.TryAddSingleton<IODataModelRequestProvider>(p => p.GetService<TODataModelRequestProvider>());
+            services.TryAddSingleton<IODataModelRequestProvider>(p => p.GetRequiredService<TODataModelRequestProvider>());
             services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, VersioningODataRoutingMatcherPolicy>());
 
             return services;
@@ -35,7 +35,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             where TODataModelProvider : class, IODataModelProvider
         {
             services.TryAddSingleton<IODataModelProvider, TODataModelProvider>();
-            services.TryAddSingleton<IODataModelProvider>(p => p.GetService<TODataModelProvider>());
+            services.TryAddSingleton<IODataModelProvider>(p => p.GetRequiredService<TODataModelProvider>());
 
             services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ODataVersioningRoutingApplicationModelProvider>());
 
@@ -70,8 +70,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             where TODataModelProvider : class, IODataModelProvider
         {
             return builder.AddVersioningOData<TMetadataController, TODataModelProvider>(
-                (options, _) => versioningSetupAction?.Invoke(options),
-                (options, _) => setupAction?.Invoke(options));
+                (options, _) => versioningSetupAction(options),
+                (options, _) => setupAction(options));
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             builder.AddOData((options, provider) =>
             {
                 ConfigureVersioningOData<TMetadataController>(options, provider);
-                setupAction?.Invoke(options, provider);
+                setupAction(options, provider);
             });
 
             return builder;
@@ -133,8 +133,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             where TODataModelRequestProvider : class, IODataModelRequestProvider
         {
             return builder.AddVersioningOData<TMetadataController, TODataModelProvider, TODataModelRequestProvider>(
-                (options, _) => versioningSetupAction?.Invoke(options),
-                (options, _) => setupAction?.Invoke(options));
+                (options, _) => versioningSetupAction(options),
+                (options, _) => setupAction(options));
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             builder.AddOData((options, provider) =>
             {
                 ConfigureVersioningOData<TMetadataController>(options, provider);
-                setupAction?.Invoke(options, provider);
+                setupAction(options, provider);
             });
 
             return builder;
@@ -196,7 +196,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             foreach (var version in apiVersionsProvider.Versions)
             {
                 var prefix = VersioningRoutingPrefixHelper.GeneratePrefix(prefixTemplate, version).TrimStart('/');
-                options.AddRouteComponents(prefix, modelProvider.GetEdmModel(version.Version));
+                options.AddRouteComponents(prefix, modelProvider.GetEdmModel(version));
             }
         }
     }

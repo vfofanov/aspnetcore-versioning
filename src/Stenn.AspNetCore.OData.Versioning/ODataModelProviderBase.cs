@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
+using Stenn.AspNetCore.Versioning;
 
 namespace Stenn.AspNetCore.OData.Versioning
 {
@@ -17,11 +18,11 @@ namespace Stenn.AspNetCore.OData.Versioning
     public abstract class ODataModelProviderBase<TModelBuilder> : IODataModelProvider
         where TModelBuilder : IODataConventionModelBuilder
     {
-        public IEdmModel GetEdmModel(ApiVersion version)
+        public IEdmModel GetEdmModel(ApiVersionInfo version)
         {
             var builder = CreateBuilder();
 
-            FillEdmModel(builder, version);
+            FillEdmModel(builder, version.Version);
             var model = builder.GetEdmModel();
 
             model.SetApiVersion(version);

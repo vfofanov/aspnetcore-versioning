@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
+using Stenn.AspNetCore.Versioning;
 
 namespace Stenn.AspNetCore.OData.Versioning
 {
@@ -9,6 +10,6 @@ namespace Stenn.AspNetCore.OData.Versioning
         ///     Model for run standard entites' name conventions for odata controllers.
         /// </summary>
         /// <returns></returns>
-        IEdmModel GetEdmModel(ApiVersion version);
+        IEdmModel GetEdmModel(ApiVersionInfo version);
     }
 }

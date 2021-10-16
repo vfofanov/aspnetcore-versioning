@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <Description>Dependency injection extensions for Stenn.AspNetCore.OData.Versioning</Description>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

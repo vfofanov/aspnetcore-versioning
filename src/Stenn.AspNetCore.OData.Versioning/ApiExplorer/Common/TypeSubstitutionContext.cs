@@ -52,7 +52,7 @@ namespace Microsoft.AspNet.OData
         ///     Gets API version associated with the source model.
         /// </summary>
         /// <value>The associated <see cref="ApiVersion">API version</see>.</value>
-        public ApiVersion ApiVersion => _apiVersion ??= _model!.GetAnnotationValue<ApiVersionAnnotation>(Model)?.ApiVersion ?? ApiVersion.Neutral;
+        public ApiVersion ApiVersion => _apiVersion ??= _model!.GetAnnotationValue<ApiVersionAnnotation>(Model)?.Version ?? ApiVersion.Neutral;
 
         /// <summary>
         ///     Gets the model type builder used to create substitution types.
