@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   
+<!--  Hide ApiVersion items from IDE Solution Explorer-->
+  <ItemDefinitionGroup>
+    <ApiVersion Visible="False"/>
+  </ItemDefinitionGroup>
+  
   <PropertyGroup>
     <_SwaggerGenApiVersionsDefaultFile>$(MSBuildProjectDirectory)\ApiVersions.props</_SwaggerGenApiVersionsDefaultFile>
   </PropertyGroup>
