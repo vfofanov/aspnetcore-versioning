@@ -5,7 +5,7 @@ namespace Stenn.AspNetCore.Versioning
 {
     public interface IApiVersionInfoProvider
     {
-        ApiVersion Default { get; }
+        ApiVersionInfo Default { get; }
         IReadOnlyList<ApiVersionInfo> Versions { get; }
     }
 }

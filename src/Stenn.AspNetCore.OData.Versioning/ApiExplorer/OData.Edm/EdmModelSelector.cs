@@ -42,7 +42,7 @@ namespace Microsoft.OData.Edm
 
             versions.Sort();
 #pragma warning disable IDE0056 // Use index operator (cannot be used in web api)
-            _maxVersion = versions.Count == 0 ? apiVersionInfoProvider.Default : versions[^1];
+            _maxVersion = versions.Count == 0 ? apiVersionInfoProvider.Default.Version : versions[^1];
 #pragma warning restore IDE0056
             collection.TrimExcess();
             

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Stenn.AspNetCore.Versioning
@@ -26,13 +27,13 @@ namespace Stenn.AspNetCore.Versioning
             {
                 throw new ArgumentException("Value cannot be an empty collection.", nameof(versions));
             }
-            Default = defaultVersion;
+            Default = versions.Single(v => v.Version == defaultVersion);
 
 
             Versions = versions;
         }
         
-        public ApiVersion Default { get; }
+        public ApiVersionInfo Default { get; }
 
         public IReadOnlyList<ApiVersionInfo> Versions { get; }
     }
