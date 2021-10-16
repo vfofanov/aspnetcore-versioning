@@ -47,14 +47,11 @@ namespace TestSample
             });
 
             services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                })
+                .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); })
                 .AddVersioningOData<MetadataController, ODataModelProvider>(versioningOptions =>
                     {
                         versioningOptions.RouteOptions.EnableEntitySetCount = false;
-                        
+
                         versioningOptions.ODataVersion = ODataVersion.V4;
                         versioningOptions.VersionPrefixTemplate = "api/{0}/odata";
                     },
@@ -63,13 +60,15 @@ namespace TestSample
                         options.EnableAttributeRouting = false;
                         options.RouteOptions.EnableKeyAsSegment = false;
                         options.RouteOptions.EnableControllerNameCaseInsensitive = true;
-                        
+
                         options.EnableQueryFeatures();
                     });
-            
+
             //Swagger
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>();
             services.AddSwaggerGen();
+            //SwaggerUI
+            services.AddTransient<IConfigureOptions<SwaggerUIOptions>, ConfigureSwaggerUIOptions>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,28 +79,44 @@ namespace TestSample
                 app.UseDeveloperExceptionPage();
                 app.UseODataRouteDebug(); //OData debugging endpoints page 
             }
-            
+
             app.UseRouting();
 
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseSwaggerUI();
+
+            #region ReDoc
             {
-                var versionProvider = app.ApplicationServices.GetRequiredService<IApiVersionInfoProvider>();
-                foreach (var apiVersion in versionProvider.Versions)
+                //NOTE: Make different routes for different versions
+                var swaggerUIOptions = app.ApplicationServices.GetRequiredService<IOptions<SwaggerUIOptions>>().Value;
+                foreach (var url in swaggerUIOptions.ConfigObject.Urls)
                 {
-                    var name = apiVersion.RoutePathName;
-                    options.SwaggerEndpoint($"/swagger/{name}/swagger.json", name);
+                    var versionName = url.Name;
+                    app.UseReDoc(c =>
+                    {
+                        c.DocumentTitle = $"OData 8 Versioning Sample ({versionName})";
+                        c.RoutePrefix = $"api-docs/{versionName}";
+                        c.SpecUrl(url.Url);
+
+                        c.EnableUntrustedSpec();
+                        c.ScrollYOffset(10);
+                        c.HideHostname();
+                        c.HideDownloadButton();
+                        c.ExpandResponses("200,201");
+                        c.RequiredPropsFirst();
+                        c.NoAutoAuth();
+                        c.PathInMiddlePanel();
+                        c.HideLoading();
+                        c.NativeScrollbars();
+                        c.DisableSearch();
+                        c.OnlyRequiredInSamples();
+                        c.SortPropsAlphabetically();
+                    });
                 }
-                options.RoutePrefix = string.Empty;
-                options.DocExpansion(DocExpansion.None);
-            });
+            }
+            #endregion
 
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

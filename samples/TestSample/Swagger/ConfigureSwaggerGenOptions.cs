@@ -33,6 +33,7 @@ namespace TestSample.Swagger
 
             // add a custom operation filter which sets default values
             options.OperationFilter<SwaggerDefaultValues>();
+            options.OrderActionsBy(apiDesc => apiDesc.RelativePath);
 
             // Set the comments path for the Swagger JSON and UI.
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
