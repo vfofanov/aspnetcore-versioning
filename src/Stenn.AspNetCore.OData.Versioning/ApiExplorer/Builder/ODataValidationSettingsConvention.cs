@@ -61,7 +61,11 @@ namespace Microsoft.AspNet.OData.Builder
             var singleResult = IsSingleResult(apiDescription, out var resultType);
             var visitor = new ODataAttributeVisitor(context, model, queryOptions, resultType, singleResult);
 
-            visitor.Visit(apiDescription);
+            var queryEnabled = visitor.Visit(apiDescription);
+            if (!queryEnabled)
+            {
+                return;
+            }
 
             var options = visitor.AllowedQueryOptions;
             var parameterDescriptions = apiDescription.ParameterDescriptions;

@@ -38,13 +38,13 @@ namespace Microsoft.AspNet.OData.Builder
 
         private bool IsSingleResult { get; }
 
-        internal void Visit(ApiDescription apiDescription)
+        internal bool Visit(ApiDescription apiDescription)
         {
-            VisitAction(apiDescription.ActionDescriptor);
+            var queryEnabled = VisitAction(apiDescription.ActionDescriptor);
 
             if (_resultType == null)
             {
-                return;
+                return queryEnabled;
             }
 
             var modelType = _typeResolver.GetStructuredType(_resultType);
@@ -53,6 +53,7 @@ namespace Microsoft.AspNet.OData.Builder
             {
                 VisitModel(modelType);
             }
+            return queryEnabled;
         }
 
         private void VisitModel(IEdmStructuredType modelType)
@@ -94,7 +95,7 @@ namespace Microsoft.AspNet.OData.Builder
                 }
                 else
                 {
-                    _context.AllowedArithmeticOperators |= attribute.AllowedArithmeticOperators;
+                    _context.AllowedArithmeticOperators &= attribute.AllowedArithmeticOperators;
                 }
 
                 if (attribute.AllowedFunctions == AllowedFunctions.None)
@@ -103,7 +104,7 @@ namespace Microsoft.AspNet.OData.Builder
                 }
                 else
                 {
-                    _context.AllowedFunctions |= attribute.AllowedFunctions;
+                    _context.AllowedFunctions &= attribute.AllowedFunctions;
                 }
 
                 if (attribute.AllowedLogicalOperators == AllowedLogicalOperators.None)
@@ -112,7 +113,7 @@ namespace Microsoft.AspNet.OData.Builder
                 }
                 else
                 {
-                    _context.AllowedLogicalOperators |= attribute.AllowedLogicalOperators;
+                    _context.AllowedLogicalOperators &= attribute.AllowedLogicalOperators;
                 }
 
                 if (attribute.AllowedQueryOptions == AllowedQueryOptions.None)
@@ -121,7 +122,7 @@ namespace Microsoft.AspNet.OData.Builder
                 }
                 else
                 {
-                    AllowedQueryOptions |= attribute.AllowedQueryOptions;
+                    AllowedQueryOptions &= attribute.AllowedQueryOptions;
                 }
 
                 if (_context.MaxAnyAllExpressionDepth == @default.MaxAnyAllExpressionDepth)
@@ -365,17 +366,29 @@ namespace Microsoft.AspNet.OData.Builder
                    querySettings.OrderByConfigurations.Any(p => p.Value);
         }
 
-        private void VisitAction(ActionDescriptor action)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns>Is action supports odata query or not. In other words does controller or|and action has <see cref="EnableQueryAttribute"/></returns>
+        private bool VisitAction(ActionDescriptor action)
         {
             if (action is not ControllerActionDescriptor controllerAction)
             {
-                return;
+                return false;
             }
 
             var attributes = new List<EnableQueryAttribute>(controllerAction.ControllerTypeInfo.GetCustomAttributes<EnableQueryAttribute>(true));
 
             attributes.AddRange(controllerAction.MethodInfo.GetCustomAttributes<EnableQueryAttribute>(true));
+
+            if (attributes.Count == 0)
+            {
+                return false;
+            }
+            
             VisitEnableQuery(attributes);
+            return true;
         }
     }
 }
