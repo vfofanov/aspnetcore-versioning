@@ -53,11 +53,17 @@ namespace TestSample
                 })
                 .AddVersioningOData<MetadataController, ODataModelProvider>(versioningOptions =>
                     {
+                        versioningOptions.RouteOptions.EnableEntitySetCount = false;
+                        
                         versioningOptions.ODataVersion = ODataVersion.V4;
                         versioningOptions.VersionPrefixTemplate = "api/{0}/odata";
                     },
                     options =>
                     {
+                        options.EnableAttributeRouting = false;
+                        options.RouteOptions.EnableKeyAsSegment = false;
+                        options.RouteOptions.EnableControllerNameCaseInsensitive = true;
+                        
                         options.EnableQueryFeatures();
                     });
             
