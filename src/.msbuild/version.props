@@ -4,9 +4,9 @@
         <!-- major.minor -->
         <TwoDigitVersion Condition="'$(TwoDigitVersion)'==''">1.0</TwoDigitVersion>
         
-        <PatchNum Condition="'$(PatchNum)'==''">15</PatchNum>
+        <PatchNum Condition="'$(PatchNum)'==''">16</PatchNum>
         <!-- special postfix will be added to patch num if defined -->
-        <PatchNumSuffix Condition="'$(PatchNumSuffix)'=='' And '$(Configuration)'!='Release'">local</PatchNumSuffix>
+        <PatchNumSuffix Condition="'$(PatchNumSuffix)'=='' And '$(Configuration)'!='Release'">debug</PatchNumSuffix>
         <BuildNum Condition="'$(BuildNum)'==''">0</BuildNum>                
     </PropertyGroup>
 </Project>

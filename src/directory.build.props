@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-    <Import Project="$(MSBuildThisFileDirectory).msbuild\import.props"/>
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\product.props"/>
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\package.props"/>
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\version.props"/>
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\build.props"/>
+    <!-- shared -->
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\shared\assemblyInfo.props"/>
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\shared\nuget.github.props"/>
 
 </Project>

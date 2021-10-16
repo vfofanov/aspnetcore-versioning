@@ -13,6 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Vers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle", "Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle\Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle.csproj", "{5D755A14-325A-49B3-BD50-028BCA73AFE4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".msbuild", ".msbuild", "{BA3CF70D-79A2-4BD5-AE60-C4485E591D87}"
+ProjectSection(SolutionItems) = preProject
+	.msbuild\build.props = .msbuild\build.props
+	.msbuild\package.props = .msbuild\package.props
+	.msbuild\product.props = .msbuild\product.props
+	.msbuild\version.props = .msbuild\version.props
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

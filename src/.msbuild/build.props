@@ -2,9 +2,9 @@
 <Project>
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <LangVersion>latest</LangVersion>       
-        <OutDir>$(MSBuildProjectDirectory)\..\bin</OutDir>
-        <PackageOutputPath>$(MSBuildProjectDirectory)\..\bin\Packages</PackageOutputPath>
+        <LangVersion>latest</LangVersion>
+        <OutDir>$(MSBuildThisFileDirectory)..\..\bin</OutDir>
+        <PackageOutputPath>$(MSBuildThisFileDirectory)..\..\bin\Packages</PackageOutputPath>
         
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DocumentationFile>$(OutDir)\$(MSBuildProjectName).xml</DocumentationFile>
