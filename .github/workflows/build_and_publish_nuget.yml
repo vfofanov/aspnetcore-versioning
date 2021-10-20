@@ -16,7 +16,7 @@ on:
         default: 'beta'
 
 env:
-  PROJECT_PATH: 'src/Stenn.MSBuild.Extensions.sln'
+  PROJECT_PATH: 'src/Stenn.AspNetCore.Versioning.sln'
   PACKAGE_OUTPUT_DIRECTORY: '${{ github.workspace }}/output'
   NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
   BUILD_CONFIGURATION: Release
