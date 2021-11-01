@@ -37,20 +37,20 @@ namespace TestSample
         private static void FillModelV1(AdvODataConventionModelBuilder builder)
         {
             builder.Add<Book, BooksController>();
-            builder.EntitySet<Customer, CustomersController>();
+            builder.Add<Customer, CustomersController>();
         }
 
         private static void FillModelV2(AdvODataConventionModelBuilder builder)
         {
-            builder.EntitySet<Book, BooksController>();
-            builder.Add<Press, PressesController>(type =>
+            builder.Add<Book, BooksController>(type =>
             {
                 type.Collection
-                    .Function(nameof(PressesController.EBooks))
-                    .ReturnsCollectionFromEntitySet<Press, PressesController>();
+                    .Function(nameof(BooksController.EBooks))
+                    .ReturnsCollectionFromEntitySet<Book, BooksController>();
             });
+            builder.Add<Press, PressesController>();
 
-            builder.EntitySet<Models.OData.v2.Customer, Controllers.OData.v2.CustomersController>();
+            builder.Add<Models.OData.v2.Customer, Controllers.OData.v2.CustomersController>();
         }
     }
 }

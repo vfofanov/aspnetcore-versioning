@@ -34,16 +34,5 @@ namespace TestSample.Controllers.OData
         {
             return _db.Presses;
         }
-
-        /// <summary>
-        /// Returns suppliers that have deals with current user's buyer company SuppliersThatHaveDealsWithCurrentBuyer
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
-        public Task<IQueryable<Press>> EBooks()
-        {
-            return Task.FromResult(_db.Presses.Where(p => p.Category == Category.EBook).AsQueryable());
-        }
     }
 }

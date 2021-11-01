@@ -57,6 +57,7 @@ namespace TestSample
                         options.EnableAttributeRouting = false;
                         options.RouteOptions.EnableKeyAsSegment = false;
                         options.RouteOptions.EnableControllerNameCaseInsensitive = true;
+                        options.RouteOptions.EnableNonParenthesisForEmptyParameterFunction = true;
 
                         options.EnableQueryFeatures();
                     });

@@ -15,6 +15,9 @@ namespace TestSample.Models.OData
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Book>().OwnsOne(c => c.Location);
+            modelBuilder.Entity<Book>()
+                .HasOne(book => book.Press)
+                .WithMany();
         }
     }
 }

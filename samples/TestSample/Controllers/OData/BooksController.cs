@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
@@ -66,6 +67,18 @@ namespace TestSample.Controllers.OData
             _db.Books.Remove(b);
             _db.SaveChanges();
             return Ok();
+        }
+
+        /// <summary>
+        /// Returns suppliers that have deals with current user's buyer company SuppliersThatHaveDealsWithCurrentBuyer
+        /// </summary>
+        /// <returns></returns>
+        [ApiVersionV2]
+        [HttpGet]
+        [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
+        public Task<IQueryable<Book>> EBooks()
+        {
+            return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
         }
     }
 }
