@@ -35,12 +35,14 @@ namespace Microsoft.AspNet.OData.Builder
 
         private static IODataQueryOptionsConvention ImplicitActionConvention(ODataQueryOptionSettings settings)
         {
+            
             var validationSettings = new ODataValidationSettings
             {
                 AllowedArithmeticOperators = AllowedArithmeticOperators.None,
                 AllowedFunctions = AllowedFunctions.None,
                 AllowedLogicalOperators = AllowedLogicalOperators.None,
-                AllowedQueryOptions = AllowedQueryOptions.None
+                //NOTE: Top and skip always enabled for now in OData implementation
+                AllowedQueryOptions = AllowedQueryOptions.Top | AllowedQueryOptions.Skip
             };
 
             return new ODataValidationSettingsConvention(validationSettings, settings);

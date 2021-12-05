@@ -17,7 +17,8 @@ namespace Microsoft.AspNet.OData.Builder
             AllowedArithmeticOperators = AllowedArithmeticOperators.None,
             AllowedFunctions = AllowedFunctions.None,
             AllowedLogicalOperators = AllowedLogicalOperators.None,
-            AllowedQueryOptions = AllowedQueryOptions.None
+            //NOTE: Top and skip always enabled for now in OData implementation
+            AllowedQueryOptions = AllowedQueryOptions.Top | AllowedQueryOptions.Skip
         };
 
         /// <inheritdoc />
