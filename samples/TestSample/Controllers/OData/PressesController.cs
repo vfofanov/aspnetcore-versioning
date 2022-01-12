@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Stenn.AspNetCore.OData.Versioning;
+using Stenn.AspNetCore.Versioning;
 using TestSample.Models.OData;
 
 namespace TestSample.Controllers.OData
@@ -25,6 +26,9 @@ namespace TestSample.Controllers.OData
                 context.Books.Add(b);
                 context.Presses.Add(b.Press);
             }
+
+            this.GetApiVersion();
+            
             context.SaveChanges();
         }
 

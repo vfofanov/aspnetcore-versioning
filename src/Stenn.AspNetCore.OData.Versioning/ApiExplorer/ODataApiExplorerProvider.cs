@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -21,6 +23,12 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
     /// </summary>
     public class ODataQueryParametersApiDescriptionProvider : IApiDescriptionProvider
     {
+        private static readonly Regex ActionParametersRegex = new(@"\((\w|{).+?}\)\z",
+            RegexOptions.Singleline | RegexOptions.RightToLeft | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+        private static readonly Regex ActionParameterReplaceRegex = new(@"(?<left>\w.+?=)?{(?<p>.+?)}",
+            RegexOptions.Singleline | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
         private const int AfterApiVersioning = -100;
         private readonly IOptions<ODataOptions> _odataOptions;
         private readonly IOptions<ODataVersioningOptions> _odataVersioningOptions;
@@ -68,6 +76,7 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
 
             var results = context.Results;
 
+            
             foreach (var apiDescription in results)
             {
                 if (apiDescription.ActionDescriptor is not ControllerActionDescriptor action ||
@@ -76,6 +85,8 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
                 {
                     continue;
                 }
+
+                ProcessActionsWithParameters(apiDescription);
 
                 var oDataRoutingMetadata = ODataEndpointExtensions.GetODataRoutingMetadata(action.EndpointMetadata);
                 if (oDataRoutingMetadata == null)
@@ -133,6 +144,27 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
             //         // }
             //     }
             // }
+        }
+
+        /// <summary>
+        /// Replace path parameters ({p1},{p2}) to query parameters (p1=@p1,p2=@p2)?@p1=..&amp;@p2=..
+        /// </summary>
+        /// <param name="apiDescription"></param>
+        private static void ProcessActionsWithParameters(ApiDescription apiDescription)
+        {
+            apiDescription.RelativePath = ActionParametersRegex.Replace(apiDescription.RelativePath,
+                match =>
+                {
+                    return ActionParameterReplaceRegex.Replace(match.Value, paramMatch =>
+                    {
+                        var paramName = paramMatch.Groups["p"].Value;
+
+                        var param = apiDescription.ParameterDescriptions.First(p => p.Name == paramName);
+                        param.Name = $"@{paramName}";
+                        param.Source = BindingSource.Query;
+                        return $"{paramName}={param.Name}";
+                    });
+                });
         }
 
         /// <summary>

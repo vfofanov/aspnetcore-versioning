@@ -1,13 +1,15 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Stenn.AspNetCore.Versioning;
+using Stenn.AspNetCore.Versioning.Swashbuckle;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace TestSample.Swagger
+namespace TestSample.Swashbuckle
 {
     public class ConfigureSwaggerGenOptions : IConfigureOptions<SwaggerGenOptions>
     {
@@ -33,6 +35,7 @@ namespace TestSample.Swagger
 
             // add a custom operation filter which sets default values
             options.OperationFilter<SwaggerDefaultValues>();
+            
             options.OrderActionsBy(apiDesc => apiDesc.RelativePath);
 
             // Set the comments path for the Swagger JSON and UI.
@@ -41,7 +44,7 @@ namespace TestSample.Swagger
             options.IncludeXmlComments(xmlPath);
         }
 
-        private static OpenApiInfo CreateInfoForApiVersion(ApiVersionInfo versionInfo)
+        public static OpenApiInfo CreateInfoForApiVersion(ApiVersionInfo versionInfo)
         {
             var info = new OpenApiInfo
             {

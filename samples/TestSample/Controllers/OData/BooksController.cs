@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using Stenn.AspNetCore.OData.Versioning;
+using Stenn.AspNetCore.OData.Versioning.Actions;
 using TestSample.Models.OData;
 
 namespace TestSample.Controllers.OData
@@ -13,6 +17,20 @@ namespace TestSample.Controllers.OData
     /// </summary>
     public class BooksController : ODataController<Book>
     {
+        public static class ActionParams
+        {
+            public static class EBooksPost
+            {
+                public static readonly ODataActionParameter<string> Name = new("name");
+                public static readonly ODataActionCollectionParameter<int> Ids = new("ids");
+            }
+            
+            public static class EBooks2Post
+            {
+                public static readonly ODataActionCollectionParameter<int> Ids = new("ids");
+            }
+        }
+
         private readonly BookStoreContext _db;
 
         public BooksController(BookStoreContext context)
@@ -45,7 +63,6 @@ namespace TestSample.Controllers.OData
             return Ok(_db.Books.FirstOrDefault(c => c.Id == key));
         }
 
-        [ApiVersionV2]
         [HttpPost]
         public IActionResult Post([FromBody] Book book)
         {
@@ -72,12 +89,39 @@ namespace TestSample.Controllers.OData
         /// <summary>
         /// Returns suppliers that have deals with current user's buyer company SuppliersThatHaveDealsWithCurrentBuyer
         /// </summary>
-        /// <returns></returns>
+        /// <param name="testId">Optional parameter</param>
+        /// <returns>Returns suppliers</returns>
         [ApiVersionV2]
         [HttpGet]
         [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
-        public Task<IQueryable<Book>> EBooks()
+        public Task<IQueryable<Book>> EBooks(int testId)
         {
+            return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
+        }
+        
+        /// <summary>
+        /// Test post controller
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        [ApiVersionV2]
+        [HttpPost]
+        [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
+        public Task<IQueryable<Book>> EBooksPost(ODataActionParameters parameters)
+        {
+            var name = parameters.Get(ActionParams.EBooksPost.Name);
+            var ids = parameters.Get(ActionParams.EBooksPost.Ids)?.ToList();
+
+            return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
+        }
+        
+        [ApiVersionV2]
+        [HttpPost]
+        [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
+        public Task<IQueryable<Book>> EBooks2Post(ODataActionParameters parameters)
+        {
+            var ids = parameters.Get(ActionParams.EBooks2Post.Ids);
+            
             return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
         }
     }

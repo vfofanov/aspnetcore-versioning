@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using Stenn.AspNetCore.Versioning;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace TestSample.Swagger
+namespace TestSample.Swashbuckle
 {
     
     public class SwaggerDefaultValues : IOperationFilter

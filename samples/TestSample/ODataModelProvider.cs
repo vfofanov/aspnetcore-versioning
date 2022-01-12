@@ -1,6 +1,8 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OData.ModelBuilder;
 using Stenn.AspNetCore.OData.Versioning;
+using Stenn.AspNetCore.OData.Versioning.Actions;
 using TestSample.Controllers.OData;
 using TestSample.Controllers.OData.v1;
 using TestSample.Models.OData;
@@ -46,6 +48,18 @@ namespace TestSample
             {
                 type.Collection
                     .Function(nameof(BooksController.EBooks))
+                    .AddParameter<int>("testId")
+                    .ReturnsCollectionFromEntitySet<Book, BooksController>();
+
+                type.Collection
+                    .Action(nameof(BooksController.EBooksPost))
+                    .AddParameter(BooksController.ActionParams.EBooksPost.Name, c => c.Required())
+                    .AddParameter(BooksController.ActionParams.EBooksPost.Ids)
+                    .ReturnsCollectionFromEntitySet<Book, BooksController>();
+
+                type.Collection
+                    .Action(nameof(BooksController.EBooks2Post))
+                    .AddParameter(BooksController.ActionParams.EBooks2Post.Ids)
                     .ReturnsCollectionFromEntitySet<Book, BooksController>();
             });
             builder.Add<Press, PressesController>();

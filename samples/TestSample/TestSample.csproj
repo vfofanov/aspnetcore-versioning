@@ -15,12 +15,14 @@
         <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.2.3" />
         <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.3" />
         <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="6.2.3" />
+        <PackageReference Include="NSwag.AspNetCore" Version="13.15.5" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection.csproj" />
         <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning\Stenn.AspNetCore.OData.Versioning.csproj" />
         <ProjectReference Include="..\..\src\Stenn.AspNetCore.Versioning.Extensions.DependencyInjection\Stenn.AspNetCore.Versioning.Extensions.DependencyInjection.csproj" />
+        <ProjectReference Include="..\..\src\Stenn.AspNetCore.Versioning.Swashbuckle\Stenn.AspNetCore.Versioning.Swashbuckle.csproj" />
         <ProjectReference Include="..\..\src\Stenn.AspNetCore.Versioning\Stenn.AspNetCore.Versioning.csproj" />
     </ItemGroup>
 

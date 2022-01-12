@@ -27,11 +27,21 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "TestSample:swagger": {
+    "TestSample:swashbuckle-ui": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
-      "launchUrl": "index.html?urls.primaryName=v2.0",
+      "launchUrl": "swashbuckle-ui/index.html?urls.primaryName=v2.0",
+      "applicationUrl": "http://localhost:5001",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "TestSample:nswag-ui": {
+      "commandName": "Project",
+      "dotnetRunMessages": "true",
+      "launchBrowser": true,
+      "launchUrl": "nswag-ui/index.html?urls.primaryName=v2.0",
       "applicationUrl": "http://localhost:5001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
