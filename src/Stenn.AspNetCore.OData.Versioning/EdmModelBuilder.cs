@@ -17,7 +17,7 @@ namespace Stenn.AspNetCore.OData.Versioning
         private IEdmModelMutator? _mutator;
         private IEdmModelOperationExtractor? _operationExtractor;
 
-        private readonly List<Type> _entityTypes;
+        private readonly List<Action> _finalInitialization = new();
 
         
         public EdmModelBuilder(ODataConventionModelBuilder? builder = null)
@@ -75,21 +75,21 @@ namespace Stenn.AspNetCore.OData.Versioning
         /// <summary>
         ///     Add entity set and entity type
         /// </summary>
-        /// <param name="typeInitialConfiguration"></param>
+        /// <param name="initAction"></param>
         /// <typeparam name="TEntity"></typeparam>
         /// <typeparam name="TController"></typeparam>
         /// <returns></returns>
-        public virtual void Add<TEntity, TController>(Action<EdmModelEntityType<TEntity, TController>>? typeInitialConfiguration = null)
+        public virtual void Add<TEntity, TController>(Action<EdmModelEntityType<TEntity, TController>>? initAction = null)
             where TEntity : class
             where TController : IODataController<TEntity>
         {
             var entitySetName = EdmExtensions.GetEntitySetName<TController>();
             var type = AddInternal<TEntity>(entitySetName);
-            
-            if (typeInitialConfiguration != null)
+
+            if (initAction != null)
             {
                 var edmType = new EdmModelEntityType<TEntity, TController>(type, OperationExtractor);
-                typeInitialConfiguration(edmType);
+                HandleInitAction(initAction, edmType);
             }
         }
 
@@ -97,15 +97,15 @@ namespace Stenn.AspNetCore.OData.Versioning
         ///     Add entity set and type without controller
         /// </summary>
         /// <param name="entitySetName"></param>
-        /// <param name="typeInitialConfiguration"></param>
+        /// <param name="initAction"></param>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        public void AddUnbound<TEntity>(string? entitySetName = null, Action<EdmModelEntityType<TEntity>>? typeInitialConfiguration = null)
+        public void AddUnbound<TEntity>(string? entitySetName = null, Action<EdmModelEntityType<TEntity>>? initAction = null)
             where TEntity : class
         {
             entitySetName ??= typeof(TEntity).Name + "Set";
             var type = AddInternal<TEntity>(entitySetName);
-            typeInitialConfiguration?.Invoke(type);
+            HandleInitAction(initAction, type);
         }
 
         /// <summary>
@@ -134,24 +134,24 @@ namespace Stenn.AspNetCore.OData.Versioning
             where TComplexType : class
         {
             var configuration = _builder.ComplexType<TComplexType>();
-            initAction?.Invoke(configuration);
+            HandleInitAction(initAction, configuration);
         }
 
         public virtual void EnumType<TEnumType>(Action<EnumTypeConfiguration<TEnumType>>? initAction = null)
         {
             var configuration =  _builder.EnumType<TEnumType>();
-            initAction?.Invoke(configuration);
+            HandleInitAction(initAction, configuration);
         }
        
         public virtual void AddComplexType(Type type, Action<ComplexTypeConfiguration>? initAction = null)
         {
             var configuration = _builder.AddComplexType(type);
-            initAction?.Invoke(configuration);
+            HandleInitAction(initAction, configuration);
         }
         public virtual void AddEnumType(Type type, Action<EnumTypeConfiguration>? initAction = null)
         {
             var configuration = _builder.AddEnumType(type);
-            initAction?.Invoke(configuration);
+            HandleInitAction(initAction, configuration);
         }
         
         protected static bool KeyExist(IEdmModelEntityType? entityType)
@@ -167,8 +167,31 @@ namespace Stenn.AspNetCore.OData.Versioning
             return entityType.Keys.Any() || KeyExist(entityType.BaseType);
         }
 
+        protected void HandleInitAction<T>(Action<T>? initAction, T configuration)
+        {
+            if (initAction is null)
+            {
+                return;
+            }
+            _finalInitialization.Add(() => initAction(configuration));
+        }
 
+        internal void FinalizeBuilderIntenal()
+        {
+            //NOTE: We run init actions at the end for fill operations with all types already registered
+            foreach (var action in _finalInitialization)
+            {
+                action();
+            }
+            FinalizeBuilder();
+        }
 
+        /// <summary>
+        /// Final initialization before model generation
+        /// </summary>
+        protected virtual void FinalizeBuilder()
+        {
+        }
         #region TODO
         protected virtual void Ignore<T>()
         {

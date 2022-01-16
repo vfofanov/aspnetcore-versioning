@@ -71,10 +71,13 @@ namespace TestSample
         {
             builder.Add<Book, BooksController>(type =>
             {
-                type.AddOperation(x => x.EBooks(EdmOp.Param<string>(p => p.Required()), default));
+                type.AddCollectionOperation(x => x.EBooks(
+                    EdmOp.Param<string>(p => p.Optional().HasDefaultValue("cool!!")),
+                    default));
+
                 // type.Collection
                 //     .Function(nameof(BooksController.EBooks))
-                //     .AddParameter<int>("testId")
+                //     .AddParameter<int>("testId").Optional().HasDefaultValue("cool!!")
                 //     .ReturnsCollectionFromEntitySet<Book, BooksController>();
             });
         }

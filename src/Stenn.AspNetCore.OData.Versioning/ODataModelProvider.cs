@@ -9,13 +9,13 @@ namespace Stenn.AspNetCore.OData.Versioning
     ///     OData model provider for request
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public abstract class ODataModelProvider<TKey> : IODataModelRequestProvider
+    public sealed class ODataModelProvider<TKey> : IODataModelRequestProvider
         where TKey : notnull
     {
         private readonly IEdmModelFactory<TKey> _edmFactory;
         private readonly ConcurrentDictionary<TKey, IEdmModel> _cached = new();
 
-        protected ODataModelProvider(IEdmModelFactory<TKey> edmFactory)
+        public ODataModelProvider(IEdmModelFactory<TKey> edmFactory)
         {
             _edmFactory = edmFactory;
         }

@@ -57,6 +57,7 @@ namespace Stenn.AspNetCore.OData.Versioning
 
             builder.Mutator.Run();
 
+            builder.FinalizeBuilderIntenal();
             FinalizeBuilder(builder.Builder);
 
             return builder.Builder.GetEdmModel();

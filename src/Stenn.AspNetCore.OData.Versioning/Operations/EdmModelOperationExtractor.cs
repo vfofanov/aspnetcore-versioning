@@ -22,12 +22,12 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
 
         public bool CreateOperation<TDeclaringType>(
             IEdmModelOperationHolder holder,
-            Expression<Action<TDeclaringType>> operationExpression, 
-            Action<EdmModelOperation<TDeclaringType>>? init=null)
+            Expression<Action<TDeclaringType>> operationExpression,
+            Action<EdmModelOperation<TDeclaringType>>? init = null)
         {
             var methodCallProvider = operationExpression.Body as MethodCallExpression ??
                                      throw new ArgumentException("Supports only method call expression", nameof(operationExpression));
-            
+
             var methodInfo = methodCallProvider.Method;
 
             if (_context.Mutator.IsIgnored(methodInfo) ||
@@ -45,7 +45,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 {
                     var configuration = holder.Function(name);
                     // TODO: Handle return type
-                    if (FillParameters(configuration, methodCallProvider, methodInfo))
+                    if (!FillParameters(configuration, methodCallProvider, methodInfo))
                     {
                         return false;
                     }
@@ -65,9 +65,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Unknown edm operation type {type}");
-
             }
-            
+
             init?.Invoke(op);
             return true;
         }
@@ -85,17 +84,46 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 }
                 var paramType = paramInfo.ParameterType;
                 var parameterName = GetFunctionParameterName(i, paramInfo);
-
-                var paramConfiguration = paramType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-                    ? configuration.CollectionParameter(paramType, parameterName)
-                    : configuration.Parameter(paramType, parameterName);
-                
+                var paramConfiguration = CreateParameter(configuration, paramType, parameterName);
                 var argExpression = methodCallProvider.Arguments[i];
-                
-                
-                        
+                InitFunctionParameter(methodInfo, argExpression, paramConfiguration);
             }
             return true;
+        }
+
+        private static void InitFunctionParameter(MethodInfo methodInfo, Expression argExpression, ParameterConfiguration paramConfiguration)
+        {
+            switch (argExpression)
+            {
+                case MethodCallExpression argMethodCallExpression:
+                    if (argMethodCallExpression.Method.DeclaringType != typeof(EdmOp))
+                    {
+                        goto default;
+                    }
+                    if (argMethodCallExpression.Arguments.Count == 1)
+                    {
+                        var edmOpParamExpression = argMethodCallExpression.Arguments[0];
+                        switch (edmOpParamExpression)
+                        {
+                            case Expression<Action<ParameterConfiguration>> initExpression:
+                                var initParam = initExpression.Compile();
+                                initParam.Invoke(paramConfiguration);
+                                break;
+                            default:
+                                throw new ApplicationException(
+                                    $"Metod '{methodInfo.DeclaringType?.FullName}.{methodInfo.Name}' function's registaration failed." +
+                                    "OData function's parameter initialized by EdmOp.Param<T>(init) must be initialized with not null init of type 'Action<ParameterConfiguration>'");
+                        }
+                    }
+                    break;
+                case ConstantExpression:
+                    //NOTE: Skip 'default' keyword initialization
+                    break;
+                default:
+                    throw new ApplicationException(
+                        $"Metod '{methodInfo.DeclaringType?.FullName}.{methodInfo.Name}' function's registaration failed." +
+                        "OData function's parameter can be initialized by 'default' keyword or 'Stenn.AspNetCore.OData.Versioning.EdmOp' members only");
+            }
         }
 
         private bool FillParameters(ActionConfiguration configuration, MethodInfo methodInfo)
@@ -103,7 +131,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             var parameters = methodInfo.GetParameters();
             if (parameters.Length > 1)
             {
-                throw new ApplicationException($"Method {methodInfo.DeclaringType?.FullName}{methodInfo.Name} have more than one parameter. " +
+                throw new ApplicationException($"Method {methodInfo.DeclaringType?.FullName}.{methodInfo.Name} have more than one parameter. " +
                                                "Odata action method can to have one parameter of 'ODataActionParameters' type or 'ODataUntypedActionParameters' type");
             }
 
@@ -113,7 +141,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 {
                     var actionParams = GetActionParamsType(parameterInfo) ??
                                        throw new ApplicationException(
-                                           $"Method {methodInfo.DeclaringType?.FullName}{methodInfo.Name} have parameter of 'ODataActionParameters' type with undefined 'ODataActionParams' parameter's attribute. " +
+                                           $"Method {methodInfo.DeclaringType?.FullName}.{methodInfo.Name} have parameter of 'ODataActionParameters' type with undefined 'ODataActionParams' parameter's attribute. " +
                                            "Odata action method can to have one parameter of 'ODataActionParameters' type with one 'ODataActionParams' parameter's attribute");
 
                     var actionParamsType = actionParams.GetType();
@@ -124,13 +152,9 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                         {
                             return false;
                         }
-                        
+
                         var parameterName = GetActionParameterName(paramInfo);
-
-                        var paramConfiguration = paramType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-                            ? configuration.CollectionParameter(paramType, parameterName)
-                            : configuration.Parameter(paramType, parameterName);
-
+                        var paramConfiguration = CreateParameter(configuration, paramType, parameterName);
                         actionParams.InitParameter(paramInfo, paramConfiguration);
                     }
                 }
@@ -141,11 +165,18 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 else
                 {
                     throw new ApplicationException(
-                        $"Method {methodInfo.DeclaringType?.FullName}{methodInfo.Name} have parameter with '{parameterInfo.ParameterType.FullName}'. " +
+                        $"Method {methodInfo.DeclaringType?.FullName}.{methodInfo.Name} have parameter with '{parameterInfo.ParameterType.FullName}'. " +
                         "Odata action method can to have one parameter of 'ODataActionParameters' type or 'ODataUntypedActionParameters' type");
                 }
             }
             return true;
+        }
+
+        protected virtual ParameterConfiguration CreateParameter(OperationConfiguration configuration, Type paramType, string parameterName)
+        {
+            return paramType.IsGenericType && paramType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+                ? configuration.CollectionParameter(paramType, parameterName)
+                : configuration.Parameter(paramType, parameterName);
         }
 
         private static ODataActionParams? GetActionParamsType(ParameterInfo paramInfo)
@@ -179,7 +210,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         {
             return info.Name;
         }
-        
+
         protected virtual EdmModelOperationType GetOperationType(MethodInfo method)
         {
             var httpMethods = method.GetCustomAttributes<HttpMethodAttribute>().ToList();
@@ -209,7 +240,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
     }
 
 
-    public abstract  class EdmModelOperation<TConfiguration, TDeclaringType>:EdmModelOperation<TDeclaringType>
+    public abstract class EdmModelOperation<TConfiguration, TDeclaringType> : EdmModelOperation<TDeclaringType>
     {
         public EdmModelOperation(TConfiguration configuration)
         {
@@ -217,8 +248,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         }
 
         public TConfiguration Configuration { get; }
-        
     }
+
     public abstract class EdmModelOperation<TDeclaringType>
     {
         public abstract EdmModelOperationType Type { get; }
@@ -227,7 +258,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
     public class EdmModelFunction<TDeclaringType> : EdmModelOperation<FunctionConfiguration, TDeclaringType>
     {
         /// <inheritdoc />
-        public EdmModelFunction(FunctionConfiguration configuration) 
+        public EdmModelFunction(FunctionConfiguration configuration)
             : base(configuration)
         {
         }

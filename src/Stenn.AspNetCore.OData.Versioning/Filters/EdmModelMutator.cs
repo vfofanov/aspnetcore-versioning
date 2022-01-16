@@ -23,17 +23,17 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
 
         public void Run()
         {
-            foreach (var eType in _builder.StructuralTypes.ToList())
+            foreach (var edmType in _builder.StructuralTypes.ToList())
             {
-                var eSets = _builder.EntitySets.Where(s => s.EntityType == eType).ToList();
-                if (IsIgnored(eType))
+                var edmSets = _builder.EntitySets.Where(s => s.EntityType == edmType).ToList();
+                if (IsIgnored(edmType))
                 {
-                    eSets.ForEach(set => _builder.RemoveEntitySet(set.Name));
-                    _builder.RemoveStructuralType(eType.ClrType);
+                    edmSets.ForEach(set => _builder.RemoveEntitySet(set.Name));
+                    _builder.RemoveStructuralType(edmType.ClrType);
                     continue;
                 }
 
-                foreach (var property in eType.Properties.ToList())
+                foreach (var property in edmType.Properties.ToList())
                 {
                     var ignoreTargetType = false;
                     var targetClrType = property switch
@@ -51,20 +51,20 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
                     }
                     if (ignoreTargetType || IsIgnored(property))
                     {
-                        eType.RemoveProperty(property.PropertyInfo);
+                        edmType.RemoveProperty(property.PropertyInfo);
                     }
                 }
 
-                foreach (var eSet in eSets)
+                foreach (var edmSet in edmSets)
                 {
-                    foreach (var binding in eSet.Bindings.ToArray())
+                    foreach (var binding in edmSet.Bindings.ToArray())
                     {
                         // when NavigationProperty is declared in the superclass, the corresponding Binding exists in all its child classes.
                         // so we have to use the DeclaringType property instead of "eType" while performing the Ignore check.
                         if (IsIgnored(binding.TargetNavigationSource.EntityType) ||
                             IsIgnored(binding.NavigationProperty))
                         {
-                            eSet.RemoveBinding(binding.NavigationProperty);
+                            edmSet.RemoveBinding(binding.NavigationProperty);
                         }
                     }
                 }
@@ -86,8 +86,13 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
         }
 
         /// <inheritdoc />
-        public bool IsIgnored(MemberInfo memberInfo)
+        public bool IsIgnored(MemberInfo? memberInfo)
         {
+            if (memberInfo is null)
+            {
+                return false;
+            }
+            
             for (var i = 0; i < _edmFilters.Length; i++)
             {
                 var f = _edmFilters[i];
@@ -99,11 +104,15 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
             return false;
         }
 
-        public virtual bool IsIgnored(IEdmTypeConfiguration edmType)
+        public virtual bool IsIgnored(IEdmTypeConfiguration? edmType)
         {
-            if (edmType is CollectionTypeConfiguration collectionTypeConfiguration)
+            switch (edmType)
             {
-                edmType = collectionTypeConfiguration.ElementType;
+                case null:
+                    return false;
+                case CollectionTypeConfiguration collectionTypeConfiguration:
+                    edmType = collectionTypeConfiguration.ElementType;
+                    break;
             }
             if (edmType is PrimitiveTypeConfiguration)
             {
@@ -112,8 +121,13 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
             return !_builder.StructuralTypes.Contains(edmType) || IsTypeIgnored(edmType);
         }
 
-        public virtual bool IsIgnored(PropertyConfiguration property)
+        public virtual bool IsIgnored(PropertyConfiguration? property)
         {
+            if (property is null)
+            {
+                return false;
+            }
+            
             for (var i = 0; i < _edmFilters.Length; i++)
             {
                 var f = _edmFilters[i];

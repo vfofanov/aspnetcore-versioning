@@ -17,7 +17,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
         /// </summary>
         /// <param name="memberInfo"></param>
         /// <returns></returns>
-        bool IsIgnored(MemberInfo? memberInfo);
+        bool IsIgnored(MemberInfo memberInfo);
 
         /// <summary>
         /// Is edm type ignored or not. Used as additional to <see cref="IsIgnored(System.Reflection.MemberInfo)"/>

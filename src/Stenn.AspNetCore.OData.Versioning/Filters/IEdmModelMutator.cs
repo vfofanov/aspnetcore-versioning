@@ -16,18 +16,18 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
         /// </summary>
         /// <param name="memberInfo"></param>
         /// <returns></returns>
-        bool IsIgnored(MemberInfo memberInfo);
+        bool IsIgnored(MemberInfo? memberInfo);
         /// <summary>
         /// Is type configuration ignored or not
         /// </summary>
         /// <param name="edmType"></param>
         /// <returns></returns>
-        bool IsIgnored(IEdmTypeConfiguration edmType);
+        bool IsIgnored(IEdmTypeConfiguration? edmType);
         /// <summary>
         /// Is property configuration ignored or not
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        bool IsIgnored(PropertyConfiguration property);
+        bool IsIgnored(PropertyConfiguration? property);
     }
 }

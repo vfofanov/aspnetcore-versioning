@@ -22,7 +22,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
         public bool ForRequestModelOnly => true;
 
         /// <inheritdoc />
-        public bool IsIgnored(MemberInfo? memberInfo)
+        public bool IsIgnored(MemberInfo memberInfo)
         {
             while (true)
             {

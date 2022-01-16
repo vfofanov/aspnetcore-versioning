@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Linq.Expressions;
 using NUnit.Framework;
@@ -12,7 +14,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Tests
         {
             var name = AddOperation<BooksController>(c => c.EBooks(
                 EdmOp.Param<string>(p => p.Required()),
-                EdmOp.Param<int>(p => p.Optional())));
+                default));
 
             var name2 = AddOperation<BooksController>(c => c.EBooksPost(EdmOp.ActionParams()));
         }
