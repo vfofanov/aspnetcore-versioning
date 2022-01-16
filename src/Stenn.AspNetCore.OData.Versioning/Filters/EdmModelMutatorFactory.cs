@@ -10,9 +10,6 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
     public class EdmModelMutatorFactory : IEdmModelMutatorFactory
     {
         private readonly IEdmModelFilterFactory[] _edmFilterFactories;
-        
-        /// <summary>
-        /// </summary>
         public EdmModelMutatorFactory(IEnumerable<IEdmModelFilterFactory> edmFilterFactories)
         {
             _edmFilterFactories = edmFilterFactories.ToArray();

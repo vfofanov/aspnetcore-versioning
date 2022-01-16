@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
@@ -51,7 +52,8 @@ namespace TestSample
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); })
-                .AddVersioningOData<MetadataController, ODataModelProvider, ODataModelRequestProvider>(versioningOptions =>
+                .AddVersioningODataModelPerRequest<ApiVersion, MetadataController, EdmModelFactory>(
+                    versioningOptions =>
                     {
                         versioningOptions.RouteOptions.EnableEntitySetCount = false;
 
@@ -66,6 +68,10 @@ namespace TestSample
                         options.RouteOptions.EnableControllerNameCaseInsensitive = true;
                         options.RouteOptions.EnableQualifiedOperationCall = false;
                         options.EnableQueryFeatures();
+                    },
+                    filterBuilder =>
+                    {
+                        filterBuilder.AddNewtonsoftJson();
                     });
 
             AddSwagbuckle(services);

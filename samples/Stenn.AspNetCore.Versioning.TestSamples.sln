@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.Versioning
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Versioning.Tests", "..\Stenn.AspNetCore.OData.Versioning.Tests\Stenn.AspNetCore.OData.Versioning.Tests.csproj", "{6288B4E0-E774-4260-ACD4-4E6673B7B8FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Versioning.Newtonsoft.Json", "..\src\Stenn.AspNetCore.OData.Versioning.Newtonsoft.Json\Stenn.AspNetCore.OData.Versioning.Newtonsoft.Json.csproj", "{31A62745-5607-4D24-90AC-E74CEB63F982}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{6288B4E0-E774-4260-ACD4-4E6673B7B8FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6288B4E0-E774-4260-ACD4-4E6673B7B8FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6288B4E0-E774-4260-ACD4-4E6673B7B8FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31A62745-5607-4D24-90AC-E74CEB63F982}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31A62745-5607-4D24-90AC-E74CEB63F982}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31A62745-5607-4D24-90AC-E74CEB63F982}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31A62745-5607-4D24-90AC-E74CEB63F982}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +73,6 @@ Global
 		{35DC3F3A-4CB8-416D-849A-8BEFA27516D1} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
 		{18178A48-F0F8-431F-9F4B-13DE26FF4FC6} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
 		{6288B4E0-E774-4260-ACD4-4E6673B7B8FB} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
+		{31A62745-5607-4D24-90AC-E74CEB63F982} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
 	EndGlobalSection
 EndGlobal

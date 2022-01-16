@@ -83,7 +83,16 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 {
                     return false;
                 }
+                var paramType = paramInfo.ParameterType;
+                var parameterName = GetFunctionParameterName(i, paramInfo);
+
+                var paramConfiguration = paramType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+                    ? configuration.CollectionParameter(paramType, parameterName)
+                    : configuration.Parameter(paramType, parameterName);
+                
                 var argExpression = methodCallProvider.Arguments[i];
+                
+                
                         
             }
             return true;
@@ -116,7 +125,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                             return false;
                         }
                         
-                        var parameterName = GetParameterName(paramInfo);
+                        var parameterName = GetActionParameterName(paramInfo);
 
                         var paramConfiguration = paramType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
                             ? configuration.CollectionParameter(paramType, parameterName)
@@ -149,9 +158,26 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         {
             return method.Name;
         }
-        protected virtual string GetParameterName(PropertyInfo propertyInfo)
+
+        /// <summary>
+        /// Gets parameter's name for <see cref="FunctionConfiguration"/>
+        /// </summary>
+        /// <param name="index">Parameter's index</param>
+        /// <param name="info">Parameter's metadata</param>
+        /// <returns></returns>
+        protected virtual string GetFunctionParameterName(int index, ParameterInfo info)
         {
-            return propertyInfo.Name;
+            return info.Name ?? $"p{index}";
+        }
+
+        /// <summary>
+        /// Gets parameter's name for <see cref="ActionConfiguration"/>
+        /// </summary>
+        /// <param name="info">Parameter's metadata</param>
+        /// <returns></returns>
+        protected virtual string GetActionParameterName(PropertyInfo info)
+        {
+            return info.Name;
         }
         
         protected virtual EdmModelOperationType GetOperationType(MethodInfo method)

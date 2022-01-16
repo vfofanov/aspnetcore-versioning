@@ -29,6 +29,9 @@ namespace TestSample.Controllers.OData
                 switch (propertyInfo.Name)
                 {
                     case nameof(name):
+                        configuration.Required();
+                        break;
+                    case nameof(ids):
                         configuration.Optional();
                         break;
                 }

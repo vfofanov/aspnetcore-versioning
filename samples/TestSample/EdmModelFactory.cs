@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.ModelBuilder;
 using Stenn.AspNetCore.OData.Versioning;
 using Stenn.AspNetCore.OData.Versioning.Filters;
+using Stenn.AspNetCore.OData.Versioning.Operations;
 using TestSample.Controllers.OData;
 using TestSample.Controllers.OData.v1;
 using TestSample.Models.OData;
@@ -13,15 +14,17 @@ namespace TestSample
     public class EdmModelFactory : EdmModelFactoryBase
     {
         /// <inheritdoc />
-        public EdmModelFactory(IEdmModelMutatorFactory modelMutatorFactory) 
-            : base(modelMutatorFactory, "TestNs")
+        public EdmModelFactory(IEdmModelMutatorFactory modelMutatorFactory,
+            IEdmModelOperationExtractorFactory operationExtractorFactory)
+            : base(modelMutatorFactory, operationExtractorFactory, "TestNs")
         {
         }
 
+        
         /// <inheritdoc />
         protected override void FillModel(EdmModelBuilder builder, ApiVersion version, ApiVersion modelKey)
         {
-            switch (key)
+            switch (modelKey)
             {
                 case { MajorVersion: 1, MinorVersion: 0 }:
                     FillModelV1(builder);
@@ -33,7 +36,7 @@ namespace TestSample
                     FillModelV3(builder);
                     break;
                 default:
-                    throw new NotSupportedException($"The input version '{key}' is not supported!");
+                    throw new NotSupportedException($"The input version '{modelKey}' is not supported!");
             }
         }
 
@@ -47,16 +50,18 @@ namespace TestSample
         {
             builder.Add<Book, BooksController>(type =>
             {
-                type.Collection
-                    .Action(nameof(BooksController.EBooksPost))
-                    .AddParameter(BooksController.ActionParams.EBooksPost.Name, c => c.Required())
-                    .AddParameter(BooksController.ActionParams.EBooksPost.Ids)
-                    .ReturnsCollectionFromEntitySet<Book, BooksController>();
+                type.AddCollectionOperation(x =>x.EBooksPost(EdmOp.ActionParams())); 
+                // type.Collection
+                //     .Action(nameof(BooksController.EBooksPost))
+                //     .AddParameter(BooksController.ActionParams.EBooksPost.Name, c => c.Required())
+                //     .AddParameter(BooksController.ActionParams.EBooksPost.Ids)
+                //     .ReturnsCollectionFromEntitySet<Book, BooksController>();
 
-                type.Collection
-                    .Action(nameof(BooksController.EBooks2Post))
-                    .AddParameter(BooksController.ActionParams.EBooks2Post.Ids)
-                    .ReturnsCollectionFromEntitySet<Book, BooksController>();
+                type.AddCollectionOperation(x =>x.EBooks2Post(default));
+                // type.Collection
+                //     .Action(nameof(BooksController.EBooks2Post))
+                //     .AddParameter(BooksController.ActionParams.EBooks2Post.Ids)
+                //     .ReturnsCollectionFromEntitySet<Book, BooksController>();
             });
             builder.Add<Press, PressesController>();
             builder.Add<Models.OData.v2.Customer, Controllers.OData.v2.CustomersController>();
@@ -66,10 +71,11 @@ namespace TestSample
         {
             builder.Add<Book, BooksController>(type =>
             {
-                type.Collection
-                    .Function(nameof(BooksController.EBooks))
-                    .AddParameter<int>("testId")
-                    .ReturnsCollectionFromEntitySet<Book, BooksController>();
+                type.AddOperation(x => x.EBooks(EdmOp.Param<string>(p => p.Required()), default));
+                // type.Collection
+                //     .Function(nameof(BooksController.EBooks))
+                //     .AddParameter<int>("testId")
+                //     .ReturnsCollectionFromEntitySet<Book, BooksController>();
             });
         }
         
