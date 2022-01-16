@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.AspNet.OData;
 using Microsoft.OData.ModelBuilder;
 
 namespace Stenn.AspNetCore.OData.Versioning.Filters
@@ -19,6 +20,17 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
             _builder = builder;
             _requestModel = requestModel;
             _edmFilters = edmFilters.ToArray();
+        }
+
+        /// <inheritdoc />
+        public EdmModelKey GetKey()
+        {
+            var keys = new EdmModelKey[_edmFilters.Length];
+            for (var i = 0; i < _edmFilters.Length; i++)
+            {
+                keys[i] = _edmFilters[i].GetKey();
+            }
+            return EdmModelKey.Aggregate(keys);
         }
 
         public void Run()

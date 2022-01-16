@@ -2,8 +2,6 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.ModelBuilder;
 using Stenn.AspNetCore.OData.Versioning;
-using Stenn.AspNetCore.OData.Versioning.Filters;
-using Stenn.AspNetCore.OData.Versioning.Operations;
 using TestSample.Controllers.OData;
 using TestSample.Controllers.OData.v1;
 using TestSample.Models.OData;
@@ -14,17 +12,16 @@ namespace TestSample
     public class EdmModelFactory : EdmModelFactoryBase
     {
         /// <inheritdoc />
-        public EdmModelFactory(IEdmModelMutatorFactory modelMutatorFactory,
-            IEdmModelOperationExtractorFactory operationExtractorFactory)
-            : base(modelMutatorFactory, operationExtractorFactory, "TestNs")
+        public EdmModelFactory()
+            : base("TestNs")
         {
         }
 
         
         /// <inheritdoc />
-        protected override void FillModel(EdmModelBuilder builder, ApiVersion version, ApiVersion modelKey)
+        protected override void FillModel(EdmModelBuilder builder, ApiVersion version)
         {
-            switch (modelKey)
+            switch (version)
             {
                 case { MajorVersion: 1, MinorVersion: 0 }:
                     FillModelV1(builder);
@@ -36,7 +33,7 @@ namespace TestSample
                     FillModelV3(builder);
                     break;
                 default:
-                    throw new NotSupportedException($"The input version '{modelKey}' is not supported!");
+                    throw new NotSupportedException($"The input version '{version}' is not supported!");
             }
         }
 

@@ -31,6 +31,16 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         {
             return AddFactory<EdmModelFilterFactory<TFilter>>();
         }
+        
+        /// <summary>
+        /// Add edm filter 
+        /// </summary>
+        /// <typeparam name="TFilter"></typeparam>
+        public EdmFilterBuilder AddWithDefaultModelKey<TFilter>() 
+            where TFilter : DefaultModelKeyEdmModelFilter, new()
+        {
+            return AddFactory<DefaultModelKeyEdmModelFilterFactory<TFilter>>();
+        }
 
         /// <summary>
         /// Add edm filter factory as singleton 

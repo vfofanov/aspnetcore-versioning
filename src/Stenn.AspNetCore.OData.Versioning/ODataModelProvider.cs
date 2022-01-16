@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
+using Stenn.AspNetCore.OData.Versioning.Filters;
+using Stenn.AspNetCore.OData.Versioning.Operations;
 using Stenn.AspNetCore.Versioning;
 
 namespace Stenn.AspNetCore.OData.Versioning
@@ -8,18 +10,23 @@ namespace Stenn.AspNetCore.OData.Versioning
     /// <summary>
     ///     OData model provider for request
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    public sealed class ODataModelProvider<TKey> : IODataModelRequestProvider
-        where TKey : notnull
+    public sealed class ODataModelProvider : IODataModelRequestProvider
     {
-        private readonly IEdmModelFactory<TKey> _edmFactory;
-        private readonly ConcurrentDictionary<TKey, IEdmModel> _cached = new();
+        private readonly IEdmModelFactory _edmFactory;
+        private readonly ConcurrentDictionary<EdmModelKey, IEdmModel> _cached = new();
 
-        public ODataModelProvider(IEdmModelFactory<TKey> edmFactory)
+        public ODataModelProvider(IEdmModelFactory edmFactory, 
+            IEdmModelMutatorFactory mutatorFactory, 
+            IEdmModelOperationExtractorFactory operationExtractorFactory)
         {
             _edmFactory = edmFactory;
+            MutatorFactory = mutatorFactory;
+            OperationExtractorFactory = operationExtractorFactory;
         }
 
+        private IEdmModelMutatorFactory MutatorFactory { get; }
+        private IEdmModelOperationExtractorFactory OperationExtractorFactory { get; }
+        
         public IEdmModel GetEdmModel(ApiVersionInfo versionInfo)
         {
             var model = GetEdmModel(versionInfo.Version, false);
@@ -34,13 +41,17 @@ namespace Stenn.AspNetCore.OData.Versioning
 
         private IEdmModel GetEdmModel(ApiVersion version, bool requestModel)
         {
-            var key = _edmFactory.GetKey(version);
-            return _cached.GetOrAdd(key, k => CreateModel(k, version, requestModel));
+            var builder = _edmFactory.CreateBuilder();
+            builder.Mutator = MutatorFactory.Create(builder.Builder, version, requestModel);
+            builder.OperationExtractor = OperationExtractorFactory.Create(builder);
+            var key = builder.Mutator.GetKey();
+
+            return _cached.GetOrAdd(key, _ => CreateModel(builder, version, requestModel));
         }
 
-        private IEdmModel CreateModel(TKey key, ApiVersion version, bool requestModel)
+        private IEdmModel CreateModel(EdmModelBuilder builder, ApiVersion version, bool requestModel)
         {
-            return _edmFactory.CreateModel(key, version, requestModel);
+            return _edmFactory.CreateModel(builder, version, requestModel);
         }
     }
 }

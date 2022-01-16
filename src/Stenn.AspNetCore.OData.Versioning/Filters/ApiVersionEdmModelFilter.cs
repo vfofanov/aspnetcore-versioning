@@ -10,13 +10,19 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
     public class ApiVersionEdmModelFilter : IVersioningEdmModelFilter
     {
         private ApiVersion? _apiVersion;
+        private ApiVersion ApiVersion => _apiVersion ?? throw new NullReferenceException("ApiVersion is null. Use SetVersion first");
+
+        /// <inheritdoc />
+        public EdmModelKey GetKey()
+        {
+            return EdmModelKey.Get(ApiVersion);
+        }
 
         /// <inheritdoc />
         void IVersioningEdmModelFilter.SetVersion(ApiVersion version)
         {
             _apiVersion = version;
         }
-        private ApiVersion ApiVersion => _apiVersion ?? throw new NullReferenceException("ApiVersion is null. Use SetVersion first");
 
         /// <inheritdoc />
         public bool ForRequestModelOnly => true;
@@ -24,28 +30,14 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
         /// <inheritdoc />
         public bool IsIgnored(MemberInfo memberInfo)
         {
-            while (true)
+            var declaringType = memberInfo switch
             {
-                if (memberInfo is null)
-                {
-                    return false;
-                }
-                if (Match(memberInfo))
-                {
-                    return false;
-                }
-                
-                switch (memberInfo)
-                {
-                    case PropertyInfo propertyInfo:
-                        memberInfo = propertyInfo.DeclaringType;
-                        continue;
-                    case MethodInfo methodInfo:
-                        memberInfo = methodInfo.DeclaringType;
-                        continue;
-                }
-                return true;
-            }
+                PropertyInfo propertyInfo => propertyInfo.DeclaringType,
+                MethodInfo methodInfo => methodInfo.DeclaringType,
+                _ => null
+            };
+            return declaringType is not null && !Match(declaringType) ||
+                   !Match(memberInfo);
         }
 
         private bool Match(MemberInfo memberInfo)

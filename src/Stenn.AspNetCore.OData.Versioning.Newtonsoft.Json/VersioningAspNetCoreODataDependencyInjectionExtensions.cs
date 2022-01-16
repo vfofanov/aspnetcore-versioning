@@ -15,7 +15,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         /// <returns>A <see cref="EdmFilterBuilder" /> that can be used to further configure the filters.</returns>
         public static EdmFilterBuilder AddNewtonsoftJson(this EdmFilterBuilder builder)
         {
-            return builder.Add<NewtonsoftJsonIgnoreAttributeEdmFilter>();
+            return builder.AddWithDefaultModelKey<NewtonsoftJsonIgnoreAttributeEdmFilter>();
         }
     }
 }

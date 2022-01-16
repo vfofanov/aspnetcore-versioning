@@ -1,14 +1,13 @@
 using System.Linq;
 using System.Reflection;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-// ReSharper disable once CheckNamespace
 namespace Stenn.AspNetCore.OData.Versioning.Filters
 {
     /// <summary>
     ///     Skip properties if it marked <see cref="System.Text.Json.Serialization.JsonIgnoreAttribute" />
     /// </summary>
-    public sealed class NewtonsoftJsonIgnoreAttributeEdmFilter : DefaultModelKeyEdmModelFilter
+    public sealed class TextJsonIgnoreAttributeEdmModelFilter : DefaultModelKeyEdmModelFilter
     {
         /// <inheritdoc />
         public override bool IsIgnored(MemberInfo memberInfo)

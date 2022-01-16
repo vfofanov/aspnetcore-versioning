@@ -5,13 +5,13 @@ using Microsoft.OData.ModelBuilder;
 
 namespace Stenn.AspNetCore.OData.Versioning.Filters
 {
-    public interface IEdmModelFilter
+    public interface IEdmModelFilter : IEdmModelKeyHolder
     {
         /// <summary>
         /// Is filter enabled for declaration model or not.
         /// </summary>
         bool ForRequestModelOnly { get; }
-        
+
         /// <summary>
         /// Is ignored or not. It can be method for operation, entity clr type, enum, property or enum value
         /// </summary>
@@ -28,7 +28,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
         {
             return IsIgnored(type.ClrType);
         }
-        
+
         /// <summary>
         /// Is edm type ignored or not. Used as additional to <see cref="IsIgnored(System.Reflection.MemberInfo)"/>
         /// </summary>

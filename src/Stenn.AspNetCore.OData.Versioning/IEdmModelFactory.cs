@@ -5,21 +5,16 @@ using Microsoft.OData.Edm;
 
 namespace Stenn.AspNetCore.OData.Versioning
 {
-    public interface IEdmModelFactory<TKey>
+    public interface IEdmModelFactory
     {
-        /// <summary>
-        /// Get edm model key for specific api version
-        /// </summary>
-        /// <param name="version"></param>
-        /// <returns></returns>
-        TKey GetKey(ApiVersion version);
+        EdmModelBuilder CreateBuilder();
 
         /// <summary>
-        /// Create edm model builder
+        /// Create edm model
         /// </summary>
-        /// <param name="modelKey"></param>
+        /// <param name="builder"></param>
         /// <param name="version"></param>
         /// <param name="requestModel"></param>
-        IEdmModel CreateModel(TKey modelKey, ApiVersion version, bool requestModel);
+        IEdmModel CreateModel(EdmModelBuilder builder, ApiVersion version, bool requestModel);
     }
 }

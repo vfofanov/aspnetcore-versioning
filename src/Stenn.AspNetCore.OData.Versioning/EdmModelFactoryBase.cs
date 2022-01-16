@@ -3,57 +3,31 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
-using Stenn.AspNetCore.OData.Versioning.Filters;
-using Stenn.AspNetCore.OData.Versioning.Operations;
 
 namespace Stenn.AspNetCore.OData.Versioning
 {
     /// <summary>
     ///  Base edm model factory
     /// </summary>
-    public abstract class EdmModelFactoryBase : EdmModelFactoryBase<ApiVersion>
+    public abstract class EdmModelFactoryBase : IEdmModelFactory
     {
-        /// <inheritdoc />
-        protected EdmModelFactoryBase(IEdmModelMutatorFactory modelMutatorFactory,
-            IEdmModelOperationExtractorFactory operationExtractorFactory, string ns = "Default")
-            : base(modelMutatorFactory, operationExtractorFactory, ns)
-        {
-        }
-
-        /// <inheritdoc />
-        public override ApiVersion GetKey(ApiVersion version)
-        {
-            return version;
-        }
-    }
-    
-    /// <summary>
-    ///  Base edm model factory
-    /// </summary>
-    public abstract class EdmModelFactoryBase<TKey> : IEdmModelFactory<TKey>
-    {
-        protected EdmModelFactoryBase(IEdmModelMutatorFactory modelMutatorFactory,
-            IEdmModelOperationExtractorFactory operationExtractorFactory,
-            string ns = "Default")
+        protected EdmModelFactoryBase(string ns = "Default")
         {
             Namespace = ns;
-            MutatorFactory = modelMutatorFactory;
-            OperationExtractorFactory = operationExtractorFactory;
         }
 
         private string Namespace { get; }
-        private IEdmModelMutatorFactory MutatorFactory { get; }
-        private IEdmModelOperationExtractorFactory OperationExtractorFactory { get; }
-
-        /// <inheritdoc />
-        public IEdmModel CreateModel(TKey modelKey, ApiVersion version, bool requestModel)
+        public virtual EdmModelBuilder CreateBuilder()
         {
-            var builder = CreateBuilder();
-            builder.Mutator = MutatorFactory.Create(builder.Builder, version, requestModel);
-            builder.OperationExtractor = OperationExtractorFactory.Create(builder);
+            return new EdmModelBuilder();
+        }
+        
+        /// <inheritdoc />
+        public IEdmModel CreateModel(EdmModelBuilder builder, ApiVersion version, bool requestModel)
+        {
             builder.Namespace = Namespace;
 
-            FillModel(builder, version, modelKey);
+            FillModel(builder, version);
 
             builder.Mutator.Run();
 
@@ -71,14 +45,6 @@ namespace Stenn.AspNetCore.OData.Versioning
         {
         }
 
-        /// <inheritdoc />
-        public abstract TKey GetKey(ApiVersion version);
-
-        protected abstract void FillModel(EdmModelBuilder builder, ApiVersion version, TKey modelKey);
-
-        protected virtual EdmModelBuilder CreateBuilder()
-        {
-            return new EdmModelBuilder();
-        }
+        protected abstract void FillModel(EdmModelBuilder builder, ApiVersion version);
     }
 }
