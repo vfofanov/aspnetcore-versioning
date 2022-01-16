@@ -1,9 +1,7 @@
-﻿using Microsoft.OData.Edm;
-
-namespace Stenn.AspNetCore.OData.Versioning
+﻿namespace Stenn.AspNetCore.OData.Versioning
 {
-    public interface IODataConventionModelBuilder
+    public interface IEdmModelBuilder
     {
-        IEdmModel GetEdmModel();
+        
     }
 }

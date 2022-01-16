@@ -1,5 +1,5 @@
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 
 namespace TestSample
 {
@@ -10,8 +10,11 @@ namespace TestSample
             CreateHostBuilder(args).Build().Run();
         }
 
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+        private static IWebHostBuilder CreateHostBuilder(string[] args)
+        {
+            var builder = WebHost.CreateDefaultBuilder(args);
+            builder.UseStartup<Startup>();
+            return builder;
+        }
     }
 }

@@ -1,11 +1,12 @@
-﻿using System;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OData.ModelBuilder;
 using Stenn.AspNetCore.OData.Versioning;
 using Stenn.AspNetCore.OData.Versioning.Actions;
 using TestSample.Models.OData;
@@ -17,19 +18,27 @@ namespace TestSample.Controllers.OData
     /// </summary>
     public class BooksController : ODataController<Book>
     {
-        public static class ActionParams
+        private class EBooksPostParams : ODataActionParams
         {
-            public static class EBooksPost
+            public string name { get; set; }
+            public IEnumerable<int> ids { get; set; }
+
+            /// <inheritdoc />
+            public override void InitParameter(PropertyInfo propertyInfo, ParameterConfiguration configuration)
             {
-                public static readonly ODataActionParameter<string> Name = new("name");
-                public static readonly ODataActionCollectionParameter<int> Ids = new("ids");
-            }
-            
-            public static class EBooks2Post
-            {
-                public static readonly ODataActionCollectionParameter<int> Ids = new("ids");
+                switch (propertyInfo.Name)
+                {
+                    case nameof(name):
+                        configuration.Optional();
+                        break;
+                }
             }
         }
+
+        private class EBooks2PostParams : ODataActionParams
+            {
+                public IEnumerable<int> ids { get; set; }
+            }
 
         private readonly BookStoreContext _db;
 
@@ -48,7 +57,6 @@ namespace TestSample.Controllers.OData
             }
         }
 
-        [ApiVersionV2]
         [HttpGet]
         [EnableQuery]
         public IQueryable<Book> Get()
@@ -89,12 +97,13 @@ namespace TestSample.Controllers.OData
         /// <summary>
         /// Returns suppliers that have deals with current user's buyer company SuppliersThatHaveDealsWithCurrentBuyer
         /// </summary>
+        /// <param name="testName"></param>
         /// <param name="testId">Optional parameter</param>
         /// <returns>Returns suppliers</returns>
-        [ApiVersionV2]
+        [ApiVersionV3]
         [HttpGet]
         [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
-        public Task<IQueryable<Book>> EBooks(int testId)
+        public Task<IQueryable<Book>> EBooks(string testName, int testId)
         {
             return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
         }
@@ -107,21 +116,18 @@ namespace TestSample.Controllers.OData
         [ApiVersionV2]
         [HttpPost]
         [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
-        public Task<IQueryable<Book>> EBooksPost(ODataActionParameters parameters)
+        public Task<IQueryable<Book>> EBooksPost([EBooksPostParams]ODataActionParameters parameters)
         {
-            var name = parameters.Get(ActionParams.EBooksPost.Name);
-            var ids = parameters.Get(ActionParams.EBooksPost.Ids)?.ToList();
-
+            var actionParams = parameters.Get<EBooksPostParams>();
             return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
         }
         
         [ApiVersionV2]
         [HttpPost]
         [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
-        public Task<IQueryable<Book>> EBooks2Post(ODataActionParameters parameters)
+        public Task<IQueryable<Book>> EBooks2Post([EBooks2PostParams]ODataActionParameters parameters)
         {
-            var ids = parameters.Get(ActionParams.EBooks2Post.Ids);
-            
+            var actionParams = parameters.Get<EBooks2PostParams>();
             return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
         }
     }

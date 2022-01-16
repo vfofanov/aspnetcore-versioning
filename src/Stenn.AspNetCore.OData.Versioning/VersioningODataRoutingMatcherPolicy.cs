@@ -50,6 +50,7 @@ namespace Stenn.AspNetCore.OData.Versioning
             var odataFeature = httpContext.ODataFeature();
             if (odataFeature.Path != null)
             {
+                
                 // If we have the OData path setting, it means there's some Policy working.
                 // Let's skip this default OData matcher policy.
                 return;
@@ -77,7 +78,7 @@ namespace Stenn.AspNetCore.OData.Versioning
                     continue;
                 }
 
-                var requestModel = _provider.GetRequestEdmModel(apiVersion, httpContext.RequestServices);
+                var requestModel = _provider.GetRequestEdmModel(apiVersion);
                 if (requestModel == null)
                 {
                     candidates.SetValidity(i, false);

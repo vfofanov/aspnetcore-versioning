@@ -51,7 +51,7 @@ namespace TestSample
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); })
-                .AddVersioningOData<MetadataController, ODataModelProvider>(versioningOptions =>
+                .AddVersioningOData<MetadataController, ODataModelProvider, ODataModelRequestProvider>(versioningOptions =>
                     {
                         versioningOptions.RouteOptions.EnableEntitySetCount = false;
 

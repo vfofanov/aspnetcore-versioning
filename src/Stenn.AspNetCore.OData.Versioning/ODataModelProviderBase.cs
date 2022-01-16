@@ -7,25 +7,25 @@ using Stenn.AspNetCore.Versioning;
 
 namespace Stenn.AspNetCore.OData.Versioning
 {
-    public abstract class ODataModelProviderBase : ODataModelProviderBase<AdvODataConventionModelBuilder>
+    public abstract class ODataModelProviderBase : ODataModelProviderBase<EdmModelBuilder>
     {
-        protected override AdvODataConventionModelBuilder CreateBuilder()
+        protected override EdmModelBuilder CreateBuilder()
         {
-            return new AdvODataConventionModelBuilder(new ODataConventionModelBuilder());
+            return new EdmModelBuilder(new ODataConventionModelBuilder());
         }
     }
 
     public abstract class ODataModelProviderBase<TModelBuilder> : IODataModelProvider
-        where TModelBuilder : IODataConventionModelBuilder
+        where TModelBuilder : IEdmModelBuilder
     {
-        public IEdmModel GetEdmModel(ApiVersionInfo version)
+        public IEdmModel GetEdmModel(ApiVersionInfo versionInfo)
         {
             var builder = CreateBuilder();
 
-            FillEdmModel(builder, version.Version);
+            FillEdmModel(builder, versionInfo.Version);
             var model = builder.GetEdmModel();
 
-            model.SetApiVersion(version);
+            model.SetApiVersion(versionInfo);
 
             return model;
         }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.OData.ModelBuilder;
@@ -89,6 +91,21 @@ namespace Stenn.AspNetCore.OData.Versioning.Actions
                 throw new ArgumentNullException(nameof(parameters), "Parameters are null. Check action's parameters names and missed parameters");
             }
             return (IEnumerable<T>?)parameters[parameter.Name];
+        }
+
+        public static T Get<T>(this ODataActionParameters parameters)
+            where T : ODataActionParams, new()
+        {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters), "Parameters are null. Check action's parameters names and missed parameters");
+            }
+
+            var result = new T();
+            
+            //TODO: Get fill up result from parameters
+
+            return result;
         }
     }
 }

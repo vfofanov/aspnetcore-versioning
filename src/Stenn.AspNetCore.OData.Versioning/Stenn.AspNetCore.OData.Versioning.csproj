@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.5" />        
+        <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.6" />        
     </ItemGroup>
 
     <ItemGroup>
@@ -27,6 +27,7 @@
             <DependentUpon>SR.resx</DependentUpon>
         </Compile>
         <Compile Remove="ApiExplorer\ODataApiExplorerProvider.Misc.cs" />
+        <Compile Remove="ODataModelProviderBase.cs" />
     </ItemGroup>
 
 </Project>
