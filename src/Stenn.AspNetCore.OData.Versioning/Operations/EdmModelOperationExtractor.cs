@@ -198,7 +198,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                                            "Odata action method can to have one parameter of 'ODataActionParameters' type with one 'ODataActionParams' parameter's attribute");
 
                     var actionParamsType = actionParams.GetType();
-                    foreach (var paramInfo in actionParamsType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    foreach (var paramInfo in actionParamsType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty))
                     {
                         var paramType = paramInfo.PropertyType;
                         if (_context.IsIgnored(paramType))
@@ -208,7 +208,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
 
                         var parameterName = GetActionParameterName(paramInfo);
                         var paramConfiguration = CreateParameter(configuration, paramType, parameterName);
-                        
+
                         InitParameterByAttribute(paramInfo, paramConfiguration);
                         actionParams.InitParameter(paramInfo, paramConfiguration);
                     }
