@@ -3,6 +3,7 @@
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace Stenn.AspNetCore.OData.Versioning.Filters
 {
@@ -37,12 +38,19 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
                    !Match(memberInfo);
         }
 
-        private bool Match(MemberInfo memberInfo)
+        private bool Match(ICustomAttributeProvider memberInfo)
         {
+            var attributes = memberInfo.GetCustomAttributes(true);
             var match = true;
-            foreach (var apiVersionAttribute in memberInfo.GetCustomAttributes<ApiVersionAttribute>(true))
+            
+            for (var i = 0; i < attributes.Length; i++)
             {
-                if (apiVersionAttribute.Versions.Contains(ApiVersion))
+                var attribute = attributes[i];
+                if (attribute is not IApiVersionProvider provider)
+                {
+                    continue;
+                }
+                if (provider.Versions.Contains(ApiVersion))
                 {
                     return true;
                 }

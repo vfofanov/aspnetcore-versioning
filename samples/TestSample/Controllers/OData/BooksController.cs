@@ -20,7 +20,9 @@ namespace TestSample.Controllers.OData
     {
         private class EBooksPostParams : ODataActionParams
         {
+            [ODataParam(DefaultValue = "attr cool!")]
             public string name { get; set; }
+
             public IEnumerable<int> ids { get; set; }
 
             /// <inheritdoc />
@@ -28,9 +30,6 @@ namespace TestSample.Controllers.OData
             {
                 switch (propertyInfo.Name)
                 {
-                    case nameof(name):
-                        configuration.Required();
-                        break;
                     case nameof(ids):
                         configuration.Optional();
                         break;
@@ -39,9 +38,9 @@ namespace TestSample.Controllers.OData
         }
 
         private class EBooks2PostParams : ODataActionParams
-            {
-                public IEnumerable<int> ids { get; set; }
-            }
+        {
+            public IEnumerable<int> ids { get; set; }
+        }
 
         private readonly BookStoreContext _db;
 
@@ -106,11 +105,11 @@ namespace TestSample.Controllers.OData
         [ApiVersionV3]
         [HttpGet]
         [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
-        public Task<IQueryable<Book>> EBooks(string testName, int testId)
+        public Task<IQueryable<Book>> EBooks([ODataParam(IsOptional = true)] string testName, int testId)
         {
             return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
         }
-        
+
         /// <summary>
         /// Test post controller
         /// </summary>

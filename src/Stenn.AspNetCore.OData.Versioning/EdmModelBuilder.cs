@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.OData.ModelBuilder;
 using Stenn.AspNetCore.OData.Versioning.Filters;
 using Stenn.AspNetCore.OData.Versioning.Operations;
@@ -57,14 +58,17 @@ namespace Stenn.AspNetCore.OData.Versioning
         protected internal ODataConventionModelBuilder Builder => _builder;
 
         /// <inheritdoc />
-        IEdmModelMutator IEdmModelBuilderContext.Mutator => Mutator;
+        IEnumerable<EntitySetConfiguration> IEdmModelBuilderContext.EntitySets => _builder.EntitySets;
+        /// <inheritdoc />
+        bool IEdmModelBuilderContext.IsIgnored(MemberInfo? memberInfo)
+        {
+            return Mutator.IsIgnored(memberInfo);
+        }
         /// <inheritdoc />
         IEdmTypeConfiguration? IEdmModelBuilderContext.GetTypeConfigurationOrNull(Type type)
         {
             return _builder.GetTypeConfigurationOrNull(type);
         }
-        /// <inheritdoc />
-        IEnumerable<EntitySetConfiguration> IEdmModelBuilderContext.EntitySets => _builder.EntitySets;
         
         protected internal IEdmModelMutator Mutator
         {

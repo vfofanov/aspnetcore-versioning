@@ -31,8 +31,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
 
             var methodInfo = methodCallProvider.Method;
 
-            if (_context.Mutator.IsIgnored(methodInfo) ||
-                _context.Mutator.IsIgnored(typeof(TDeclaringType)))
+            if (_context.IsIgnored(methodInfo) ||
+                _context.IsIgnored(typeof(TDeclaringType)))
             {
                 return false;
             }
@@ -90,7 +90,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             bool isCollection;
             (type, isCollection) = OperationReturnTypeExtensions.UnwrapCollection(type);
 
-            if (_context.Mutator.IsIgnored(type))
+            if (_context.IsIgnored(type))
             {
                 return false;
             }
@@ -130,7 +130,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             for (var i = 0; i < methodCallProvider.Arguments.Count; i++)
             {
                 var paramInfo = parameters[i];
-                if (_context.Mutator.IsIgnored(paramInfo.ParameterType))
+                if (_context.IsIgnored(paramInfo.ParameterType))
                 {
                     return false;
                 }
@@ -138,6 +138,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 var parameterName = GetFunctionParameterName(i, paramInfo);
                 var paramConfiguration = CreateParameter(configuration, paramType, parameterName);
                 var argExpression = methodCallProvider.Arguments[i];
+                InitParameterByAttribute(paramInfo, paramConfiguration);
                 InitFunctionParameter(methodInfo, argExpression, paramConfiguration);
             }
             return true;
@@ -200,13 +201,15 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                     foreach (var paramInfo in actionParamsType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                     {
                         var paramType = paramInfo.PropertyType;
-                        if (_context.Mutator.IsIgnored(paramType))
+                        if (_context.IsIgnored(paramType))
                         {
                             return false;
                         }
 
                         var parameterName = GetActionParameterName(paramInfo);
                         var paramConfiguration = CreateParameter(configuration, paramType, parameterName);
+                        
+                        InitParameterByAttribute(paramInfo, paramConfiguration);
                         actionParams.InitParameter(paramInfo, paramConfiguration);
                     }
                 }
@@ -237,6 +240,14 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             return oDataParamsList.Count != 1 ? null : oDataParamsList[0];
         }
 
+        protected virtual void InitParameterByAttribute(ICustomAttributeProvider paramInfo, ParameterConfiguration paramConfiguration)
+        {
+            foreach (var initializer in paramInfo.GetCustomAttributes(true).OfType<IParameterConfigurationInitializer>())
+            {
+                initializer.Initialize(paramConfiguration);
+            }
+        }
+        
         protected virtual string GetOperationName(MethodInfo method)
         {
             return method.Name;
