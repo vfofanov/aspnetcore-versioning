@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.AspNet.OData;
 using Microsoft.OData.ModelBuilder;
 
 namespace Stenn.AspNetCore.OData.Versioning.Filters

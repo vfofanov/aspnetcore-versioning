@@ -19,8 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\samples\TestSample\TestSample.csproj" />
-    <ProjectReference Include="..\src\Stenn.AspNetCore.OData.Versioning\Stenn.AspNetCore.OData.Versioning.csproj" />
+    <ProjectReference Include="..\Stenn.AspNetCore.OData.Versioning\Stenn.AspNetCore.OData.Versioning.csproj" />
   </ItemGroup>
+
+  
 
 </Project>

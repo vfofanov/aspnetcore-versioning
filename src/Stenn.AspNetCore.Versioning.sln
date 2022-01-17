@@ -23,6 +23,19 @@ EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.Versioning.Swashbuckle", "Stenn.AspNetCore.Versioning.Swashbuckle\Stenn.AspNetCore.Versioning.Swashbuckle.csproj", "{80138C34-8CAA-477F-A1B4-19B8A71A39CD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".workflows", ".workflows", "{1ADB75C4-F11E-4FB3-8981-939AEB449EFA}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build_and_publish_nuget.yml = ..\.github\workflows\build_and_publish_nuget.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Versioning.ApiExplorer", "Stenn.AspNetCore.OData.Versioning.ApiExplorer\Stenn.AspNetCore.OData.Versioning.ApiExplorer.csproj", "{71A951CF-9A0A-4ECE-BD49-319E90762F91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Versioning.ApiExplorer.Extensions.DependencyInjection", "Stenn.AspNetCore.OData.Versioning.ApiExplorer.Extensions.DependencyInjection\Stenn.AspNetCore.OData.Versioning.ApiExplorer.Extensions.DependencyInjection.csproj", "{11D08DA7-2A96-4DB4-A3AF-445E682FADE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Versioning.Tests", "Stenn.AspNetCore.OData.Versioning.Tests\Stenn.AspNetCore.OData.Versioning.Tests.csproj", "{A2CB5279-35E4-4318-BB4A-20FC78C166F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{0E4532F2-E3F7-4383-ABF3-6E3670797B64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,11 +66,26 @@ Global
 		{80138C34-8CAA-477F-A1B4-19B8A71A39CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80138C34-8CAA-477F-A1B4-19B8A71A39CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80138C34-8CAA-477F-A1B4-19B8A71A39CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71A951CF-9A0A-4ECE-BD49-319E90762F91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71A951CF-9A0A-4ECE-BD49-319E90762F91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71A951CF-9A0A-4ECE-BD49-319E90762F91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71A951CF-9A0A-4ECE-BD49-319E90762F91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11D08DA7-2A96-4DB4-A3AF-445E682FADE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11D08DA7-2A96-4DB4-A3AF-445E682FADE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11D08DA7-2A96-4DB4-A3AF-445E682FADE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11D08DA7-2A96-4DB4-A3AF-445E682FADE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2CB5279-35E4-4318-BB4A-20FC78C166F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2CB5279-35E4-4318-BB4A-20FC78C166F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2CB5279-35E4-4318-BB4A-20FC78C166F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2CB5279-35E4-4318-BB4A-20FC78C166F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {90A61DCC-4469-4042-B534-C37020F4A7EF}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A2CB5279-35E4-4318-BB4A-20FC78C166F8} = {0E4532F2-E3F7-4383-ABF3-6E3670797B64}
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
@@ -52,7 +51,7 @@ namespace TestSample
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); })
-                .AddVersioningODataModelPerRequest<ApiVersion, MetadataController, EdmModelFactory>(
+                .AddVersioningODataModelPerRequest<MetadataController, EdmModelFactory>(
                     versioningOptions =>
                     {
                         versioningOptions.RouteOptions.EnableEntitySetCount = false;
@@ -74,6 +73,8 @@ namespace TestSample
                         edmModelFilterBuilder.AddNewtonsoftJsonIgnore();
                     });
 
+            services.AddVersioningODataApiExplorer();
+            
             AddSwagbuckle(services);
 
             AddNSwag(services);
@@ -81,24 +82,22 @@ namespace TestSample
 
         private static void AddNSwag(IServiceCollection services)
         {
-            using (var provider = services.BuildServiceProvider())
-            {
-                var versionInfoProvider = provider.GetRequiredService<IApiVersionInfoProvider>();
+            using var provider = services.BuildServiceProvider();
+            var versionInfoProvider = provider.GetRequiredService<IApiVersionInfoProvider>();
                 
-                foreach (var version in versionInfoProvider.Versions)
+            foreach (var version in versionInfoProvider.Versions)
+            {
+                var versionTmp = version;
+                services.AddOpenApiDocument(settings =>
                 {
-                    var versionTmp = version;
-                    services.AddOpenApiDocument(settings =>
-                    {
-                        settings.UseXmlDocumentation = true;
-                        settings.UseHttpAttributeNameAsOperationId = false;
-                        settings.UseControllerSummaryAsTagDescription = true;
-                        settings.Title = "Test API";
-                        settings.Version = versionTmp.Version.ToString();
-                        settings.DocumentName = versionTmp.RoutePathName;
-                        settings.ApiGroupNames = new[] { versionTmp.RoutePathName };
-                    });
-                }
+                    settings.UseXmlDocumentation = true;
+                    settings.UseHttpAttributeNameAsOperationId = false;
+                    settings.UseControllerSummaryAsTagDescription = true;
+                    settings.Title = "Test API";
+                    settings.Version = versionTmp.Version.ToString();
+                    settings.DocumentName = versionTmp.RoutePathName;
+                    settings.ApiGroupNames = new[] { versionTmp.RoutePathName };
+                });
             }
         }
 

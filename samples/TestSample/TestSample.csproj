@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning.ApiExplorer.Extensions.DependencyInjection\Stenn.AspNetCore.OData.Versioning.ApiExplorer.Extensions.DependencyInjection.csproj" />
         <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection.csproj" />
         <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning.Newtonsoft.Json\Stenn.AspNetCore.OData.Versioning.Newtonsoft.Json.csproj" />
         <ProjectReference Include="..\..\src\Stenn.AspNetCore.OData.Versioning\Stenn.AspNetCore.OData.Versioning.csproj" />

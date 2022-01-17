@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNetCore.OData.Routing;
+﻿using Microsoft.AspNetCore.OData.Routing;
 using Microsoft.OData;
 
 namespace Stenn.AspNetCore.OData.Versioning
@@ -18,11 +17,6 @@ namespace Stenn.AspNetCore.OData.Versioning
 
 
         public ODataVersioningRouteOptions RouteOptions { get; set; } = new();
-
-        /// <summary>
-        ///     Convention builder for build query parameters in ApiExplorer
-        /// </summary>
-        public ODataQueryOptionsConventionBuilder ODataQueryOptions { get; set; } = new();
     }
 
     /// <summary>

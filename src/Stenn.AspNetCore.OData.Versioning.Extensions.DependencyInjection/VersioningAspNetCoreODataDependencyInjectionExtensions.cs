@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.OData;
@@ -42,15 +41,13 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         ///     model
         /// </param>
         /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
-        public static IMvcBuilder AddVersioningODataModelPerRequest<TModelKey, TMetadataController, TEdmFactory>(this IMvcBuilder builder,
+        public static IMvcBuilder AddVersioningODataModelPerRequest<TMetadataController, TEdmFactory>(this IMvcBuilder builder,
             Action<ODataVersioningOptions> versioningSetupAction,
             Action<ODataOptions> setupAction,
-            Action<EdmModelFilterBuilder> initFilters)
-            where TModelKey : notnull
-            where TMetadataController : MetadataControllerBase
+            Action<EdmModelFilterBuilder> initFilters) where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
-            return AddVersioningOData<TModelKey, TMetadataController, TEdmFactory>(builder, versioningSetupAction, setupAction, initFilters, true);
+            return AddVersioningOData<TMetadataController, TEdmFactory>(builder, versioningSetupAction, setupAction, true, initFilters);
         }
 
         /// <summary>
@@ -79,7 +76,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             where TEdmFactory : class, IEdmModelFactory
         {
             // ReSharper disable once RedundantArgumentDefaultValue
-            return AddVersioningOData<ApiVersion, TMetadataController, TEdmFactory>(builder, versioningSetupAction, setupAction, initFilters, false);
+            return AddVersioningOData<TMetadataController, TEdmFactory>(builder, versioningSetupAction, setupAction, false, initFilters);
         }
 
 
@@ -87,7 +84,6 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         ///     Adds essential versioning OData services to the specified <see cref="IMvcBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="IMvcBuilder" /> to add services to.</param>
-        /// ///
         /// <param name="versioningSetupAction">
         ///     The OData versioning options to configure the services with,
         ///     including access to a service provider which you can resolve services from.
@@ -96,22 +92,22 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         ///     The OData options to configure the services with,
         ///     including access to a service provider which you can resolve services from.
         /// </param>
+        /// <param name="modelPerRequest">Is edm model will be generated for each request</param>
         /// <param name="initFilters">
         ///     Initialize custom <see cref="IEdmModelFilter" /> filters for change <see cref="IEdmModel" />
         ///     model
         /// </param>
-        /// <param name="modelPerRequest">Is edm model will be generated for each request</param>
+        /// ///
         /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
-        public static IMvcBuilder AddVersioningOData<TModelKey, TMetadataController, TEdmFactory>(this IMvcBuilder builder,
+        public static IMvcBuilder AddVersioningOData<TMetadataController, TEdmFactory>(this IMvcBuilder builder,
             Action<ODataVersioningOptions> versioningSetupAction,
             Action<ODataOptions> setupAction,
-            Action<EdmModelFilterBuilder>? initFilters = null,
-            bool modelPerRequest = false)
-            where TModelKey : notnull
+            bool modelPerRequest,
+            Action<EdmModelFilterBuilder>? initFilters = null) 
             where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
-            return builder.AddVersioningOData<TModelKey, TMetadataController, TEdmFactory>(
+            return builder.AddVersioningOData<TMetadataController, TEdmFactory>(
                 (options, _) => versioningSetupAction(options),
                 (options, _) => setupAction(options),
                 initFilters,
@@ -137,15 +133,13 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         ///     model
         /// </param>
         /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
-        public static IMvcBuilder AddVersioningODataModelPerRequest<TModelKey, TMetadataController, TEdmFactory>(this IMvcBuilder builder,
+        public static IMvcBuilder AddVersioningODataModelPerRequest<TMetadataController, TEdmFactory>(this IMvcBuilder builder,
             Action<ODataVersioningOptions, IServiceProvider> versioningSetupAction,
             Action<ODataOptions, IServiceProvider> setupAction,
-            Action<EdmModelFilterBuilder>? initFilters = null)
-            where TModelKey : notnull
-            where TMetadataController : MetadataControllerBase
+            Action<EdmModelFilterBuilder>? initFilters = null) where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
-            return AddVersioningOData<TModelKey, TMetadataController, TEdmFactory>(builder, versioningSetupAction, setupAction, initFilters, true);
+            return AddVersioningOData<TMetadataController, TEdmFactory>(builder, versioningSetupAction, setupAction, initFilters, true);
         }
 
         /// <summary>
@@ -173,7 +167,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
-            return AddVersioningOData<ApiVersion, TMetadataController, TEdmFactory>(builder, versioningSetupAction, setupAction, initFilters, false);
+            return AddVersioningOData<TMetadataController, TEdmFactory>(builder, versioningSetupAction, setupAction, initFilters, false);
         }
 
         /// <summary>
@@ -195,13 +189,11 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         /// </param>
         /// <param name="modelPerRequest"></param>
         /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
-        private static IMvcBuilder AddVersioningOData<TModelKey, TMetadataController, TEdmFactory>(this IMvcBuilder builder,
+        private static IMvcBuilder AddVersioningOData<TMetadataController, TEdmFactory>(this IMvcBuilder builder,
             Action<ODataVersioningOptions, IServiceProvider> versioningSetupAction,
             Action<ODataOptions, IServiceProvider> setupAction,
             Action<EdmModelFilterBuilder>? initFilters,
-            bool modelPerRequest)
-            where TModelKey : notnull
-            where TMetadataController : MetadataControllerBase
+            bool modelPerRequest) where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
             if (builder == null)
@@ -209,7 +201,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            builder.Services.AddVersioningODataCore<TModelKey, TEdmFactory>(initFilters, modelPerRequest);
+            builder.Services.AddVersioningODataCore<TEdmFactory>(initFilters, modelPerRequest);
             builder.Services.AddOptions<ODataVersioningOptions>().Configure(versioningSetupAction);
 
             builder.AddOData((options, provider) =>
@@ -221,10 +213,10 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IServiceCollection AddVersioningODataCore<TModelKey, TEdmFactory>(this IServiceCollection services, Action<EdmModelFilterBuilder>? initFilters,
+        public static IServiceCollection AddVersioningODataCore<TEdmFactory>(this IServiceCollection services, 
+            Action<EdmModelFilterBuilder>? initFilters,
             bool modelPerRequest)
             where TEdmFactory : class, IEdmModelFactory
-            where TModelKey : notnull
         {
             services.TryAddSingleton<IEdmModelMutatorFactory, EdmModelMutatorFactory>();
             services.TryAddSingleton<IEdmModelOperationExtractorFactory, EdmModelOperationExtractorFactory>();
@@ -238,10 +230,6 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
 
             //Options
             services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<ODataVersioningOptions>, ODataVersioningOptionsSetup>());
-
-            //For ApiExplorer
-            services.TryAddSingleton<IEdmModelSelector, EdmModelSelector>();
-            services.TryAddEnumerable(ServiceDescriptor.Transient<IApiDescriptionProvider, ODataQueryParametersApiDescriptionProvider>());
 
             if (modelPerRequest)
             {
@@ -289,7 +277,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         /// <returns>A <see cref="EdmModelFilterBuilder" /> that can be used to further configure the filters.</returns>
         public static EdmModelFilterBuilder AddApiVersioning(this EdmModelFilterBuilder builder)
         {
-            return builder.AddFactory<ApiVersionEdmModelFilterFactory>();;
+            return builder.AddFactory<ApiVersionEdmModelFilterFactory>();
         }
         
         /// <summary>

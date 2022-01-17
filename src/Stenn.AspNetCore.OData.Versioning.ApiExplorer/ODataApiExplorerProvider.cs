@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OData.ModelBuilder.Config;
 using Microsoft.OData.UriParser;
 using Stenn.AspNetCore.OData.Versioning;
+using Stenn.AspNetCore.OData.Versioning.ApiExplorer;
 
 namespace Microsoft.AspNetCore.Mvc.ApiExplorer
 {
@@ -31,11 +32,11 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
 
         private const int AfterApiVersioning = -100;
         private readonly IOptions<ODataOptions> _odataOptions;
-        private readonly IOptions<ODataVersioningOptions> _odataVersioningOptions;
+        private readonly IOptions<ODataVersioningApiExplorerOptions> _odataVersioningOptions;
 
         public ODataQueryParametersApiDescriptionProvider(
             IModelMetadataProvider metadataProvider,
-            IOptions<ODataVersioningOptions> odataVersioningOptions,
+            IOptions<ODataVersioningApiExplorerOptions> odataVersioningOptions,
             IOptions<ODataOptions> odataOptions)
         {
             _odataOptions = odataOptions;
@@ -54,7 +55,7 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
 
         protected ODataOptions ODataOptions => _odataOptions.Value;
 
-        protected ODataVersioningOptions ODataVersioningOptions => _odataVersioningOptions.Value;
+        protected ODataVersioningApiExplorerOptions ODataVersioningOptions => _odataVersioningOptions.Value;
 
         /// <summary>
         ///     Gets the order precedence of the current API description provider.
@@ -198,7 +199,7 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
                 throw new ArgumentNullException(nameof(uriResolver));
             }
 
-            var queryOptions = ODataVersioningOptions.ODataQueryOptions;
+            var queryOptions = ODataVersioningOptions.QueryOptions;
             //queryOptions.DescriptionProvider = new DefaultODataQueryOptionDescriptionProvider();
 
 
