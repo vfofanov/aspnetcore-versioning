@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Stenn.AspNetCore.OData.Versioning.Filters;
 
+// ReSharper disable once CheckNamespace
 namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
 {
     /// <summary>
