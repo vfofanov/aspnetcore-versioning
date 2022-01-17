@@ -44,14 +44,10 @@ namespace Stenn.AspNetCore.OData.Versioning
             var builder = _edmFactory.CreateBuilder();
             builder.Mutator = MutatorFactory.Create(builder.Builder, version, requestModel);
             builder.OperationExtractor = OperationExtractorFactory.Create(builder);
+            
             var key = builder.Mutator.GetKey();
 
-            return _cached.GetOrAdd(key, _ => CreateModel(builder, version, requestModel));
-        }
-
-        private IEdmModel CreateModel(EdmModelBuilder builder, ApiVersion version, bool requestModel)
-        {
-            return _edmFactory.CreateModel(builder, version, requestModel);
+            return _cached.GetOrAdd(key, _ => _edmFactory.CreateModel(builder, requestModel));
         }
     }
 }

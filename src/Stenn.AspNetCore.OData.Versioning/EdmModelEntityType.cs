@@ -91,14 +91,14 @@ namespace Stenn.AspNetCore.OData.Versioning
         }
 
         public EdmModelEntityType<TEntityType, TController> AddOperation(Expression<Action<TController>> operationExpression,
-            Action<EdmModelOperation<TController>>? init = null)
+            Action<IEdmModelOperation>? init = null)
         {
             OperationExtractor.CreateOperation(Type.ToOperationHolder(), operationExpression, init);
             return this;
         }
 
         public EdmModelEntityType<TEntityType, TController> AddCollectionOperation(Expression<Action<TController>> operationExpression,
-            Action<EdmModelOperation<TController>>? init = null)
+            Action<IEdmModelOperation>? init = null)
         {
             OperationExtractor.CreateOperation(Type.Collection.ToOperationHolder(), operationExpression, init);
             return this;

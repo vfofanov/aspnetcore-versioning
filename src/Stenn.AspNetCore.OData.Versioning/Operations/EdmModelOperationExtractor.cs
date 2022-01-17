@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.OData.Formatter;
+using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using Stenn.AspNetCore.OData.Versioning.Actions;
 
@@ -23,7 +24,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         public bool CreateOperation<TDeclaringType>(
             IEdmModelOperationHolder holder,
             Expression<Action<TDeclaringType>> operationExpression,
-            Action<EdmModelOperation<TDeclaringType>>? init = null)
+            Action<IEdmModelOperation>? init = null)
         {
             var methodCallProvider = operationExpression.Body as MethodCallExpression ??
                                      throw new ArgumentException("Supports only method call expression", nameof(operationExpression));
@@ -38,36 +39,87 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             var name = GetOperationName(methodInfo);
             var type = GetOperationType(methodInfo);
 
-            EdmModelOperation<TDeclaringType> op;
+            IEdmModelOperation op;
+            OperationReturnTypeHolder returnTypeHolder;
             switch (type)
             {
                 case EdmModelOperationType.Function:
                 {
                     var configuration = holder.Function(name);
-                    // TODO: Handle return type
                     if (!FillParameters(configuration, methodCallProvider, methodInfo))
                     {
                         return false;
                     }
-                    op = new EdmModelFunction<TDeclaringType>(configuration);
+                    op = new EdmModelFunction<TDeclaringType>(methodInfo, configuration);
+                    returnTypeHolder = configuration.ToReturnTypeHolder();
                 }
                     break;
                 case EdmModelOperationType.Action:
                 {
                     var configuration = holder.Action(name);
-                    //TODO: Handle return type
                     if (!FillParameters(configuration, methodInfo))
                     {
                         return false;
                     }
-                    op = new EdmModelAction<TDeclaringType>(configuration);
+                    op = new EdmModelAction<TDeclaringType>(methodInfo, configuration);
+                    returnTypeHolder = configuration.ToReturnTypeHolder();
                 }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Unknown edm operation type {type}");
             }
 
+            if (!FillReturnType(methodInfo, returnTypeHolder))
+            {
+                return false;
+            }
             init?.Invoke(op);
+            return true;
+        }
+
+        private bool FillReturnType(MethodInfo methodInfo, OperationReturnTypeHolder holder)
+        {
+            var type = methodInfo.ReturnType;
+            if (OperationReturnTypeExtensions.ReturnsVoid(type))
+            {
+                holder.ReturnsVoid();
+                return true;
+            }
+
+            type = OperationReturnTypeExtensions.UnwrapTask(type);
+            bool isCollection;
+            (type, isCollection) = OperationReturnTypeExtensions.UnwrapCollection(type);
+
+            if (_context.Mutator.IsIgnored(type))
+            {
+                return false;
+            }
+
+            var edmType = _context.GetTypeConfigurationOrNull(type);
+            if (edmType is null)
+            {
+                return true;
+            }
+
+            switch (edmType.Kind)
+            {
+                case EdmTypeKind.Enum:
+                case EdmTypeKind.Primitive:
+                case EdmTypeKind.Complex:
+                    holder.Returns(type, isCollection);
+                    break;
+                case EdmTypeKind.Entity:
+                    var sets = _context.EntitySets.Where(s => s.ClrType == type).ToList();
+                    if (sets.Count != 1)
+                    {
+                        //TODO: Save error to op about this case. It can be when you add the same clr type for multiple entity sets
+                        //Try autmatic resolve via bindingParameter
+                        return false;
+                    }
+                    var set = sets[0];
+                    holder.ReturnsFromEntitySet(type, set.Name, isCollection);
+                    break;
+            }
             return true;
         }
 
@@ -191,7 +243,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         }
 
         /// <summary>
-        /// Gets parameter's name for <see cref="FunctionConfiguration"/>
+        ///     Gets parameter's name for <see cref="FunctionConfiguration" />
         /// </summary>
         /// <param name="index">Parameter's index</param>
         /// <param name="info">Parameter's metadata</param>
@@ -202,7 +254,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         }
 
         /// <summary>
-        /// Gets parameter's name for <see cref="ActionConfiguration"/>
+        ///     Gets parameter's name for <see cref="ActionConfiguration" />
         /// </summary>
         /// <param name="info">Parameter's metadata</param>
         /// <returns></returns>
@@ -240,7 +292,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
     }
 
 
-    public abstract class EdmModelOperation<TConfiguration, TDeclaringType> : EdmModelOperation<TDeclaringType>
+    public abstract class EdmModelOperation<TConfiguration, TDeclaringType> : IEdmModelOperation
+        where TConfiguration : OperationConfiguration
     {
         public EdmModelOperation(TConfiguration configuration)
         {
@@ -248,17 +301,24 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         }
 
         public TConfiguration Configuration { get; }
+
+        /// <inheritdoc />
+        public abstract EdmModelOperationType Type { get; }
+
+        /// <inheritdoc />
+        OperationConfiguration IEdmModelOperation.Configuration => Configuration;
     }
 
-    public abstract class EdmModelOperation<TDeclaringType>
+    public interface IEdmModelOperation
     {
-        public abstract EdmModelOperationType Type { get; }
+        EdmModelOperationType Type { get; }
+        OperationConfiguration Configuration { get; }
     }
 
     public class EdmModelFunction<TDeclaringType> : EdmModelOperation<FunctionConfiguration, TDeclaringType>
     {
         /// <inheritdoc />
-        public EdmModelFunction(FunctionConfiguration configuration)
+        public EdmModelFunction(MethodInfo methodInfo, FunctionConfiguration configuration)
             : base(configuration)
         {
         }
@@ -270,7 +330,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
     public class EdmModelAction<TDeclaringType> : EdmModelOperation<ActionConfiguration, TDeclaringType>
     {
         /// <inheritdoc />
-        public EdmModelAction(ActionConfiguration configuration)
+        public EdmModelAction(MethodInfo methodInfo, ActionConfiguration configuration)
             : base(configuration)
         {
         }

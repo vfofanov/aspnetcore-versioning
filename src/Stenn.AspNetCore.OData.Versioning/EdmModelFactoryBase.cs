@@ -1,6 +1,5 @@
 #nullable enable
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 
@@ -23,11 +22,11 @@ namespace Stenn.AspNetCore.OData.Versioning
         }
         
         /// <inheritdoc />
-        public IEdmModel CreateModel(EdmModelBuilder builder, ApiVersion version, bool requestModel)
+        public IEdmModel CreateModel(EdmModelBuilder builder, bool requestModel)
         {
             builder.Namespace = Namespace;
 
-            FillModel(builder, version);
+            FillModel(builder);
 
             builder.Mutator.Run();
 
@@ -45,6 +44,6 @@ namespace Stenn.AspNetCore.OData.Versioning
         {
         }
 
-        protected abstract void FillModel(EdmModelBuilder builder, ApiVersion version);
+        protected abstract void FillModel(EdmModelBuilder builder);
     }
 }

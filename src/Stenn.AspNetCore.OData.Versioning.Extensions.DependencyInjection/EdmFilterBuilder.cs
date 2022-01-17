@@ -8,11 +8,11 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
     /// <summary>
     /// Builder for add <see cref="IEdmModelFilterFactory"/> to customize OData <see cref="IEdmModel"/> model
     /// </summary>
-    public sealed class EdmFilterBuilder
+    public sealed class EdmModelFilterBuilder
     {
         private readonly IServiceCollection _services;
 
-        public EdmFilterBuilder(IServiceCollection services)
+        public EdmModelFilterBuilder(IServiceCollection services)
         {
             _services = services;
         }
@@ -26,7 +26,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         /// Add edm filter 
         /// </summary>
         /// <typeparam name="TFilter"></typeparam>
-        public EdmFilterBuilder Add<TFilter>() 
+        public EdmModelFilterBuilder Add<TFilter>() 
             where TFilter : IEdmModelFilter, new()
         {
             return AddFactory<EdmModelFilterFactory<TFilter>>();
@@ -36,7 +36,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         /// Add edm filter 
         /// </summary>
         /// <typeparam name="TFilter"></typeparam>
-        public EdmFilterBuilder AddWithDefaultModelKey<TFilter>() 
+        public EdmModelFilterBuilder AddWithDefaultModelKey<TFilter>() 
             where TFilter : DefaultModelKeyEdmModelFilter, new()
         {
             return AddFactory<DefaultModelKeyEdmModelFilterFactory<TFilter>>();
@@ -46,7 +46,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         /// Add edm filter factory as singleton 
         /// </summary>
         /// <typeparam name="TFactory"></typeparam>
-        public EdmFilterBuilder AddFactory<TFactory>()
+        public EdmModelFilterBuilder AddFactory<TFactory>()
             where TFactory : class, IEdmModelFilterFactory
         {
             _services.TryAddEnumerable(ServiceDescriptor.Singleton<IEdmModelFilterFactory, TFactory>());

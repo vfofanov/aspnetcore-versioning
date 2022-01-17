@@ -18,7 +18,6 @@ namespace Stenn.AspNetCore.OData.Versioning
         private IEdmModelOperationExtractor? _operationExtractor;
 
         private readonly List<Action> _finalInitialization = new();
-
         
         public EdmModelBuilder(ODataConventionModelBuilder? builder = null)
         {
@@ -59,7 +58,14 @@ namespace Stenn.AspNetCore.OData.Versioning
 
         /// <inheritdoc />
         IEdmModelMutator IEdmModelBuilderContext.Mutator => Mutator;
-
+        /// <inheritdoc />
+        IEdmTypeConfiguration? IEdmModelBuilderContext.GetTypeConfigurationOrNull(Type type)
+        {
+            return _builder.GetTypeConfigurationOrNull(type);
+        }
+        /// <inheritdoc />
+        IEnumerable<EntitySetConfiguration> IEdmModelBuilderContext.EntitySets => _builder.EntitySets;
+        
         protected internal IEdmModelMutator Mutator
         {
             get => _mutator ?? throw new NullReferenceException("Initialize Mutator first");
@@ -83,6 +89,11 @@ namespace Stenn.AspNetCore.OData.Versioning
             where TEntity : class
             where TController : IODataController<TEntity>
         {
+            if (Mutator.IsIgnored(typeof(TEntity)))
+            {
+                return;
+            }
+            
             var entitySetName = EdmExtensions.GetEntitySetName<TController>();
             var type = AddInternal<TEntity>(entitySetName);
 
@@ -103,6 +114,11 @@ namespace Stenn.AspNetCore.OData.Versioning
         public void AddUnbound<TEntity>(string? entitySetName = null, Action<EdmModelEntityType<TEntity>>? initAction = null)
             where TEntity : class
         {
+            if (Mutator.IsIgnored(typeof(TEntity)))
+            {
+                return;
+            }
+            
             entitySetName ??= typeof(TEntity).Name + "Set";
             var type = AddInternal<TEntity>(entitySetName);
             HandleInitAction(initAction, type);
@@ -133,23 +149,43 @@ namespace Stenn.AspNetCore.OData.Versioning
         public virtual void ComplexType<TComplexType>(Action<ComplexTypeConfiguration<TComplexType>>? initAction = null)
             where TComplexType : class
         {
+            if (Mutator.IsIgnored(typeof(TComplexType)))
+            {
+                return;
+            }
+            
             var configuration = _builder.ComplexType<TComplexType>();
             HandleInitAction(initAction, configuration);
         }
 
         public virtual void EnumType<TEnumType>(Action<EnumTypeConfiguration<TEnumType>>? initAction = null)
         {
+            if (Mutator.IsIgnored(typeof(TEnumType)))
+            {
+                return;
+            }
+            
             var configuration =  _builder.EnumType<TEnumType>();
             HandleInitAction(initAction, configuration);
         }
        
         public virtual void AddComplexType(Type type, Action<ComplexTypeConfiguration>? initAction = null)
         {
+            if (Mutator.IsIgnored(type))
+            {
+                return;
+            }
+            
             var configuration = _builder.AddComplexType(type);
             HandleInitAction(initAction, configuration);
         }
         public virtual void AddEnumType(Type type, Action<EnumTypeConfiguration>? initAction = null)
         {
+            if (Mutator.IsIgnored(type))
+            {
+                return;
+            }
+            
             var configuration = _builder.AddEnumType(type);
             HandleInitAction(initAction, configuration);
         }

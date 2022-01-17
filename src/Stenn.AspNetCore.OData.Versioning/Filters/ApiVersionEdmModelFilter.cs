@@ -1,31 +1,28 @@
 #nullable enable
 
-using System;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Stenn.AspNetCore.OData.Versioning.Filters
 {
-    public class ApiVersionEdmModelFilter : IVersioningEdmModelFilter
+    public class ApiVersionEdmModelFilter : IEdmModelFilter
     {
-        private ApiVersion? _apiVersion;
-        private ApiVersion ApiVersion => _apiVersion ?? throw new NullReferenceException("ApiVersion is null. Use SetVersion first");
+        public ApiVersionEdmModelFilter(ApiVersion apiVersion)
+        {
+            ApiVersion = apiVersion;
+        }
 
+        public ApiVersion ApiVersion { get; }
+
+        /// <inheritdoc />
+        public bool ForRequestModelOnly => false;
+        
         /// <inheritdoc />
         public EdmModelKey GetKey()
         {
             return EdmModelKey.Get(ApiVersion);
         }
-
-        /// <inheritdoc />
-        void IVersioningEdmModelFilter.SetVersion(ApiVersion version)
-        {
-            _apiVersion = version;
-        }
-
-        /// <inheritdoc />
-        public bool ForRequestModelOnly => true;
 
         /// <inheritdoc />
         public bool IsIgnored(MemberInfo memberInfo)

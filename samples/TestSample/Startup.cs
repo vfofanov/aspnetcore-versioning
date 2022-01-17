@@ -69,9 +69,9 @@ namespace TestSample
                         options.RouteOptions.EnableQualifiedOperationCall = false;
                         options.EnableQueryFeatures();
                     },
-                    filterBuilder =>
+                    edmModelFilterBuilder =>
                     {
-                        filterBuilder.AddNewtonsoftJson();
+                        edmModelFilterBuilder.AddNewtonsoftJsonIgnore();
                     });
 
             AddSwagbuckle(services);

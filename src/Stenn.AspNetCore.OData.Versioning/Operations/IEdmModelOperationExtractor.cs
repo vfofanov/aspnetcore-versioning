@@ -8,6 +8,6 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         bool CreateOperation<TDeclaringType>(
             IEdmModelOperationHolder holder,
             Expression<Action<TDeclaringType>> operationExpression, 
-            Action<EdmModelOperation<TDeclaringType>>? init=null);
+            Action<IEdmModelOperation>? init=null);
     }
 }

@@ -1,15 +1,15 @@
+using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Stenn.AspNetCore.OData.Versioning.Filters
 {
-    public sealed class VersioningEdmModelFilterFactory<TFilter> : EdmModelFilterFactory<TFilter>
-        where TFilter : IVersioningEdmModelFilter, new()
+    public sealed class ApiVersionEdmModelFilterFactory : IEdmModelFilterFactory
     {
-        protected override TFilter Create(ApiVersion version)
+        private readonly ConcurrentDictionary<ApiVersion, ApiVersionEdmModelFilter> _cached = new();
+
+        public IEdmModelFilter Create(ApiVersion version)
         {
-            var filter = base.Create(version);
-            filter.SetVersion(version);
-            return filter;
+            return _cached.GetOrAdd(version, v => new ApiVersionEdmModelFilter(v));
         }
     }
 }

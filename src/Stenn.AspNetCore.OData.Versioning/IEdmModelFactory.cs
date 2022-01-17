@@ -1,6 +1,5 @@
 #nullable enable
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
 
 namespace Stenn.AspNetCore.OData.Versioning
@@ -13,8 +12,7 @@ namespace Stenn.AspNetCore.OData.Versioning
         /// Create edm model
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="version"></param>
         /// <param name="requestModel"></param>
-        IEdmModel CreateModel(EdmModelBuilder builder, ApiVersion version, bool requestModel);
+        IEdmModel CreateModel(EdmModelBuilder builder, bool requestModel);
     }
 }
