@@ -5,5 +5,6 @@ namespace Stenn.AspNetCore.OData.Versioning
     public interface IEdmModelEntityType
     {
         EntityTypeConfiguration CommonType { get; }
+        IEdmModelBuilderContext Context { get; }
     }
 }

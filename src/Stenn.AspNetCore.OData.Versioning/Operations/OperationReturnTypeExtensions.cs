@@ -9,14 +9,14 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
 {
     public static class OperationReturnTypeExtensions
     {
-        public static OperationReturnTypeHolder ToReturnTypeHolder(this ActionConfiguration operation)
+        public static OperationReturnTypeHolder ToReturnTypeHolder(this ActionConfiguration operation, Type? holderClrType)
         {
-            return new OperationReturnTypeHolder.Action(operation);
+            return new OperationReturnTypeHolder.Action(operation, holderClrType);
         }
 
-        public static OperationReturnTypeHolder ToReturnTypeHolder(this FunctionConfiguration operation)
+        public static OperationReturnTypeHolder ToReturnTypeHolder(this FunctionConfiguration operation, Type? holderClrType)
         {
-            return new OperationReturnTypeHolder.Function(operation);
+            return new OperationReturnTypeHolder.Function(operation,holderClrType);
         }
 
         public static bool ReturnsVoid(Type type)

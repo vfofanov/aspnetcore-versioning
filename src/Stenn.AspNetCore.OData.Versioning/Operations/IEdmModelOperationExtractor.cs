@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Stenn.AspNetCore.OData.Versioning.Operations
 {
@@ -7,7 +8,12 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
     {
         bool CreateOperation<TDeclaringType>(
             IEdmModelOperationHolder holder,
-            Expression<Action<TDeclaringType>> operationExpression, 
-            Action<IEdmModelOperation>? init=null);
+            Expression<Func<TDeclaringType, Task>> operationExpression,
+            Action<IEdmModelOperation>? init = null);
+        
+        bool CreateOperation<TDeclaringType>(
+            IEdmModelOperationHolder holder,
+            Expression<Action<TDeclaringType>> operationExpression,
+            Action<IEdmModelOperation>? init = null);
     }
 }

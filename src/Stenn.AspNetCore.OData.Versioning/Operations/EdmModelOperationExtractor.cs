@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.OData.Formatter;
@@ -21,12 +22,26 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             _context = context;
         }
 
+        /// <inheritdoc />
+        public bool CreateOperation<TDeclaringType>(
+            IEdmModelOperationHolder holder, 
+            Expression<Func<TDeclaringType, Task>> operationExpression, 
+            Action<IEdmModelOperation>? init = null)
+        {
+            return CreateOperation<TDeclaringType>(holder, operationExpression.Body, init);
+        }
+
         public bool CreateOperation<TDeclaringType>(
             IEdmModelOperationHolder holder,
             Expression<Action<TDeclaringType>> operationExpression,
             Action<IEdmModelOperation>? init = null)
         {
-            var methodCallProvider = operationExpression.Body as MethodCallExpression ??
+            return CreateOperation<TDeclaringType>(holder, operationExpression.Body, init);
+        }
+
+        private bool CreateOperation<TDeclaringType>(IEdmModelOperationHolder holder, Expression operationExpression, Action<IEdmModelOperation>? init)
+        {
+            var methodCallProvider = operationExpression as MethodCallExpression ??
                                      throw new ArgumentException("Supports only method call expression", nameof(operationExpression));
 
             var methodInfo = methodCallProvider.Method;
@@ -51,7 +66,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                         return false;
                     }
                     op = new EdmModelFunction<TDeclaringType>(methodInfo, configuration);
-                    returnTypeHolder = configuration.ToReturnTypeHolder();
+                    returnTypeHolder = configuration.ToReturnTypeHolder(holder.ClrType);
                 }
                     break;
                 case EdmModelOperationType.Action:
@@ -62,18 +77,22 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                         return false;
                     }
                     op = new EdmModelAction<TDeclaringType>(methodInfo, configuration);
-                    returnTypeHolder = configuration.ToReturnTypeHolder();
+                    returnTypeHolder = configuration.ToReturnTypeHolder(holder.ClrType);
                 }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Unknown edm operation type {type}");
             }
 
-            if (!FillReturnType(methodInfo, returnTypeHolder))
-            {
-                return false;
-            }
+
+            var returnTypeExtractResult = FillReturnType(methodInfo, returnTypeHolder);
             init?.Invoke(op);
+            if (!returnTypeExtractResult && op.Configuration.ReturnType == null)
+            {
+                throw new ApplicationException(
+                    $"Metod '{methodInfo.DeclaringType?.FullName}.{methodInfo.Name}' registaration failed." +
+                    "Method has return but it faild resolve automatically and didn't resolve in init action. Resolve returns in init action");
+            }
             return true;
         }
 
@@ -110,14 +129,19 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                     break;
                 case EdmTypeKind.Entity:
                     var sets = _context.EntitySets.Where(s => s.ClrType == type).ToList();
-                    if (sets.Count != 1)
+                    if (sets.Count == 1)
                     {
-                        //TODO: Save error to op about this case. It can be when you add the same clr type for multiple entity sets
-                        //Try autmatic resolve via bindingParameter
+                        var set = sets[0];
+                        holder.ReturnsFromEntitySet(type, set.Name, isCollection);
+                        break;
+                    }
+                    if (holder.BindedClrType != type)
+                    {
                         return false;
                     }
-                    var set = sets[0];
-                    holder.ReturnsFromEntitySet(type, set.Name, isCollection);
+                    //NOTE: Special case when we have multiple entity sets for one clr type
+                    //and we binded operation to one of this types
+                    holder.ReturnsViaEntitySetPath(type, holder.Configuration.BindingParameter.Name, isCollection);
                     break;
             }
             return true;

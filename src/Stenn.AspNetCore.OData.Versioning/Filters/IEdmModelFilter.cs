@@ -36,7 +36,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
         /// <returns></returns>
         public bool IsIgnored(PropertyConfiguration property)
         {
-            return IsIgnored(property.RelatedClrType) && IsIgnored(property.PropertyInfo);
+            return IsIgnored(property.RelatedClrType) || IsIgnored(property.PropertyInfo);
         }
     }
 }

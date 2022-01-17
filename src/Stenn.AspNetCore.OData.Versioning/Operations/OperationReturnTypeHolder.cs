@@ -5,6 +5,15 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
 {
     public abstract class OperationReturnTypeHolder
     {
+        protected OperationReturnTypeHolder(Type? bindedClrType)
+        {
+            BindedClrType = bindedClrType;
+        }
+
+        public Type? BindedClrType { get; }
+
+        public abstract OperationConfiguration Configuration { get; }
+
         public void Returns(Type elementEntityType, bool isCollection)
         {
             if (isCollection)
@@ -16,7 +25,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 Returns(elementEntityType);
             }
         }
-        
+
         /// <summary>
         ///     Established the return type of the Action.
         ///     <remarks>Used when the return type is a single Primitive or ComplexType.</remarks>
@@ -55,7 +64,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         /// <param name="entitySetName">The name of the entity set which contains the returned entities.</param>
         public abstract void ReturnsCollectionFromEntitySet(Type elementEntityType, string entitySetName);
 
-        public void ReturnsEntityViaEntitySetPath(Type elementEntityType, string entitySetPath, bool isCollection)
+        public void ReturnsViaEntitySetPath(Type elementEntityType, string entitySetPath, bool isCollection)
         {
             if (isCollection)
             {
@@ -66,7 +75,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 ReturnsEntityViaEntitySetPath(elementEntityType, entitySetPath);
             }
         }
-        
+
         /// <summary>
         ///     Sets the return type to a single EntityType instance.
         /// </summary>
@@ -85,16 +94,20 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         ///     Sets the return type to a void.
         /// </summary>
         public abstract void ReturnsVoid();
-        
+
         internal sealed class Action : OperationReturnTypeHolder
         {
             private readonly ActionConfiguration _operation;
 
             /// <inheritdoc />
-            public Action(ActionConfiguration operation)
+            public Action(ActionConfiguration operation, Type? bindedClrType)
+                : base(bindedClrType)
             {
                 _operation = operation;
             }
+
+            /// <inheritdoc />
+            public override OperationConfiguration Configuration => _operation;
 
             public override void ReturnsFromEntitySet(Type entityType, string entitySetName)
             {
@@ -138,10 +151,13 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             private readonly FunctionConfiguration _operation;
 
             /// <inheritdoc />
-            public Function(FunctionConfiguration operation)
+            public Function(FunctionConfiguration operation, Type? bindedClrType)
+                : base(bindedClrType)
             {
                 _operation = operation;
             }
+
+            public override OperationConfiguration Configuration => _operation;
 
             public override void ReturnsFromEntitySet(Type entityType, string entitySetName)
             {
@@ -172,7 +188,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             {
                 _operation.ReturnsCollectionViaEntitySetPath(clrElementEntityType, entitySetPath);
             }
-            
+
             /// <inheritdoc />
             public override void ReturnsVoid()
             {

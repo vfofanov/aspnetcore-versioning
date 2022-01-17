@@ -75,8 +75,8 @@ namespace Stenn.AspNetCore.OData.Versioning
             get => _mutator ?? throw new NullReferenceException("Initialize Mutator first");
             internal set => _mutator = value;
         }
-        
-        protected internal IEdmModelOperationExtractor OperationExtractor
+
+        public IEdmModelOperationExtractor OperationExtractor
         {
             get => _operationExtractor ?? throw new NullReferenceException("Initialize OperationExtractor first");
             internal set => _operationExtractor = value;
@@ -139,7 +139,7 @@ namespace Stenn.AspNetCore.OData.Versioning
         {
             var (commonType, type) = AddEntityType<TEntity>();
             var set = _builder.EntitySet<TEntity>(entitySetName);
-            return new EdmModelEntityType<TEntity>(commonType, type, set);
+            return new EdmModelEntityType<TEntity>(commonType, type, set, this);
         }
 
         protected virtual (EntityTypeConfiguration commonType, EntityTypeConfiguration<TEntity> type) AddEntityType<TEntity>()
