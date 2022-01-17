@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Vers
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{0E4532F2-E3F7-4383-ABF3-6E3670797B64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Versioning.Newtonsoft.Json", "Stenn.AspNetCore.OData.Versioning.Newtonsoft.Json\Stenn.AspNetCore.OData.Versioning.Newtonsoft.Json.csproj", "{37565588-B2B6-4BA2-A5D6-5CEB39A571D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{A2CB5279-35E4-4318-BB4A-20FC78C166F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2CB5279-35E4-4318-BB4A-20FC78C166F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2CB5279-35E4-4318-BB4A-20FC78C166F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37565588-B2B6-4BA2-A5D6-5CEB39A571D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37565588-B2B6-4BA2-A5D6-5CEB39A571D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37565588-B2B6-4BA2-A5D6-5CEB39A571D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37565588-B2B6-4BA2-A5D6-5CEB39A571D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
