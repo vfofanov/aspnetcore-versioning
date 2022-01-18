@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OData.ModelBuilder;
 using Stenn.AspNetCore.OData.Versioning;
 using Stenn.AspNetCore.OData.Versioning.Actions;
+using TestSample.Models.Complex;
 using TestSample.Models.OData;
 
 namespace TestSample.Controllers.OData
@@ -94,6 +95,19 @@ namespace TestSample.Controllers.OData
         {
             var actionParams = parameters.Get<EBooks2PostParams>();
             return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
+        }
+
+        [ApiVersionV3]
+        [HttpGet]
+        public BookGroups GetGroups()
+        {
+            return new BookGroups
+            {
+                New = 10,
+                Used = 5,
+                LikeNew = 15,
+                FairCondition = 2
+            };
         }
     }
 }

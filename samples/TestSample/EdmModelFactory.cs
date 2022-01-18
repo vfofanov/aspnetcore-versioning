@@ -29,12 +29,13 @@ namespace TestSample
                     EdmOp.Param<string>(p => p.Optional().HasDefaultValue("cool!!")),
                     default));
             });
-            
+
             builder.Add<Book, OldBooksController>(type =>
             {
                 type.AddCollectionOperation(x => x.OldEBooksPost(default));
                 type.AddCollectionOperation(x => x.OldEBooks2Post(default));
                 type.AddCollectionOperation(x => x.OldEBooks(default, default));
+                type.AddCollectionOperation(x => x.GetGroups());
             });
 
             builder.Add<Press, PressesController>();

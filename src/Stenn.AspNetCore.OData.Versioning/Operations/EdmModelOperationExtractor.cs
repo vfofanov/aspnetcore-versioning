@@ -117,6 +117,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             var edmType = _context.GetTypeConfigurationOrNull(type);
             if (edmType is null)
             {
+                //NOTE: It will implicitly add new type
+                holder.Returns(type, isCollection);
                 return true;
             }
 
