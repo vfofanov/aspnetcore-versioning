@@ -24,8 +24,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
 
         /// <inheritdoc />
         public bool CreateOperation<TDeclaringType>(
-            IEdmModelOperationHolder holder, 
-            Expression<Func<TDeclaringType, Task>> operationExpression, 
+            IEdmModelOperationHolder holder,
+            Expression<Func<TDeclaringType, Task>> operationExpression,
             Action<IEdmModelOperation>? init = null)
         {
             return CreateOperation<TDeclaringType>(holder, operationExpression.Body, init);
@@ -81,7 +81,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 }
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException($"Unknown edm operation type {type}");
+                    throw new EdmModelOperationExtractionException(methodInfo, $"Unknown edm operation type {type}");
             }
 
 
@@ -89,9 +89,9 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             init?.Invoke(op);
             if (!returnTypeExtractResult && op.Configuration.ReturnType == null)
             {
-                throw new ApplicationException(
-                    $"Metod '{methodInfo.DeclaringType?.FullName}.{methodInfo.Name}' registaration failed." +
-                    "Method has return but it faild resolve automatically and didn't resolve in init action. Resolve returns in init action");
+                throw new EdmModelOperationExtractionException(methodInfo,
+                    "Method has return but it failed to resolve automatically and didn't resolve in init action. " +
+                    "Resolve returns in init action");
             }
             return true;
         }
@@ -189,8 +189,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                                 initParam.Invoke(paramConfiguration);
                                 break;
                             default:
-                                throw new ApplicationException(
-                                    $"Metod '{methodInfo.DeclaringType?.FullName}.{methodInfo.Name}' function's registaration failed." +
+                                throw new EdmModelOperationExtractionException(methodInfo,
+                                    "Function's registaration failed." +
                                     "OData function's parameter initialized by EdmOp.Param<T>(init) must be initialized with not null init of type 'Action<ParameterConfiguration>'");
                         }
                     }
@@ -199,8 +199,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                     //NOTE: Skip 'default' keyword initialization
                     break;
                 default:
-                    throw new ApplicationException(
-                        $"Metod '{methodInfo.DeclaringType?.FullName}.{methodInfo.Name}' function's registaration failed." +
+                    throw new EdmModelOperationExtractionException(methodInfo,
+                        "Function's registaration failed." +
                         "OData function's parameter can be initialized by 'default' keyword or 'Stenn.AspNetCore.OData.Versioning.EdmOp' members only");
             }
         }
@@ -210,8 +210,9 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             var parameters = methodInfo.GetParameters();
             if (parameters.Length > 1)
             {
-                throw new ApplicationException($"Method {methodInfo.DeclaringType?.FullName}.{methodInfo.Name} have more than one parameter. " +
-                                               "Odata action method can to have one parameter of 'ODataActionParameters' type or 'ODataUntypedActionParameters' type");
+                throw new EdmModelOperationExtractionException(methodInfo,
+                    "Has more than one parameter. " +
+                    "OData action method can to have one parameter of 'ODataActionParameters' type or 'ODataUntypedActionParameters' type");
             }
 
             foreach (var parameterInfo in parameters)
@@ -219,9 +220,9 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 if (parameterInfo.ParameterType == typeof(ODataActionParameters))
                 {
                     var actionParams = GetActionParamsType(parameterInfo) ??
-                                       throw new ApplicationException(
-                                           $"Method {methodInfo.DeclaringType?.FullName}.{methodInfo.Name} have parameter of 'ODataActionParameters' type with undefined 'ODataActionParams' parameter's attribute. " +
-                                           "Odata action method can to have one parameter of 'ODataActionParameters' type with one 'ODataActionParams' parameter's attribute");
+                                       throw new EdmModelOperationExtractionException(methodInfo,
+                                           "Has parameter of 'ODataActionParameters' type with undefined 'ODataActionParams' parameter's attribute. " +
+                                           "OData action method can to have one parameter of 'ODataActionParameters' type with one 'ODataActionParams' parameter's attribute");
 
                     var actionParamsType = actionParams.GetType();
                     foreach (var paramInfo in actionParamsType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty))
@@ -245,8 +246,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 }
                 else
                 {
-                    throw new ApplicationException(
-                        $"Method {methodInfo.DeclaringType?.FullName}.{methodInfo.Name} have parameter with '{parameterInfo.ParameterType.FullName}'. " +
+                    throw new EdmModelOperationExtractionException(methodInfo,
+                        $"Has parameter with '{parameterInfo.ParameterType.FullName}'. " +
                         "Odata action method can to have one parameter of 'ODataActionParameters' type or 'ODataUntypedActionParameters' type");
                 }
             }
@@ -273,7 +274,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 initializer.Initialize(paramConfiguration);
             }
         }
-        
+
         protected virtual string GetOperationName(MethodInfo method)
         {
             return method.Name;
@@ -300,18 +301,20 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             return info.Name;
         }
 
-        protected virtual EdmModelOperationType GetOperationType(MethodInfo method)
+        protected virtual EdmModelOperationType GetOperationType(MethodInfo methodInfo)
         {
-            var httpMethods = method.GetCustomAttributes<HttpMethodAttribute>().ToList();
+            var httpMethods = methodInfo.GetCustomAttributes<HttpMethodAttribute>().ToList();
             if (httpMethods.Count == 0)
             {
-                throw new ArgumentException($"Method {method.DeclaringType?.FullName}{method.Name} doesn't have any HttpMethodAttribute. " +
-                                            "Unable to get type of odata operation. Mark method with one of attribute: [HttpGet] for function, [HttpPost] - for Operation");
+                throw new EdmModelOperationExtractionException(methodInfo,
+                    "Method doesn't have any HttpMethodAttribute. " +
+                    "Unable to get type of odata operation. Mark method with one of attribute: [HttpGet] for function, [HttpPost] - for Operation");
             }
             if (httpMethods.Count > 1)
             {
-                throw new ArgumentException($"Method {method.DeclaringType?.FullName}{method.Name} have multiple HttpMethodAttribute. " +
-                                            "Unable to get type of odata operation. Mark method with one of attribute: [HttpGet] for function, [HttpPost] - for Operation");
+                throw new EdmModelOperationExtractionException(methodInfo,
+                    "Method has multiple HttpMethodAttribute. " +
+                    "Unable to get type of odata operation. Mark method with one of attribute: [HttpGet] for function, [HttpPost] - for Operation");
             }
 
             switch (httpMethods[0])
@@ -321,8 +324,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 case HttpPostAttribute:
                     return EdmModelOperationType.Action;
                 default:
-                    throw new ArgumentException(
-                        $"Method {method.DeclaringType?.FullName}{method.Name} have unmatched attribute {httpMethods[0].GetType().Name}. " +
+                    throw new EdmModelOperationExtractionException(methodInfo,
+                        $"Method has unmatched attribute {httpMethods[0].GetType().Name}. " +
                         "Unable to get type of odata operation. Mark method with one of attribute: [HttpGet] for function, [HttpPost] - for Operation");
             }
         }
