@@ -9,3 +9,5 @@ Based on
 
 ## Extra functionality
 - [MSBuild task for generate open api specification during build](https://github.com/StennGroup/stenn-aspnetcore-versioning/tree/master/src/Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle) 
+- ApiExplorer port from [7.+](https://github.com/dotnet/aspnet-api-versioning)
+- Test sample with swagger-ui via [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) and [NSwag](https://github.com/RicoSuter/NSwag)
