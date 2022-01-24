@@ -40,7 +40,7 @@ namespace Stenn.AspNetCore.OData.Versioning
         }
 
         /// <inheritdoc />
-        public async Task ApplyAsync(HttpContext httpContext, CandidateSet candidates)
+        public Task ApplyAsync(HttpContext httpContext, CandidateSet candidates)
         {
             if (httpContext == null)
             {
@@ -50,9 +50,10 @@ namespace Stenn.AspNetCore.OData.Versioning
             var odataFeature = httpContext.ODataFeature();
             if (odataFeature.Path != null)
             {
+
                 // If we have the OData path setting, it means there's some Policy working.
                 // Let's skip this default OData matcher policy.
-                return;
+                return Task.CompletedTask;
             }
 
             for (var i = 0; i < candidates.Count; i++)
@@ -126,13 +127,14 @@ namespace Stenn.AspNetCore.OData.Versioning
                     }
                     if (odataPath != null)
                     {
+
                         //NOTE: This means that endpoint valid for full model and invalid for request model, and that is unauthorized access
-                        httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        await httpContext.Response.CompleteAsync();
+                        httpContext.AddODataAuthorizedFeature(StatusCodes.Status401Unauthorized);
                     }
                     candidates.SetValidity(i, false);
                 }
             }
+            return Task.CompletedTask;
         }
 
         private static ODataPathTemplate? GetODataPathTemplate(ODataPathTemplate? metadataTemplate, IEdmModel model)
@@ -231,3 +233,5 @@ namespace Stenn.AspNetCore.OData.Versioning
         }
     }
 }
+
+    
