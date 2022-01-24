@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OData;
 using Newtonsoft.Json.Converters;
 using NSwag.AspNetCore;
+using Stenn.AspNetCore.OData.Versioning;
 using Stenn.AspNetCore.OData.Versioning.CsvRouting;
 using Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection;
 using Stenn.AspNetCore.Versioning;
@@ -71,6 +72,7 @@ namespace TestSample
                     edmModelFilterBuilder =>
                     {
                         edmModelFilterBuilder.AddNewtonsoftJsonIgnore();
+                        //edmModelFilterBuilder.Add<DenyAllEdmFilter>();
                     });
 
             services.AddVersioningODataApiExplorer();
@@ -149,8 +151,6 @@ namespace TestSample
             services.AddTransient<IConfigureOptions<SwaggerUIOptions>, ConfigureSwaggerUIOptions>();
         }
 
-        
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -161,7 +161,8 @@ namespace TestSample
             }
 
             app.UseRouting();
-
+            app.UseODataUnauthorizedHandler();
+            
             UseSwashbuckle(app);
 
             UseNSwag(app);
