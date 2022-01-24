@@ -31,7 +31,7 @@ namespace Stenn.AspNetCore.OData.Versioning
         {
             // Verify if AddRouting was done before calling UseEndpointRouting/UseEndpoint
             // We use the RoutingMarkerService to make sure if all the services were added.
-            if (app.ApplicationServices.GetService(typeof(ODataModelProvider)) == null)
+            if (app.ApplicationServices.GetService(typeof(IODataModelProvider)) == null)
             {
                 throw new InvalidOperationException(
                     "Unable to find OData versioning services. Check that they added to services via VersioningAspNetCoreODataDependencyInjectionExtensions.AddVersioningOData");
