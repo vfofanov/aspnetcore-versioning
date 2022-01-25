@@ -12,11 +12,11 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         /// <summary>
         ///     Adds supports for ignore properties marked with <see cref="JsonIgnoreAttribute" />
         /// </summary>
-        /// <param name="builder">The <see cref="EdmModelFilterBuilder" /> to add filters to.</param>
-        /// <returns>A <see cref="EdmModelFilterBuilder" /> that can be used to further configure the filters.</returns>
-        public static EdmModelFilterBuilder AddNewtonsoftJsonIgnore(this EdmModelFilterBuilder builder)
+        /// <param name="builder">The <see cref="ModelFilterBuilder" /> to add filters to.</param>
+        /// <returns>A <see cref="ModelFilterBuilder" /> that can be used to further configure the filters.</returns>
+        public static ModelFilterBuilder AddNewtonsoftJsonIgnore(this ModelFilterBuilder builder)
         {
-            return builder.AddWithDefaultModelKey<NewtonsoftJsonIgnoreAttributeEdmFilter>();
+            return builder.AddWithDefaultModelKey<NewtonsoftJsonIgnoreAttributeFilter>(false);
         }
     }
 }

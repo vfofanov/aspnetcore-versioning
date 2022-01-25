@@ -7,7 +7,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
     /// <summary>
     ///     Skip properties if it marked <see cref="System.Text.Json.Serialization.JsonIgnoreAttribute" />
     /// </summary>
-    public sealed class TextJsonIgnoreAttributeEdmModelFilter : DefaultModelKeyEdmModelFilter
+    public sealed class TextJsonIgnoreAttributeModelFilter : DefaultModelKeyModelFilter
     {
         /// <inheritdoc />
         public override bool IsIgnored(MemberInfo memberInfo)

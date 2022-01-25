@@ -3,7 +3,7 @@ using Stenn.AspNetCore.OData.Versioning.Filters;
 
 namespace TestSample
 {
-    public class DenyAllEdmFilter : IEdmModelFilter
+    public class DenyAllFilter : IModelFilter
     {
         /// <inheritdoc />
         public EdmModelKey GetKey()

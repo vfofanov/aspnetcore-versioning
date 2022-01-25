@@ -37,14 +37,14 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         ///     including access to a service provider which you can resolve services from.
         /// </param>
         /// <param name="initFilters">
-        ///     Initialize custom <see cref="IEdmModelFilter" /> filters for change <see cref="IEdmModel" />
+        ///     Initialize custom <see cref="IModelFilter" /> filters for change <see cref="IEdmModel" />
         ///     model
         /// </param>
         /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
         public static IMvcBuilder AddVersioningODataModelPerRequest<TMetadataController, TEdmFactory>(this IMvcBuilder builder,
             Action<ODataVersioningOptions> versioningSetupAction,
             Action<ODataOptions> setupAction,
-            Action<EdmModelFilterBuilder> initFilters) where TMetadataController : MetadataControllerBase
+            Action<ModelFilterBuilder> initFilters) where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
             return AddVersioningOData<TMetadataController, TEdmFactory>(builder, versioningSetupAction, setupAction, true, initFilters);
@@ -64,14 +64,14 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         ///     including access to a service provider which you can resolve services from.
         /// </param>
         /// <param name="initFilters">
-        ///     Initialize custom <see cref="IEdmModelFilter" /> filters for change <see cref="IEdmModel" />
+        ///     Initialize custom <see cref="IModelFilter" /> filters for change <see cref="IEdmModel" />
         ///     model
         /// </param>
         /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
         public static IMvcBuilder AddVersioningOData<TMetadataController, TEdmFactory>(this IMvcBuilder builder,
             Action<ODataVersioningOptions> versioningSetupAction,
             Action<ODataOptions> setupAction,
-            Action<EdmModelFilterBuilder>? initFilters = null)
+            Action<ModelFilterBuilder>? initFilters = null)
             where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
@@ -94,7 +94,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         /// </param>
         /// <param name="modelPerRequest">Is edm model will be generated for each request</param>
         /// <param name="initFilters">
-        ///     Initialize custom <see cref="IEdmModelFilter" /> filters for change <see cref="IEdmModel" />
+        ///     Initialize custom <see cref="IModelFilter" /> filters for change <see cref="IEdmModel" />
         ///     model
         /// </param>
         /// ///
@@ -103,7 +103,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
             Action<ODataVersioningOptions> versioningSetupAction,
             Action<ODataOptions> setupAction,
             bool modelPerRequest,
-            Action<EdmModelFilterBuilder>? initFilters = null) 
+            Action<ModelFilterBuilder>? initFilters = null) 
             where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
@@ -129,14 +129,14 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         ///     including access to a service provider which you can resolve services from.
         /// </param>
         /// <param name="initFilters">
-        ///     Initialize custom <see cref="IEdmModelFilter" /> filters for change <see cref="IEdmModel" />
+        ///     Initialize custom <see cref="IModelFilter" /> filters for change <see cref="IEdmModel" />
         ///     model
         /// </param>
         /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
         public static IMvcBuilder AddVersioningODataModelPerRequest<TMetadataController, TEdmFactory>(this IMvcBuilder builder,
             Action<ODataVersioningOptions, IServiceProvider> versioningSetupAction,
             Action<ODataOptions, IServiceProvider> setupAction,
-            Action<EdmModelFilterBuilder>? initFilters = null) where TMetadataController : MetadataControllerBase
+            Action<ModelFilterBuilder>? initFilters = null) where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
             return AddVersioningOData<TMetadataController, TEdmFactory>(builder, versioningSetupAction, setupAction, initFilters, true);
@@ -156,14 +156,14 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         ///     including access to a service provider which you can resolve services from.
         /// </param>
         /// <param name="initFilters">
-        ///     Initialize custom <see cref="IEdmModelFilter" /> filters for change <see cref="IEdmModel" />
+        ///     Initialize custom <see cref="IModelFilter" /> filters for change <see cref="IEdmModel" />
         ///     model
         /// </param>
         /// <returns>A <see cref="IMvcBuilder" /> that can be used to further configure the OData services.</returns>
         public static IMvcBuilder AddVersioningOData<TMetadataController, TEdmFactory>(this IMvcBuilder builder,
             Action<ODataVersioningOptions, IServiceProvider> versioningSetupAction,
             Action<ODataOptions, IServiceProvider> setupAction,
-            Action<EdmModelFilterBuilder>? initFilters = null)
+            Action<ModelFilterBuilder>? initFilters = null)
             where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
@@ -184,7 +184,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         ///     including access to a service provider which you can resolve services from.
         /// </param>
         /// <param name="initFilters">
-        ///     Initialize custom <see cref="IEdmModelFilter" /> filters for change <see cref="IEdmModel" />
+        ///     Initialize custom <see cref="IModelFilter" /> filters for change <see cref="IEdmModel" />
         ///     model
         /// </param>
         /// <param name="modelPerRequest"></param>
@@ -192,7 +192,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         private static IMvcBuilder AddVersioningOData<TMetadataController, TEdmFactory>(this IMvcBuilder builder,
             Action<ODataVersioningOptions, IServiceProvider> versioningSetupAction,
             Action<ODataOptions, IServiceProvider> setupAction,
-            Action<EdmModelFilterBuilder>? initFilters,
+            Action<ModelFilterBuilder>? initFilters,
             bool modelPerRequest) where TMetadataController : MetadataControllerBase
             where TEdmFactory : class, IEdmModelFactory
         {
@@ -214,7 +214,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         }
 
         public static IServiceCollection AddVersioningODataCore<TEdmFactory>(this IServiceCollection services, 
-            Action<EdmModelFilterBuilder>? initFilters,
+            Action<ModelFilterBuilder>? initFilters,
             bool modelPerRequest)
             where TEdmFactory : class, IEdmModelFactory
         {
@@ -237,7 +237,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
                 services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, VersioningODataRoutingMatcherPolicy>());
             }
 
-            var filtersBuilder = new EdmModelFilterBuilder(services);
+            var filtersBuilder = new ModelFilterBuilder(services);
             filtersBuilder.AddApiVersioning();
             filtersBuilder.AddTextJsonIgnore();
             initFilters?.Invoke(filtersBuilder);
@@ -273,21 +273,21 @@ namespace Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection
         /// <summary>
         ///     Adds supports for ignore model parts marked with attribute inherited from <see cref="IApiVersionProvider"/>. eg. <see cref="ApiVersionAttribute" />
         /// </summary>
-        /// <param name="builder">The <see cref="EdmModelFilterBuilder" /> to add filters to.</param>
-        /// <returns>A <see cref="EdmModelFilterBuilder" /> that can be used to further configure the filters.</returns>
-        public static EdmModelFilterBuilder AddApiVersioning(this EdmModelFilterBuilder builder)
+        /// <param name="builder">The <see cref="ModelFilterBuilder" /> to add filters to.</param>
+        /// <returns>A <see cref="ModelFilterBuilder" /> that can be used to further configure the filters.</returns>
+        public static ModelFilterBuilder AddApiVersioning(this ModelFilterBuilder builder)
         {
-            return builder.AddFactory<ApiVersionEdmModelFilterFactory>();
+            return builder.AddFactory<ApiVersionModelFilterFactory>(false);
         }
         
         /// <summary>
         ///     Adds supports for ignore properties marked with <see cref="JsonIgnoreAttribute" />
         /// </summary>
-        /// <param name="builder">The <see cref="EdmModelFilterBuilder" /> to add filters to.</param>
-        /// <returns>A <see cref="EdmModelFilterBuilder" /> that can be used to further configure the filters.</returns>
-        public static EdmModelFilterBuilder AddTextJsonIgnore(this EdmModelFilterBuilder builder)
+        /// <param name="builder">The <see cref="ModelFilterBuilder" /> to add filters to.</param>
+        /// <returns>A <see cref="ModelFilterBuilder" /> that can be used to further configure the filters.</returns>
+        public static ModelFilterBuilder AddTextJsonIgnore(this ModelFilterBuilder builder)
         {
-            return builder.AddWithDefaultModelKey<TextJsonIgnoreAttributeEdmModelFilter>();
+            return builder.AddWithDefaultModelKey<TextJsonIgnoreAttributeModelFilter>(false);
         }
     }
 }

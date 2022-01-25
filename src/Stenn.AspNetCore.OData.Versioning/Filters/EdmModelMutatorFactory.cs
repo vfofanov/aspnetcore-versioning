@@ -9,22 +9,24 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
 {
     public class EdmModelMutatorFactory : IEdmModelMutatorFactory
     {
-        private readonly IEdmModelFilterFactory[] _edmFilterFactories;
-        public EdmModelMutatorFactory(IEnumerable<IEdmModelFilterFactory> edmFilterFactories)
+        private readonly IModelFilterFactoryRegistration[] _edmFilterFactories;
+        public EdmModelMutatorFactory(IEnumerable<IModelFilterFactoryRegistration> edmFilterFactories)
         {
             _edmFilterFactories = edmFilterFactories.ToArray();
         }
-        protected virtual IEdmModelMutator Create(ODataModelBuilder builder, bool requestModel, IEnumerable<IEdmModelFilter> edmFilters)
+        protected virtual IEdmModelMutator Create(ODataModelBuilder builder, bool requestModel, IEnumerable<IModelFilter> edmFilters)
         {
             return new EdmModelMutator(builder,requestModel, edmFilters);
         }
         public IEdmModelMutator Create(ODataModelBuilder builder, ApiVersion version, bool requestModel)
         {
-            var edmFilters = _edmFilterFactories.Select(f => f.Create(version));
+            IEnumerable<IModelFilterFactoryRegistration> edmFilterFactories = _edmFilterFactories;
             if (!requestModel)
             {
-                edmFilters = edmFilters.Where(f => !f.ForRequestModelOnly);
+                edmFilterFactories = edmFilterFactories.Where(f => !f.RequestOnly);
             }
+            var edmFilters = edmFilterFactories.Select(f => f.Factory.Create(version));
+            
             var context = Create(builder, requestModel, edmFilters);
             return context;
         }

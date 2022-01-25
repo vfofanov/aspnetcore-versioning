@@ -11,10 +11,10 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
     public class EdmModelMutator : IEdmModelMutator
     {
         private readonly ODataModelBuilder _builder;
-        private readonly IEdmModelFilter[] _edmFilters;
+        private readonly IModelFilter[] _edmFilters;
         private readonly bool _requestModel;
 
-        public EdmModelMutator(ODataModelBuilder builder, bool requestModel, IEnumerable<IEdmModelFilter> edmFilters)
+        public EdmModelMutator(ODataModelBuilder builder, bool requestModel, IEnumerable<IModelFilter> edmFilters)
         {
             _builder = builder;
             _requestModel = requestModel;
@@ -155,7 +155,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
             for (var i = 0; i < _edmFilters.Length; i++)
             {
                 var f = _edmFilters[i];
-                if (f.IsIgnored(type.ClrType) || f.IsIgnored(type))
+                if (f.IsIgnored(type))
                 {
                     return true;
                 }

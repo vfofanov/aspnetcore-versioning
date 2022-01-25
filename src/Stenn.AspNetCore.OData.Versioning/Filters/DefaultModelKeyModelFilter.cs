@@ -5,7 +5,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
     /// <summary>
     ///     Base edm model filter with default model key. This filter will be added like singleton
     /// </summary>
-    public abstract class DefaultModelKeyEdmModelFilter : IEdmModelFilter
+    public abstract class DefaultModelKeyModelFilter : IModelFilter
     {
         /// <inheritdoc />
         public bool ForRequestModelOnly => false;

@@ -7,18 +7,15 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace Stenn.AspNetCore.OData.Versioning.Filters
 {
-    public class ApiVersionEdmModelFilter : IEdmModelFilter
+    public class ApiVersionModelFilter : IModelFilter
     {
-        public ApiVersionEdmModelFilter(ApiVersion apiVersion)
+        public ApiVersionModelFilter(ApiVersion apiVersion)
         {
             ApiVersion = apiVersion;
         }
 
         public ApiVersion ApiVersion { get; }
 
-        /// <inheritdoc />
-        public bool ForRequestModelOnly => false;
-        
         /// <inheritdoc />
         public EdmModelKey GetKey()
         {

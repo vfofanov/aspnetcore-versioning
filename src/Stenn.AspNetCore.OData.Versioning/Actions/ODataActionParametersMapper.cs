@@ -5,11 +5,6 @@ using System.Reflection;
 
 namespace Stenn.AspNetCore.OData.Versioning.Actions
 {
-    internal interface IODataActionParametersMapper
-    {
-        object Map(Dictionary<string, object> parameters);
-    }
-
     internal sealed class ODataActionParametersMapper<T> : IODataActionParametersMapper
         where T : class, new()
     {

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 #nullable enable
 namespace Stenn.AspNetCore.OData.Versioning.Filters
 {
-    public interface IEdmModelFilterFactory
+    public interface IModelFilterFactory
     {
-        public IEdmModelFilter Create(ApiVersion version);
+        public IModelFilter Create(ApiVersion version);
     }
 }

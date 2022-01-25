@@ -28,7 +28,7 @@ namespace Stenn.AspNetCore.OData.Versioning
 
             FillModel(builder);
 
-            builder.Mutator.Run();
+            builder.Builder.OnModelCreating += _ => builder.Mutator.Run();   
 
             builder.FinalizeBuilderIntenal();
             FinalizeBuilder(builder.Builder);

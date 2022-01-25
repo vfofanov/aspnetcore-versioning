@@ -348,34 +348,4 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         /// <inheritdoc />
         OperationConfiguration IEdmModelOperation.Configuration => Configuration;
     }
-
-    public interface IEdmModelOperation
-    {
-        EdmModelOperationType Type { get; }
-        OperationConfiguration Configuration { get; }
-    }
-
-    public class EdmModelFunction<TDeclaringType> : EdmModelOperation<FunctionConfiguration, TDeclaringType>
-    {
-        /// <inheritdoc />
-        public EdmModelFunction(MethodInfo methodInfo, FunctionConfiguration configuration)
-            : base(configuration)
-        {
-        }
-
-        /// <inheritdoc />
-        public override EdmModelOperationType Type => EdmModelOperationType.Function;
-    }
-
-    public class EdmModelAction<TDeclaringType> : EdmModelOperation<ActionConfiguration, TDeclaringType>
-    {
-        /// <inheritdoc />
-        public EdmModelAction(MethodInfo methodInfo, ActionConfiguration configuration)
-            : base(configuration)
-        {
-        }
-
-        /// <inheritdoc />
-        public override EdmModelOperationType Type => EdmModelOperationType.Action;
-    }
 }

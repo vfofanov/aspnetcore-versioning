@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 #nullable enable
 namespace Stenn.AspNetCore.OData.Versioning.Filters
 {
-    public class EdmModelFilterFactory<TFilter> : IEdmModelFilterFactory
-        where TFilter : IEdmModelFilter, new()
+    public class ModelFilterFactory<TFilter> : IModelFilterFactory
+        where TFilter : IModelFilter, new()
     {
         /// <inheritdoc />
-        IEdmModelFilter IEdmModelFilterFactory.Create(ApiVersion version)
+        IModelFilter IModelFilterFactory.Create(ApiVersion version)
         {
             return Create(version);
         }
