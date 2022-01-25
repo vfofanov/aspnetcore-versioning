@@ -25,6 +25,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Vers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.OData.Versioning.ApiExplorer.Extensions.DependencyInjection", "..\src\Stenn.AspNetCore.OData.Versioning.ApiExplorer.Extensions.DependencyInjection\Stenn.AspNetCore.OData.Versioning.ApiExplorer.Extensions.DependencyInjection.csproj", "{871E0EA7-C3A7-453B-ADEC-DC18738A7780}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".msbuild", ".msbuild", "{1D248C6D-3F83-464F-93D4-805C5684BBA6}"
+	ProjectSection(SolutionItems) = preProject
+		..\src\.msbuild\version.props = ..\src\.msbuild\version.props
+		..\src\.msbuild\build.props = ..\src\.msbuild\build.props
+		..\src\.msbuild\package.props = ..\src\.msbuild\package.props
+		..\src\.msbuild\product.props = ..\src\.msbuild\product.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,5 +96,6 @@ Global
 		{31A62745-5607-4D24-90AC-E74CEB63F982} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
 		{41207CC6-4805-4F60-B4E4-5150B5871A65} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
 		{871E0EA7-C3A7-453B-ADEC-DC18738A7780} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
+		{1D248C6D-3F83-464F-93D4-805C5684BBA6} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
 	EndGlobalSection
 EndGlobal

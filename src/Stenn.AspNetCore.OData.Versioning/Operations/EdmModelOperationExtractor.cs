@@ -99,15 +99,15 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         private bool FillReturnType(MethodInfo methodInfo, OperationReturnTypeHolder holder)
         {
             var type = methodInfo.ReturnType;
-            if (OperationReturnTypeExtensions.ReturnsVoid(type))
+            if (OperationExtractorExtensions.ReturnsVoid(type))
             {
                 holder.ReturnsVoid();
                 return true;
             }
 
-            type = OperationReturnTypeExtensions.UnwrapTask(type);
+            type = OperationExtractorExtensions.UnwrapTask(type);
             bool isCollection;
-            (type, isCollection) = OperationReturnTypeExtensions.UnwrapCollection(type);
+            (type, isCollection) = OperationExtractorExtensions.UnwrapCollection(type);
 
             if (_context.IsIgnored(type))
             {
@@ -256,7 +256,10 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
 
         protected virtual ParameterConfiguration CreateParameter(OperationConfiguration configuration, Type paramType, string parameterName)
         {
-            return paramType.IsGenericType && paramType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+            bool isCollection;
+            (paramType, isCollection) = OperationExtractorExtensions.UnwrapCollection(paramType);
+            
+            return isCollection
                 ? configuration.CollectionParameter(paramType, parameterName)
                 : configuration.Parameter(paramType, parameterName);
         }

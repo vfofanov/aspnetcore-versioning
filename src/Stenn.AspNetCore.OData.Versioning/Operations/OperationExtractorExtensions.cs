@@ -1,14 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.OData.ModelBuilder;
 
 namespace Stenn.AspNetCore.OData.Versioning.Operations
 {
-    public static class OperationReturnTypeExtensions
+    public static class OperationExtractorExtensions
     {
+        private static readonly MethodInfo CollectionParameterMethod =
+            typeof(FunctionConfiguration).GetMethod(nameof(OperationConfiguration.CollectionParameter)) ??
+            throw new ApplicationException("Can't find method 'OperationConfiguration.CollectionParameter'");
+        public static ParameterConfiguration CollectionParameter(this OperationConfiguration action, Type itemType, string parameterName)
+        {
+            var generic = CollectionParameterMethod.MakeGenericMethod(itemType);
+            var configuration = (ParameterConfiguration?)generic.Invoke(action, new object?[] { parameterName });
+            return configuration!;
+        }
+        
         public static OperationReturnTypeHolder ToReturnTypeHolder(this ActionConfiguration operation, Type? holderClrType)
         {
             return new OperationReturnTypeHolder.Action(operation, holderClrType);
@@ -41,15 +50,24 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
 
         public static (Type type, bool isCollection) UnwrapCollection(Type type)
         {
-            bool isCollection = false;
-            if (type.IsGenericType)
+            var isCollection = false;
+            if (!type.IsGenericType)
             {
-                var typeDefinition = type.GetGenericTypeDefinition();
-                if (typeDefinition == typeof(IEnumerable<>) || typeDefinition == typeof(IQueryable<>))
-                {
-                    isCollection = true;
-                    type = type.GetGenericArguments()[0];
-                }
+                return (type, isCollection);
+            }
+
+            var genericArgs = type.GetGenericArguments();
+            if (genericArgs.Length > 1)
+            {
+                return (type, isCollection);
+            }
+
+            var itemType = type.GetGenericArguments()[0];
+            var ienumerableType = typeof(IEnumerable<>).MakeGenericType(itemType);
+            if (ienumerableType.IsAssignableFrom(type))
+            {
+                isCollection = true;
+                type = itemType;
             }
             return (type, isCollection);
         }
