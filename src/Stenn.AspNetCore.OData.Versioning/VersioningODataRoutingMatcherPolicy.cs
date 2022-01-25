@@ -78,7 +78,7 @@ namespace Stenn.AspNetCore.OData.Versioning
                     continue;
                 }
 
-                var requestModel = _provider.GetRequestEdmModel(apiVersion, httpContext.RequestServices);
+                var requestModel = _provider.GetRequestEdmModel(apiVersion);
                 if (requestModel == null)
                 {
                     candidates.SetValidity(i, false);

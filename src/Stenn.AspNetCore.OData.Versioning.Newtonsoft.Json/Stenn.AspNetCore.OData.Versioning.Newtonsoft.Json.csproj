@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Description>Api versioning implementation for ASP.NET Core OData 8.+</Description>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.6" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />        
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection\Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection.csproj" />
+        <ProjectReference Include="..\Stenn.AspNetCore.OData.Versioning\Stenn.AspNetCore.OData.Versioning.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
 
 namespace Stenn.AspNetCore.OData.Versioning
 {
-    public interface IODataModelRequestProvider
+    public interface IODataModelRequestProvider: IODataModelProvider
     {
-        IEdmModel? GetRequestEdmModel(ApiVersion version, IServiceProvider provider);
+        IEdmModel? GetRequestEdmModel(ApiVersion version);
     }
 }

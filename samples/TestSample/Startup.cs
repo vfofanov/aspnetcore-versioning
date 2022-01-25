@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OData;
 using Newtonsoft.Json.Converters;
 using NSwag.AspNetCore;
+using Stenn.AspNetCore.OData.Versioning;
 using Stenn.AspNetCore.OData.Versioning.CsvRouting;
 using Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection;
 using Stenn.AspNetCore.Versioning;
@@ -51,7 +52,8 @@ namespace TestSample
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); })
-                .AddVersioningOData<MetadataController, ODataModelProvider>(versioningOptions =>
+                .AddVersioningODataModelPerRequest<MetadataController, EdmModelFactory>(
+                    versioningOptions =>
                     {
                         versioningOptions.RouteOptions.EnableEntitySetCount = false;
 
@@ -66,8 +68,15 @@ namespace TestSample
                         options.RouteOptions.EnableControllerNameCaseInsensitive = true;
                         options.RouteOptions.EnableQualifiedOperationCall = false;
                         options.EnableQueryFeatures();
+                    },
+                    edmModelFilterBuilder =>
+                    {
+                        edmModelFilterBuilder.AddNewtonsoftJsonIgnore();
+                        //edmModelFilterBuilder.Add<DenyAllEdmFilter>();
                     });
 
+            services.AddVersioningODataApiExplorer();
+            
             AddSwagbuckle(services);
 
             AddNSwag(services);
@@ -75,24 +84,22 @@ namespace TestSample
 
         private static void AddNSwag(IServiceCollection services)
         {
-            using (var provider = services.BuildServiceProvider())
-            {
-                var versionInfoProvider = provider.GetRequiredService<IApiVersionInfoProvider>();
+            using var provider = services.BuildServiceProvider();
+            var versionInfoProvider = provider.GetRequiredService<IApiVersionInfoProvider>();
                 
-                foreach (var version in versionInfoProvider.Versions)
+            foreach (var version in versionInfoProvider.Versions)
+            {
+                var versionTmp = version;
+                services.AddOpenApiDocument(settings =>
                 {
-                    var versionTmp = version;
-                    services.AddOpenApiDocument(settings =>
-                    {
-                        settings.UseXmlDocumentation = true;
-                        settings.UseHttpAttributeNameAsOperationId = false;
-                        settings.UseControllerSummaryAsTagDescription = true;
-                        settings.Title = "Test API";
-                        settings.Version = versionTmp.Version.ToString();
-                        settings.DocumentName = versionTmp.RoutePathName;
-                        settings.ApiGroupNames = new[] { versionTmp.RoutePathName };
-                    });
-                }
+                    settings.UseXmlDocumentation = true;
+                    settings.UseHttpAttributeNameAsOperationId = false;
+                    settings.UseControllerSummaryAsTagDescription = true;
+                    settings.Title = "Test API";
+                    settings.Version = versionTmp.Version.ToString();
+                    settings.DocumentName = versionTmp.RoutePathName;
+                    settings.ApiGroupNames = new[] { versionTmp.RoutePathName };
+                });
             }
         }
 
@@ -144,8 +151,6 @@ namespace TestSample
             services.AddTransient<IConfigureOptions<SwaggerUIOptions>, ConfigureSwaggerUIOptions>();
         }
 
-        
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -156,7 +161,8 @@ namespace TestSample
             }
 
             app.UseRouting();
-
+            app.UseODataUnauthorizedHandler();
+            
             UseSwashbuckle(app);
 
             UseNSwag(app);

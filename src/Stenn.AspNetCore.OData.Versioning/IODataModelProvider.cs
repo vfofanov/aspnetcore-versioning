@@ -10,6 +10,6 @@ namespace Stenn.AspNetCore.OData.Versioning
         ///     Model for run standard entites' name conventions for odata controllers.
         /// </summary>
         /// <returns></returns>
-        IEdmModel GetEdmModel(ApiVersionInfo version);
+        IEdmModel GetEdmModel(ApiVersionInfo versionInfo);
     }
 }

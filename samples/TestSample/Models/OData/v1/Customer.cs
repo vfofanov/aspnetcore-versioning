@@ -2,6 +2,7 @@
 
 namespace TestSample.Models.OData.v1
 {
+    [ApiVersionV1]
     public class Customer : CustomerBase
     {
         public string Name { get; set; }
