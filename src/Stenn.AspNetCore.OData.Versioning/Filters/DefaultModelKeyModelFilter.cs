@@ -8,9 +8,6 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
     public abstract class DefaultModelKeyModelFilter : IModelFilter
     {
         /// <inheritdoc />
-        public bool ForRequestModelOnly => false;
-
-        /// <inheritdoc />
         public abstract bool IsIgnored(MemberInfo memberInfo);
 
         /// <inheritdoc />

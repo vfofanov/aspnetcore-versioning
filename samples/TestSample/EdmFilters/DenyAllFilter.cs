@@ -12,9 +12,6 @@ namespace TestSample
         }
 
         /// <inheritdoc />
-        public bool ForRequestModelOnly => true;
-
-        /// <inheritdoc />
         public bool IsIgnored(MemberInfo memberInfo)
         {
             return true;
