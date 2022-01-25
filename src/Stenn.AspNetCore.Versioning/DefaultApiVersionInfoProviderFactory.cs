@@ -1,12 +1,19 @@
-﻿namespace Stenn.AspNetCore.Versioning
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Stenn.AspNetCore.Versioning
 {
+    /// <summary>
+    /// Default api version provider factory for use nominal versioning.
+    /// If you are planning use versioning in future
+    /// It will use 'v1.0' placeholder in routing
+    /// </summary>
     public sealed class DefaultApiVersionInfoProviderFactory : IApiVersionInfoProviderFactory
     {
         /// <inheritdoc />
         public IApiVersionInfoProvider Create()
         {
-            return new ApiVersionInfoProvider(DefaultApiVersions.V1_0,
-                new ApiVersionInfo(DefaultApiVersions.V1_0, "v1.0"));
+            var version = new ApiVersion(1, 0);
+            return new ApiVersionInfoProvider(version, new ApiVersionInfo(version, "v1.0"));
         }
     }
 }
