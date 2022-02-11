@@ -13,8 +13,13 @@ namespace Stenn.AspNetCore.OData.Versioning.Actions
         public static T Get<T>(this Dictionary<string, object>? parameters)
             where T : ODataActionParams, new()
         {
+            if (parameters == null)
+            {
+                return new T();
+            }
+
             var mapper = ParamsMappers.GetOrAdd(typeof(T), ODataActionParametersMapper<T>.Create);
-            return (T)mapper.Map(parameters ?? new Dictionary<string, object>());
+            return (T)mapper.Map(parameters);
         }
     }
 }
