@@ -61,7 +61,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 case EdmModelOperationType.Function:
                 {
                     var configuration = holder.Function(name);
-                    if (!FillParameters(configuration, methodCallProvider, methodInfo))
+                    if (!FillFunctionParameters(configuration, methodCallProvider, methodInfo))
                     {
                         return false;
                     }
@@ -72,7 +72,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                 case EdmModelOperationType.Action:
                 {
                     var configuration = holder.Action(name);
-                    if (!FillParameters(configuration, methodInfo))
+                    if (!FillActionParameters(configuration, methodInfo))
                     {
                         return false;
                     }
@@ -149,7 +149,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             return true;
         }
 
-        private bool FillParameters(FunctionConfiguration configuration,
+        private bool FillFunctionParameters(FunctionConfiguration configuration,
             MethodCallExpression methodCallProvider, MethodInfo methodInfo)
         {
             var parameters = methodInfo.GetParameters();
@@ -205,7 +205,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
             }
         }
 
-        private bool FillParameters(ActionConfiguration configuration, MethodInfo methodInfo)
+        private bool FillActionParameters(ActionConfiguration configuration, MethodInfo methodInfo)
         {
             var parameters = methodInfo.GetParameters();
             if (parameters.Length > 1)
@@ -227,6 +227,12 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
                     var actionParamsType = actionParams.GetType();
                     foreach (var paramInfo in actionParamsType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty))
                     {
+                        //NOTE: Ignore inherited from Attribute
+                        if (paramInfo.DeclaringType == typeof(Attribute))
+                        {
+                            continue;
+                        }
+                        
                         var paramType = paramInfo.PropertyType;
                         if (_context.IsIgnored(paramType))
                         {
@@ -301,7 +307,9 @@ namespace Stenn.AspNetCore.OData.Versioning.Operations
         /// <returns></returns>
         protected virtual string GetActionParameterName(PropertyInfo info)
         {
-            return info.Name;
+            var name = info.Name; 
+            var camelCasePropertyName = char.ToLowerInvariant(name[0]) + name[1..];
+            return camelCasePropertyName;
         }
 
         protected virtual EdmModelOperationType GetOperationType(MethodInfo methodInfo)

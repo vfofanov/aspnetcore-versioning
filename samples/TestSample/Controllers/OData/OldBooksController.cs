@@ -22,16 +22,16 @@ namespace TestSample.Controllers.OData
         private class EBooksPostParams : ODataActionParams
         {
             [ODataParam(DefaultValue = "attr cool!")]
-            public string name { get; set; }
+            public string Name { get; set; }
 
-            public IEnumerable<int> ids { get; set; }
+            public IEnumerable<int> Ids { get; set; }
 
             /// <inheritdoc />
             public override void InitParameter(PropertyInfo propertyInfo, ParameterConfiguration configuration)
             {
                 switch (propertyInfo.Name)
                 {
-                    case nameof(ids):
+                    case nameof(Ids):
                         configuration.Optional();
                         break;
                 }
