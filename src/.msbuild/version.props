@@ -2,9 +2,9 @@
 <Project>
     <PropertyGroup>        
         <!-- major.minor -->
-        <TwoDigitVersion Condition="'$(TwoDigitVersion)'==''">2.0</TwoDigitVersion>
+        <TwoDigitVersion Condition="'$(TwoDigitVersion)'==''">5.0</TwoDigitVersion>
         
-        <PatchNum Condition="'$(PatchNum)'==''">5</PatchNum>
+        <PatchNum Condition="'$(PatchNum)'==''">6</PatchNum>
         <!-- special postfix will be added to patch num if defined -->
         <PatchNumSuffix Condition="'$(PatchNumSuffix)'=='' And '$(Configuration)'!='Release'">debug</PatchNumSuffix>
         <BuildNum Condition="'$(BuildNum)'==''">0</BuildNum>                

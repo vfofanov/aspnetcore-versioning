@@ -14,7 +14,7 @@
 
     <!--    Stenn MSBuild extensions-->
     <ItemGroup>
-        <PackageReference Include="Stenn.MSBuild.Extensions" Version="1.0.12">
+        <PackageReference Include="Stenn.MSBuild.Extensions" Version="1.0.13">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
