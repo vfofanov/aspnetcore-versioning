@@ -97,9 +97,9 @@ namespace TestSample.Controllers.OData
         }
 
         /// <summary>
-        /// Returns suppliers that have deals with current user's buyer company SuppliersThatHaveDealsWithCurrentBuyer
+        /// Returns ebooks
         /// </summary>
-        /// <param name="testName"></param>
+        /// <param name="testName">Must be surrond with '. Eg. 'name'</param>
         /// <param name="testId">Optional parameter</param>
         /// <returns>Returns suppliers</returns>
         [ApiVersionV3]

@@ -21,8 +21,10 @@ namespace Stenn.AspNetCore.Versioning.Swashbuckle
             var defaultDocInclusionPredicate = options.SwaggerGeneratorOptions.DocInclusionPredicate;
             options.SwaggerGeneratorOptions.DocInclusionPredicate = (docName, description) =>
             {
-                description.RelativePath =
-                    description.RelativePath.Replace("=@", EqualSignHolder + "@");
+                if (description.RelativePath != null)
+                {
+                    description.RelativePath = description.RelativePath.Replace("=@", EqualSignHolder + "@");
+                }
                 return defaultDocInclusionPredicate(docName, description);
             };
             options.DocumentFilter<Filter>();

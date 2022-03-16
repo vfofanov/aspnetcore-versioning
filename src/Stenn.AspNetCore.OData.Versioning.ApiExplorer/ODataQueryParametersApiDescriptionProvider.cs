@@ -153,19 +153,22 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
         /// <param name="apiDescription"></param>
         private static void ProcessActionsWithParameters(ApiDescription apiDescription)
         {
-            apiDescription.RelativePath = ActionParametersRegex.Replace(apiDescription.RelativePath,
-                match =>
-                {
-                    return ActionParameterReplaceRegex.Replace(match.Value, paramMatch =>
+            if (apiDescription.RelativePath != null)
+            {
+                apiDescription.RelativePath = ActionParametersRegex.Replace(apiDescription.RelativePath,
+                    match =>
                     {
-                        var paramName = paramMatch.Groups["p"].Value;
+                        return ActionParameterReplaceRegex.Replace(match.Value, paramMatch =>
+                        {
+                            var paramName = paramMatch.Groups["p"].Value;
 
-                        var param = apiDescription.ParameterDescriptions.First(p => p.Name == paramName);
-                        param.Name = $"@{paramName}";
-                        param.Source = BindingSource.Query;
-                        return $"{paramName}={param.Name}";
+                            var param = apiDescription.ParameterDescriptions.First(p => p.Name == paramName);
+                            param.Name = $"@{paramName}";
+                            param.Source = BindingSource.Query;
+                            return $"{paramName}={param.Name}";
+                        });
                     });
-                });
+            }
         }
 
         /// <summary>

@@ -101,8 +101,8 @@ namespace Stenn.AspNetCore.Versioning
             for (var i = 0; i < selectors.Count; i++)
             {
                 var selector = selectors[i];
-                if (selector.AttributeRouteModel != null &&
-                    !selector.AttributeRouteModel.Template.StartsWith(prefix))
+                if (selector.AttributeRouteModel?.Template is { } template &&
+                    !template.StartsWith(prefix))
                 {
                     selectors.RemoveAt(i);
                     i--;
@@ -129,7 +129,7 @@ namespace Stenn.AspNetCore.Versioning
                     {
                         continue;
                     }
-                    selector.AttributeRouteModel = new AttributeRouteModel(routeModel) { Template = prefix + "/" + routeModel.Template.TrimStart('/') };
+                    selector.AttributeRouteModel = new AttributeRouteModel(routeModel) { Template = prefix + "/" + routeModel.Template?.TrimStart('/') };
                 }
             }
         }

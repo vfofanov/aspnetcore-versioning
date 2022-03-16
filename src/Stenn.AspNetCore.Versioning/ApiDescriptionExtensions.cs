@@ -18,7 +18,7 @@ namespace Stenn.AspNetCore.Versioning
         /// </summary>
         /// <param name="apiDescription">The <see cref="ApiDescription">API description</see> to get the API version for.</param>
         /// <returns>The associated <see cref="ApiVersion">API version</see> or <c>null</c>.</returns>
-        public static ApiVersion GetApiVersion( this ApiDescription apiDescription ) => apiDescription.GetProperty<ApiVersion>();
+        public static ApiVersion? GetApiVersion( this ApiDescription apiDescription ) => apiDescription.GetProperty<ApiVersion>();
 
         /// <summary>
         /// Gets a value indicating whether the associated API description is deprecated.
@@ -33,7 +33,7 @@ namespace Stenn.AspNetCore.Versioning
             }
 
             var apiVersion = apiDescription.GetApiVersion();
-            var model = apiDescription.ActionDescriptor.GetApiVersionModel(ApiVersionMapping.Explicit | ApiVersionMapping.Implicit);
+            var model = apiDescription.ActionDescriptor.GetApiVersionModel(ApiVersionMapping.Implicit | ApiVersionMapping.Explicit);
 
             return model.DeprecatedApiVersions.Contains(apiVersion);
         }

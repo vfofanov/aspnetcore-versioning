@@ -40,42 +40,42 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
         public override ModelPropertyCollection Properties => _inner.Properties;
 
         /// <inheritdoc />
-        public override string BinderModelName => _inner.BinderModelName;
+        public override string? BinderModelName => _inner.BinderModelName;
 
         /// <inheritdoc />
-        public override Type BinderType => _inner.BinderType;
+        public override Type? BinderType => _inner.BinderType;
 
         /// <inheritdoc />
-        public override BindingSource BindingSource => _inner.BindingSource;
+        public override BindingSource? BindingSource => _inner.BindingSource;
 
         /// <inheritdoc />
         public override bool ConvertEmptyStringToNull => _inner.ConvertEmptyStringToNull;
 
         /// <inheritdoc />
-        public override string DataTypeName => _inner.DataTypeName;
+        public override string? DataTypeName => _inner.DataTypeName;
 
         /// <inheritdoc />
         public override string Description { get; }
 
         /// <inheritdoc />
-        public override string DisplayFormatString => _inner.DisplayFormatString;
+        public override string? DisplayFormatString => _inner.DisplayFormatString;
 
         /// <inheritdoc />
 #pragma warning disable CA1721 // Property names should not match get methods; inherited member
-        public override string DisplayName => _inner.DisplayName;
+        public override string? DisplayName => _inner.DisplayName;
 #pragma warning restore CA1721
 
         /// <inheritdoc />
-        public override string EditFormatString => _inner.EditFormatString;
+        public override string? EditFormatString => _inner.EditFormatString;
 
         /// <inheritdoc />
         public override ModelMetadata? ElementMetadata => _inner.ElementMetadata;
 
         /// <inheritdoc />
-        public override IEnumerable<KeyValuePair<EnumGroupAndName, string>> EnumGroupedDisplayNamesAndValues => _inner.EnumGroupedDisplayNamesAndValues;
+        public override IEnumerable<KeyValuePair<EnumGroupAndName, string>>? EnumGroupedDisplayNamesAndValues => _inner.EnumGroupedDisplayNamesAndValues;
 
         /// <inheritdoc />
-        public override IReadOnlyDictionary<string, string> EnumNamesAndValues => _inner.EnumNamesAndValues;
+        public override IReadOnlyDictionary<string, string>? EnumNamesAndValues => _inner.EnumNamesAndValues;
 
         /// <inheritdoc />
         public override bool HasNonDefaultEditFormat => _inner.HasNonDefaultEditFormat;
@@ -111,13 +111,13 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
         public override int Order => _inner.Order;
 
         /// <inheritdoc />
-        public override string Placeholder => _inner.Placeholder;
+        public override string? Placeholder => _inner.Placeholder;
 
         /// <inheritdoc />
-        public override string NullDisplayText => _inner.NullDisplayText;
+        public override string? NullDisplayText => _inner.NullDisplayText;
 
         /// <inheritdoc />
-        public override IPropertyFilterProvider PropertyFilterProvider => _inner.PropertyFilterProvider;
+        public override IPropertyFilterProvider? PropertyFilterProvider => _inner.PropertyFilterProvider;
 
         /// <inheritdoc />
         public override bool ShowForDisplay => _inner.ShowForDisplay;
@@ -126,10 +126,10 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
         public override bool ShowForEdit => _inner.ShowForEdit;
 
         /// <inheritdoc />
-        public override string SimpleDisplayProperty => _inner.SimpleDisplayProperty;
+        public override string? SimpleDisplayProperty => _inner.SimpleDisplayProperty;
 
         /// <inheritdoc />
-        public override string TemplateHint => _inner.TemplateHint;
+        public override string? TemplateHint => _inner.TemplateHint;
 
         /// <inheritdoc />
         public override bool ValidateChildren => _inner.ValidateChildren;
@@ -138,9 +138,9 @@ namespace Microsoft.AspNetCore.Mvc.ApiExplorer
         public override IReadOnlyList<object> ValidatorMetadata => _inner.ValidatorMetadata;
 
         /// <inheritdoc />
-        public override Func<object, object> PropertyGetter => _inner.PropertyGetter;
+        public override Func<object, object?>? PropertyGetter => _inner.PropertyGetter;
 
         /// <inheritdoc />
-        public override Action<object, object> PropertySetter => _inner.PropertySetter;
+        public override Action<object, object?>? PropertySetter => _inner.PropertySetter;
     }
 }
