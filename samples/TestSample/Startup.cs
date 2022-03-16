@@ -16,7 +16,6 @@ using Stenn.AspNetCore.OData.Versioning.CsvRouting;
 using Stenn.AspNetCore.OData.Versioning.Extensions.DependencyInjection;
 using Stenn.AspNetCore.Versioning;
 using Stenn.AspNetCore.Versioning.Extensions.DependencyInjection;
-using Stenn.AspNetCore.Versioning.Swashbuckle;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -105,14 +104,10 @@ namespace TestSample
 
         private static void AddSwagbuckle(IServiceCollection services)
         {
-            ODataFunctionParamRoutingWorkaround.FixServices(services);
-            
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>();
             services.AddTransient<IConfigureOptions<SwaggerOptions>, ConfigureSwaggerOptions>();
             services.AddSwaggerGen(options =>
             {
-                ODataFunctionParamRoutingWorkaround.FixGenOptions(options);
-                
                 var defaultSelector = options.SwaggerGeneratorOptions.OperationIdSelector;
                 options.CustomOperationIds(apiDesc =>
                 {
