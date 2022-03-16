@@ -21,8 +21,6 @@ ProjectSection(SolutionItems) = preProject
 	.msbuild\version.props = .msbuild\version.props
 EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.Versioning.Swashbuckle", "Stenn.AspNetCore.Versioning.Swashbuckle\Stenn.AspNetCore.Versioning.Swashbuckle.csproj", "{80138C34-8CAA-477F-A1B4-19B8A71A39CD}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".workflows", ".workflows", "{1ADB75C4-F11E-4FB3-8981-939AEB449EFA}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\build_and_publish_nuget.yml = ..\.github\workflows\build_and_publish_nuget.yml
@@ -64,10 +62,6 @@ Global
 		{5D755A14-325A-49B3-BD50-028BCA73AFE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D755A14-325A-49B3-BD50-028BCA73AFE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D755A14-325A-49B3-BD50-028BCA73AFE4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{80138C34-8CAA-477F-A1B4-19B8A71A39CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80138C34-8CAA-477F-A1B4-19B8A71A39CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{80138C34-8CAA-477F-A1B4-19B8A71A39CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80138C34-8CAA-477F-A1B4-19B8A71A39CD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71A951CF-9A0A-4ECE-BD49-319E90762F91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71A951CF-9A0A-4ECE-BD49-319E90762F91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71A951CF-9A0A-4ECE-BD49-319E90762F91}.Release|Any CPU.ActiveCfg = Release|Any CPU
