@@ -304,7 +304,7 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
                 return _k1.Equals(other._k1) &&
                        _k2.Equals(other._k2) &&
                        _k3.Equals(other._k3) &&
-                       _k3.Equals(other._k4);
+                       _k4.Equals(other._k4);
             }
 
             /// <inheritdoc />
@@ -346,8 +346,8 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
                 return _k1.Equals(other._k1) &&
                        _k2.Equals(other._k2) &&
                        _k3.Equals(other._k3) &&
-                       _k3.Equals(other._k4) &&
-                       _k3.Equals(other._k5);
+                       _k4.Equals(other._k4) &&
+                       _k5.Equals(other._k5);
             }
 
             /// <inheritdoc />
@@ -392,9 +392,9 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
                 return _k1.Equals(other._k1) &&
                        _k2.Equals(other._k2) &&
                        _k3.Equals(other._k3) &&
-                       _k3.Equals(other._k4) &&
-                       _k3.Equals(other._k5) &&
-                       _k3.Equals(other._k6);
+                       _k4.Equals(other._k4) &&
+                       _k5.Equals(other._k5) &&
+                       _k6.Equals(other._k6);
             }
 
             /// <inheritdoc />
@@ -441,10 +441,10 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
                 return _k1.Equals(other._k1) &&
                        _k2.Equals(other._k2) &&
                        _k3.Equals(other._k3) &&
-                       _k3.Equals(other._k4) &&
-                       _k3.Equals(other._k5) &&
-                       _k3.Equals(other._k6) &&
-                       _k3.Equals(other._k7);
+                       _k4.Equals(other._k4) &&
+                       _k5.Equals(other._k5) &&
+                       _k6.Equals(other._k6) &&
+                       _k7.Equals(other._k7);
             }
 
             /// <inheritdoc />
@@ -493,11 +493,11 @@ namespace Stenn.AspNetCore.OData.Versioning.Filters
                 return _k1.Equals(other._k1) &&
                        _k2.Equals(other._k2) &&
                        _k3.Equals(other._k3) &&
-                       _k3.Equals(other._k4) &&
-                       _k3.Equals(other._k5) &&
-                       _k3.Equals(other._k6) &&
-                       _k3.Equals(other._k7) &&
-                       _k3.Equals(other._k8);
+                       _k4.Equals(other._k4) &&
+                       _k5.Equals(other._k5) &&
+                       _k6.Equals(other._k6) &&
+                       _k7.Equals(other._k7) &&
+                       _k8.Equals(other._k8);
             }
 
             /// <inheritdoc />

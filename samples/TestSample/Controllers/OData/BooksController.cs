@@ -99,7 +99,7 @@ namespace TestSample.Controllers.OData
         /// <summary>
         /// Returns ebooks
         /// </summary>
-        /// <param name="testName">Must be surrond with '. Eg. 'name'</param>
+        /// <param name="testName">String must be surround with '. Eg. 'name'</param>
         /// <param name="testId">Optional parameter</param>
         /// <returns>Returns suppliers</returns>
         [ApiVersionV3]
