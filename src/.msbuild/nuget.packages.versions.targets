@@ -66,7 +66,7 @@
         <PackageReference Update="System.Runtime" Version="4.18.2" />
         
         
-        <PackageReference Update="Microsoft.AspNetCore.OData" Version="8.0.8" />
+        <PackageReference Update="Microsoft.AspNetCore.OData" Version="8.0.12" />
         <PackageReference Update="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
         
         <PackageReference Update="FluentAssertions" Version="6.8.0" />
@@ -74,10 +74,10 @@
         <PackageReference Update="Moq" Version="4.18.2" />
         <PackageReference Update="Moq.EntityFrameworkCore" Version="5.0.0.2" />
 
-        <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+        <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.4.1" />
         <PackageReference Update="NUnit" Version="3.13.3" />
         <PackageReference Update="NUnit3TestAdapter" Version="4.3.1" />
-        <PackageReference Update="coverlet.collector" Version="3.1.0" />
+        <PackageReference Update="coverlet.collector" Version="3.2.0" />
 
         <PackageReference Update="Newtonsoft.Json" Version="13.0.2" />
 
