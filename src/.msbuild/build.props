@@ -4,10 +4,8 @@
         <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <LangVersion>latest</LangVersion>
         <PackageOutputPath>$(MSBuildThisFileDirectory)..\..\bin\Packages</PackageOutputPath>
-        
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <DocumentationFile>$(OutDir)\$(MSBuildProjectName).xml</DocumentationFile>
-        <NoWarn>$(NoWarn);CS1591;EF1001;NETSDK1138</NoWarn>
+        <NoWarn>$(NoWarn);CS1591;EF1001</NoWarn>
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     </PropertyGroup>
 
