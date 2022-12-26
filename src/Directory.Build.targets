@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <Import Project="$(MSBuildThisFileDirectory).msbuild\nuget.packages.versions.targets" />
+  <Import Project="$(MSBuildThisFileDirectory).msbuild\allTestsProjToInternalsVisibleTo.targets" />
+  
+</Project>

@@ -8,6 +8,10 @@
   
   <PropertyGroup>
     <_SwaggerGenApiVersionsDefaultFile>$(MSBuildProjectDirectory)\ApiVersions.props</_SwaggerGenApiVersionsDefaultFile>
+    <_SwaggerGenApiVersionsDefaultFile Condition="!Exists('$(_SwaggerGenApiVersionsDefaultFile)')">$(MSBuildProjectDirectory)\Api.Versions.props</_SwaggerGenApiVersionsDefaultFile>
+    <_SwaggerGenApiVersionsDefaultFile Condition="!Exists('$(_SwaggerGenApiVersionsDefaultFile)')">$(MSBuildProjectDirectory)\apiVersions.props</_SwaggerGenApiVersionsDefaultFile>
+    <_SwaggerGenApiVersionsDefaultFile Condition="!Exists('$(_SwaggerGenApiVersionsDefaultFile)')">$(MSBuildProjectDirectory)\apiversions.props</_SwaggerGenApiVersionsDefaultFile>
+    <_SwaggerGenApiVersionsDefaultFile Condition="!Exists('$(_SwaggerGenApiVersionsDefaultFile)')">$(MSBuildProjectDirectory)\api.versions.props</_SwaggerGenApiVersionsDefaultFile>
   </PropertyGroup>
 
   <Import Condition="'$(ApiVersionsImported)'!='True' And Exists('$(_SwaggerGenApiVersionsDefaultFile)')" Project="$(_SwaggerGenApiVersionsDefaultFile)"/>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup Condition="'$(RepositoryRootDir)'==''">
+    <!--    Try to find repo root by .gitignore file-->
+    <RepositoryRootDir>$([System.IO.Path]::GetDirectoryName($([MSBuild]::GetPathOfFileAbove('.gitignore', '$(MSBuildProjectDirectory)'))))</RepositoryRootDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RepositoryRootDir)'!=''">
+    <RepositoryRootDirEndsWithSlash>$(RepositoryRootDir.EndsWith('\\'))</RepositoryRootDirEndsWithSlash>
+    <RepositoryRootDir Condition="'$(RepositoryRootDirEndsWithSlash)'=='False'">$(RepositoryRootDir)\</RepositoryRootDir>
+  </PropertyGroup>
+
+</Project>

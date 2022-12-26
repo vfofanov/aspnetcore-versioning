@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup Condition="'$(TestsDir)'!=''">
+    <TestsDirEndsWithSlash>$(TestsDir.EndsWith('\'))</TestsDirEndsWithSlash>
+    <TestsDir Condition="'$(TestsDirEndsWithSlash)'=='False'">$(TestsDir)\</TestsDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <InternalsVisibleToAllTestsProjects Condition="'$(InternalsVisibleToAllTestsProjects)'==''">false</InternalsVisibleToAllTestsProjects>
+    <InternalsVisibleToAllTestsProjects Condition="'$(InternalsVisibleToAllTestsProjects)'=='True'">true</InternalsVisibleToAllTestsProjects>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(InternalsVisibleToAllTestsProjects)'=='true' And '$(TestsDir)'!='' And Exists('$(TestsDir)')">
+    <InternalVisibleToProj Include="$(TestsDir)**\*.Tests.csproj"/>
+    <InternalsVisibleTo Include="@(InternalVisibleToProj->'%(Filename)')"/>
+  </ItemGroup>
+
+  <Target Condition="'$(InternalsVisibleToAllTestsProjects)'=='true'" Name="AllTestsInternalsVisibleTo" BeforeTargets="BeforeCompile">
+    <!--Check that TestsDir set-->
+    <Warning Condition="'$(TestsDir)'==''"
+             Text="The PropertyGroup 'TestsDir' is empty. Fill 'TestsDir' or set 'InternalsVisibleToAllTestsProjects' to False"
+             File="$(MSBuildProjectFullPath)" />
+    <Warning Condition="'$(TestsDir)'!='' And !Exists('$(TestsDir)')"
+             Text="The PropertyGroup 'TestsDir' is '$(TestsDir)'. Fill 'TestsDir' or set 'InternalsVisibleToAllTestsProjects' to False"
+             File="$(MSBuildProjectFullPath)" />
+
+  </Target>
+
+</Project>

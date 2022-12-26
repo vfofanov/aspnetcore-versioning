@@ -29,7 +29,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".msbuild", ".msbuild", "{1D
 		..\src\.msbuild\build.props = ..\src\.msbuild\build.props
 		..\src\.msbuild\package.props = ..\src\.msbuild\package.props
 		..\src\.msbuild\product.props = ..\src\.msbuild\product.props
+		..\src\.msbuild\allTestsProjToInternalsVisibleTo.targets = ..\src\.msbuild\allTestsProjToInternalsVisibleTo.targets
+		..\src\.msbuild\nuget.packages.versions.targets = ..\src\.msbuild\nuget.packages.versions.targets
+		..\src\.msbuild\repository.root.dir.props = ..\src\.msbuild\repository.root.dir.props
+		..\src\.msbuild\tfm.constants.props = ..\src\.msbuild\tfm.constants.props
+		..\src\.msbuild\work.root.dir.props = ..\src\.msbuild\work.root.dir.props
+		..\src\Directory.Build.props = ..\src\Directory.Build.props
+		..\src\Directory.Build.targets = ..\src\Directory.Build.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle", "..\src\Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle\Stenn.AspNetCore.Versioning.MSBuild.Swashbuckle.csproj", "{B52EABA8-7DCF-4796-BC7D-F6F18D827C42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +82,10 @@ Global
 		{871E0EA7-C3A7-453B-ADEC-DC18738A7780}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{871E0EA7-C3A7-453B-ADEC-DC18738A7780}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{871E0EA7-C3A7-453B-ADEC-DC18738A7780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B52EABA8-7DCF-4796-BC7D-F6F18D827C42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B52EABA8-7DCF-4796-BC7D-F6F18D827C42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B52EABA8-7DCF-4796-BC7D-F6F18D827C42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B52EABA8-7DCF-4796-BC7D-F6F18D827C42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,5 +103,6 @@ Global
 		{41207CC6-4805-4F60-B4E4-5150B5871A65} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
 		{871E0EA7-C3A7-453B-ADEC-DC18738A7780} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
 		{1D248C6D-3F83-464F-93D4-805C5684BBA6} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
+		{B52EABA8-7DCF-4796-BC7D-F6F18D827C42} = {7F9C03D7-613A-4BEE-A362-192AEB9E1D8E}
 	EndGlobalSection
 EndGlobal

@@ -1,27 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <LangVersion>latest</LangVersion>
-        <OutDir>$(MSBuildThisFileDirectory)..\..\bin</OutDir>
         <PackageOutputPath>$(MSBuildThisFileDirectory)..\..\bin\Packages</PackageOutputPath>
         
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DocumentationFile>$(OutDir)\$(MSBuildProjectName).xml</DocumentationFile>
-        <NoWarn>$(NoWarn);CS1591</NoWarn>
+        <NoWarn>$(NoWarn);CS1591;EF1001;NETSDK1138</NoWarn>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     </PropertyGroup>
-
 
     <!--    Stenn MSBuild extensions-->
     <ItemGroup>
-        <PackageReference Include="Stenn.MSBuild.Extensions" Version="1.0.13">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
+        <PackageReference Include="Stenn.MSBuild.Extensions" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" />
     </ItemGroup>
     <PropertyGroup>
         <EnableExtension_SourceLinkGitHub>true</EnableExtension_SourceLinkGitHub>
         <EnableExtension_AssemblyInfo>true</EnableExtension_AssemblyInfo>
+        <EnableExtension_NugetPackageVersionsSingleFile>true</EnableExtension_NugetPackageVersionsSingleFile>
+    </PropertyGroup>
+
+    <!--  Enable checks for nuget.packages.versions files-->
+    <ItemGroup>
+        <NugetVersionsFilePath Include="$(MSBuildThisFileDirectory)**\*nuget.packages.versions.targets"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <TestsDir>$(MSBuildThisFileDirectory)..\</TestsDir>
+        <!--
+        This automatically applies InternalsVisibleToAttribute to all the projects
+        so their internal classes will be visible to all the projects with '.Tests' name ending.
+        -->
+        <InternalsVisibleToAllTestsProjects>true</InternalsVisibleToAllTestsProjects>
     </PropertyGroup>
     
 </Project>

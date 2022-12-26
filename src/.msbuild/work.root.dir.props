@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup Condition="'$(WorkRootDir)'==''">
+    <WorkRootDir>$(RepositoryRootDir)..\</WorkRootDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(WorkRootDir)'!=''">
+    <WorkRootDirEndsWithSlash>$(WorkRootDir.EndsWith('\\'))</WorkRootDirEndsWithSlash>
+    <WorkRootDir Condition="'$(WorkRootDirEndsWithSlash)'=='False'">$(WorkRootDir)\</WorkRootDir>
+  </PropertyGroup>
+
+</Project>

@@ -28,6 +28,7 @@ namespace TestSample
                 type.AddCollectionOperation(x => x.EBooks(
                     EdmOp.Param<string>(p => p.Optional().HasDefaultValue("cool!!")),
                     default));
+                type.AddCollectionOperation(x => x.EBooks2());
             });
 
             builder.Add<Book, OldBooksController>(type =>

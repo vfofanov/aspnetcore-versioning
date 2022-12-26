@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-    <Import Project="$(MSBuildThisFileDirectory).msbuild\product.props"/>
-    <Import Project="$(MSBuildThisFileDirectory).msbuild\package.props"/>
-    <Import Project="$(MSBuildThisFileDirectory).msbuild\version.props"/>
-    <Import Project="$(MSBuildThisFileDirectory).msbuild\build.props"/>    
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\repository.root.dir.props" />
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\work.root.dir.props" />
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\product.props" />
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\package.props" />
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\version.props" />
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\build.props" />
+    <Import Project="$(MSBuildThisFileDirectory).msbuild\tfm.constants.props" /> 
 
 </Project>

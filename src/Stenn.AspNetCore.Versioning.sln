@@ -19,6 +19,11 @@ ProjectSection(SolutionItems) = preProject
 	.msbuild\package.props = .msbuild\package.props
 	.msbuild\product.props = .msbuild\product.props
 	.msbuild\version.props = .msbuild\version.props
+	.msbuild\nuget.packages.versions.targets = .msbuild\nuget.packages.versions.targets
+	.msbuild\allTestsProjToInternalsVisibleTo.targets = .msbuild\allTestsProjToInternalsVisibleTo.targets
+	.msbuild\tfm.constants.props = .msbuild\tfm.constants.props
+	.msbuild\work.root.dir.props = .msbuild\work.root.dir.props
+	.msbuild\repository.root.dir.props = .msbuild\repository.root.dir.props
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".workflows", ".workflows", "{1ADB75C4-F11E-4FB3-8981-939AEB449EFA}"

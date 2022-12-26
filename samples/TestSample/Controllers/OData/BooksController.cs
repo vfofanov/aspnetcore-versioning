@@ -109,6 +109,15 @@ namespace TestSample.Controllers.OData
         {
             return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
         }
+        
+        [ApiVersionV3]
+        [HttpGet]
+        [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
+        public Task<IQueryable<Book>> EBooks2()
+        {
+            return Task.FromResult(_db.Books.Where(b => b.Press.Category == Category.EBook).AsQueryable());
+        }
+        
 
         /// <summary>
         /// Test post controller
